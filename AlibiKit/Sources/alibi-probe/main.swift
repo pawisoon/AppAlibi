@@ -26,7 +26,8 @@ for try await batch in LogReader.run(LogReader.showArguments(predicate: LogPredi
 try store.record(events, lastProcessed: Date())
 
 let sensorEvents = events.filter { if case .sensor = $0 { true } else { false } }.count
-print("Parsed \(lines) log lines in \(String(format: "%.1f", Date().timeIntervalSince(started)))s: \(sensorEvents) sensor events, \(events.count - sensorEvents) permission checks.\n")
+let lockEvents = events.filter { if case .screenLock = $0 { true } else { false } }.count
+print("Parsed \(lines) log lines in \(String(format: "%.1f", Date().timeIntervalSince(started)))s: \(sensorEvents) sensor events, \(lockEvents) screen locks and unlocks, \(events.count - sensorEvents - lockEvents) permission checks.\n")
 
 let duration = DateComponentsFormatter()
 duration.allowedUnits = [.hour, .minute, .second]
@@ -40,6 +41,15 @@ if sensitive.isEmpty { print("  none in this window") }
 for session in sensitive {
     let length = session.isActive ? "active" : duration.string(from: session.duration()) ?? "?"
     print("  \(time.string(from: session.startedAt))  \(session.sensor.displayName.padding(toLength: 16, withPad: " ", startingAt: 0)) \(session.app)  (\(length))")
+}
+
+let locks = try store.screenLocks()
+print("\nScreen locked:")
+if locks.spans.isEmpty { print("  never in this window") }
+for span in locks.spans.suffix(10) {
+    let used = try ActivityReport.build(store: store, interval: span) { _, _ in true }.apps
+        .map { "\($0.app) \(duration.string(from: $0.duration) ?? "?")" }
+    print("  \(time.string(from: span.start)) to \(time.string(from: span.end))\(used.isEmpty ? "" : "  used: " + used.joined(separator: ", "))")
 }
 
 let location = try store.sessions(SessionQuery(sensors: [.location], limit: 100_000))

@@ -70,9 +70,11 @@ public actor Collector {
     }
 
     private func runOnce() async throws {
-        processor = EventProcessor(active: try store.openAttributions())
         lastProcessed = try store.lastProcessed()
         let since = lastProcessed ?? Date().addingTimeInterval(-initialBackfill)
+        try await importLockHistory(upTo: lastProcessed)
+        if let bootTime = SystemClock.bootTime() { try store.endScreenLock(openBefore: bootTime) }
+        processor = EventProcessor(active: try store.openAttributions(), screenLocked: try store.isScreenLocked())
 
         // Start following first so nothing is lost while catching up.
         let stream = LogReader.run(LogReader.streamArguments(predicate: predicate))
@@ -88,6 +90,26 @@ public actor Collector {
             try Task.checkCancellation()
             try handle(batch)
         }
+    }
+
+    /// Once per database: the lock lines from before the checkpoint, which a
+    /// database made before lock tracking skipped. Without a checkpoint the
+    /// normal catch-up reads them.
+    private func importLockHistory(upTo checkpoint: Date?) async throws {
+        guard try store.needsLockHistoryImport() else { return }
+        if let checkpoint {
+            publish(.catchingUp(since: checkpoint.addingTimeInterval(-initialBackfill)))
+            var locks = EventProcessor()
+            var events: [CollectedEvent] = []
+            let arguments = LogReader.showArguments(predicate: LogPredicates.screenLock,
+                                                    start: checkpoint.addingTimeInterval(-initialBackfill), end: checkpoint)
+            for try await batch in LogReader.run(arguments) {
+                try Task.checkCancellation()
+                for entry in batch where entry.timestamp <= checkpoint { events += locks.process(entry) }
+            }
+            try store.record(events, lastProcessed: nil)
+        }
+        try store.markLockHistoryImported()
     }
 
     private func handle(_ batch: [LogEntry]) throws {

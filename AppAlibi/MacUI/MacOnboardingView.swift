@@ -186,7 +186,7 @@ struct MacOnboardingView: View {
         case .notifications:
             template(
                 title: "Hear about it as it happens",
-                body: "AppAlibi can tell you when an app turns on your camera, microphone or screen for the first time, and sum up each day at \(defaultSummaryTime). Change either one, or add a weekly summary, in Settings."
+                body: "AppAlibi can tell you when an app turns on your camera, microphone or screen for the first time, what used them while your Mac was locked, and sum up each day at \(defaultSummaryTime). Change any of these, or add a weekly summary, in Settings."
             ) {
                 AnimatedSymbol(name: "bell.badge", size: 68, effect: .bounce)
             } extra: {

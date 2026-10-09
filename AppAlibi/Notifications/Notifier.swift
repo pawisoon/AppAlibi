@@ -13,6 +13,8 @@ final class Notifier: NSObject {
     /// Where a click on a notification should take the user.
     enum Destination: Equatable {
         case sensors
+        /// Sensors, filtered to use while the screen was locked.
+        case lockedUse
         case permissions
         case summary(ReportPeriod)
     }
@@ -84,6 +86,11 @@ final class Notifier: NSObject {
             content.body = "The first time AppAlibi has seen this app do that."
             content.threadIdentifier = "permissions"
             content.userInfo = ["open": "permissions"]
+        case let .lockedUse(lock, apps):
+            content.title = "Used while your Mac was locked"
+            content.body = Self.lockedUseText(lock: lock, apps: apps)
+            content.threadIdentifier = "locked"
+            content.userInfo = ["open": "locked"]
         }
         content.sound = .default
         deliver(content)
@@ -118,6 +125,17 @@ final class Notifier: NSObject {
         return lines.joined(separator: "\n")
     }
 
+    /// One line per app, longest first, then when the screen was locked.
+    static func lockedUseText(lock: DateInterval, apps: [ActivityReport.AppUsage]) -> String {
+        var lines = apps.prefix(3).map { usage in
+            let sensors = ListFormatter.localizedString(byJoining: usage.sensors.map { $0.displayName.lowercased() })
+            return "\(AppInfo.info(for: usage.app).name): \(sensors), \(Formatting.duration(usage.duration))"
+        }
+        if apps.count > 3 { lines.append("+\(apps.count - 3) more") }
+        lines.append("Locked \(Formatting.time(lock.start)) to \(Formatting.time(lock.end)).")
+        return lines.joined(separator: "\n")
+    }
+
     private func deliver(_ content: UNMutableNotificationContent) {
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
         center.add(request) { [logger] error in
@@ -138,6 +156,7 @@ extension Notifier: UNUserNotificationCenterDelegate {
         let info = response.notification.request.content.userInfo
         let destination: Destination = switch info["open"] as? String {
         case "permissions": .permissions
+        case "locked": .lockedUse
         case "summary": .summary((info["period"] as? String).flatMap(ReportPeriod.init(rawValue:)) ?? .day)
         default: .sensors
         }

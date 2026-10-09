@@ -11,6 +11,7 @@
 		0D61ABA9F1383668741FF5F9 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC660CA0B895C7E71A5D487C /* SummaryView.swift */; };
 		1806C3DA3CE91DD8B5E2D100 /* MacComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FD9DD0A0C209F48890C8A9 /* MacComponents.swift */; };
 		327A88B8166CD68D68C19772 /* MacFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E911C016E050719DA75591A5 /* MacFoundation.swift */; };
+		5417F2866181CD8DFE287B1F /* HistoryRetention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D594EBA0065A8EB681406A30 /* HistoryRetention.swift */; };
 		6889135C8946D68DC83B9B93 /* Notifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D37DC5BF8EA3BF8C531BB64 /* Notifier.swift */; };
 		88FCAC2DC0CB3D4C604E5BF9 /* AlibiKit in Frameworks */ = {isa = PBXBuildFile; productRef = 83EA70C61FEBD972F1C8C7C8 /* AlibiKit */; };
 		960AE2EC382A5C17826E5B4F /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557C1E92D1D0049A660E7BCB /* HistoryView.swift */; };
@@ -23,9 +24,11 @@
 		D86D4DA133808C931D6CC0F8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82004A715356100548A02B4 /* SettingsView.swift */; };
 		DEC161602472EC5ADEF879EC /* AppAlibiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C81561F403BEFA370680634 /* AppAlibiApp.swift */; };
 		FCC872F4FFFD813CED59E0F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3785523D3BBA81F811A1B819 /* Assets.xcassets */; };
+		FEE6530547A7CD09996E998D /* Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B670826B5D829B5EABE7368 /* Export.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B670826B5D829B5EABE7368 /* Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Export.swift; sourceTree = "<group>"; };
 		27D8BC0CB48EB45EA873D82E /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		2D37DC5BF8EA3BF8C531BB64 /* Notifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifier.swift; sourceTree = "<group>"; };
 		3785523D3BBA81F811A1B819 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -40,6 +43,7 @@
 		B82004A715356100548A02B4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		C1168319881CD354FE2C30F9 /* AlertPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPreferences.swift; sourceTree = "<group>"; };
 		C93DBB3104133D9256C919E8 /* MenuContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuContentView.swift; sourceTree = "<group>"; };
+		D594EBA0065A8EB681406A30 /* HistoryRetention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRetention.swift; sourceTree = "<group>"; };
 		DC660CA0B895C7E71A5D487C /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
 		E7553550D720D6551E6C6FC9 /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
 		E911C016E050719DA75591A5 /* MacFoundation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacFoundation.swift; sourceTree = "<group>"; };
@@ -121,7 +125,9 @@
 		F3A90ADFF97FD3AFAF5E3411 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0B670826B5D829B5EABE7368 /* Export.swift */,
 				E7553550D720D6551E6C6FC9 /* Formatting.swift */,
+				D594EBA0065A8EB681406A30 /* HistoryRetention.swift */,
 				557C1E92D1D0049A660E7BCB /* HistoryView.swift */,
 				C93DBB3104133D9256C919E8 /* MenuContentView.swift */,
 				B82004A715356100548A02B4 /* SettingsView.swift */,
@@ -210,7 +216,9 @@
 				DEC161602472EC5ADEF879EC /* AppAlibiApp.swift in Sources */,
 				A8190E4F0F46B543AC4BDAD2 /* AppInfo.swift in Sources */,
 				09250B2AB08C09EC7B90947D /* AppModel.swift in Sources */,
+				FEE6530547A7CD09996E998D /* Export.swift in Sources */,
 				9849A9EE5AA43BF4B968A557 /* Formatting.swift in Sources */,
+				5417F2866181CD8DFE287B1F /* HistoryRetention.swift in Sources */,
 				960AE2EC382A5C17826E5B4F /* HistoryView.swift in Sources */,
 				1806C3DA3CE91DD8B5E2D100 /* MacComponents.swift in Sources */,
 				327A88B8166CD68D68C19772 /* MacFoundation.swift in Sources */,

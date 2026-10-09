@@ -60,6 +60,7 @@ struct SensorHistoryView: View {
     @State private var range: TimeRange = .week
     @State private var search = ""
     @State private var sessions: [SensorSession] = []
+    @State private var locks = ScreenLockSpans([])
 
     var body: some View {
         VStack(spacing: 0) {
@@ -74,8 +75,13 @@ struct SensorHistoryView: View {
                     ForEach(TimeRange.allCases) { Text($0.rawValue).tag($0) }
                 }
                 .frame(width: 180)
+                Toggle("While locked", isOn: lockedOnly)
+                    .toggleStyle(.checkbox)
+                    .help("Only use while the screen was locked.")
                 Spacer()
                 Text("\(sessions.count) sessions").foregroundStyle(.secondary)
+                Button("Export\u{2026}", action: export)
+                    .disabled(sessions.isEmpty)
             }
             .padding(10)
 
@@ -93,10 +99,19 @@ struct SensorHistoryView: View {
                 }
                 .width(min: 150, ideal: 180)
                 TableColumn("Duration") { session in
-                    Text(session.isActive ? "Active" : Formatting.duration(session.duration()))
-                        .foregroundStyle(session.isActive ? Color.orange : Color.primary)
+                    HStack(spacing: 4) {
+                        Text(session.isActive ? "Active" : Formatting.duration(session.duration()))
+                            .foregroundStyle(session.isActive ? Color.orange : Color.primary)
+                        let locked = lockedTime(session)
+                        if locked >= ScreenLockSpans.minimumOverlap {
+                            Image(systemName: "lock.fill")
+                                .foregroundStyle(.secondary)
+                                .help("\(Formatting.duration(locked)) of it while the screen was locked")
+                                .accessibilityLabel("Partly while the screen was locked")
+                        }
+                    }
                 }
-                .width(min: 70, ideal: 90)
+                .width(min: 90, ideal: 110)
             }
             .overlay {
                 if sessions.isEmpty {
@@ -106,7 +121,9 @@ struct SensorHistoryView: View {
             }
         }
         .searchable(text: $search, prompt: "Bundle ID")
-        .task(id: ReloadKey(revision: model.revision, scope: scope, sensor: sensor, range: range, search: search)) {
+        .focusedSceneValue(\.exportAction, ExportAction(run: export))
+        .task(id: ReloadKey(revision: model.revision, scope: scope, sensor: sensor, range: range, search: search,
+                            lockedOnly: model.sensorsLockedOnly)) {
             reload()
         }
     }
@@ -117,17 +134,48 @@ struct SensorHistoryView: View {
         let sensor: Sensor?
         let range: TimeRange
         let search: String
+        let lockedOnly: Bool
     }
 
-    private func reload() {
-        let query = SessionQuery(
+    private var lockedOnly: Binding<Bool> {
+        Binding(get: { model.sensorsLockedOnly }, set: { model.sensorsLockedOnly = $0 })
+    }
+
+    private func lockedTime(_ session: SensorSession) -> TimeInterval {
+        let end = max(session.endedAt ?? Date(), session.startedAt)
+        return locks.overlap(with: DateInterval(start: session.startedAt, end: end))
+    }
+
+    private func query(limit: Int) -> SessionQuery {
+        SessionQuery(
             sensors: sensor.map { [$0] },
             apps: model.sessionApps(in: scope),
             appContains: search,
             since: range.since,
-            limit: 2_000
+            limit: limit
         )
-        sessions = (try? model.store?.sessions(query)) ?? []
+    }
+
+    private func reload() {
+        locks = model.screenLocks(since: range.since)
+        let found = (try? model.store?.sessions(query(limit: 2_000))) ?? []
+        sessions = model.sensorsLockedOnly ? found.filter { lockedTime($0) >= ScreenLockSpans.minimumOverlap } : found
+    }
+
+    /// The same filters as the table, without its row limit.
+    private func export() {
+        CSVSaver.save(suggestedName: "AppAlibi Sensors") {
+            let now = Date()
+            let locks = model.screenLocks(since: nil)
+            var rows = (try? model.store?.sessions(query(limit: .max))) ?? []
+            if model.sensorsLockedOnly {
+                rows = rows.filter {
+                    locks.overlap(with: DateInterval(start: $0.startedAt, end: max($0.endedAt ?? now, $0.startedAt)))
+                        >= ScreenLockSpans.minimumOverlap
+                }
+            }
+            return CSVExport.sessions(rows, locks: locks, now: now) { AppInfo.info(for: $0).name }
+        }
     }
 }
 
@@ -155,6 +203,8 @@ struct PermissionHistoryView: View {
                 Toggle("Preflight checks", isOn: $includePreflight)
                     .help("Preflight checks ask whether access is allowed without accessing anything.")
                 Spacer()
+                Button("Export\u{2026}", action: export)
+                    .disabled(rows.isEmpty)
             }
             .toggleStyle(.checkbox)
             .padding(10)
@@ -190,6 +240,7 @@ struct PermissionHistoryView: View {
             }
         }
         .searchable(text: $search, prompt: "App or path")
+        .focusedSceneValue(\.exportAction, ExportAction(run: export))
         .task(id: ReloadKey(revision: model.revision, range: range, search: search,
                             preflight: includePreflight, scope: scope, files: filesOnly)) {
             reload()
@@ -205,17 +256,30 @@ struct PermissionHistoryView: View {
         let files: Bool
     }
 
-    private func reload() {
-        let query = TCCQuery(
+    private func query(limit: Int) -> TCCQuery {
+        TCCQuery(
             apps: model.tccApps(in: scope),
             includePreflight: includePreflight,
             includeApple: true,
             fileAccessOnly: filesOnly,
             appContains: search,
             since: range.since,
-            limit: 2_000
+            limit: limit
         )
-        rows = (try? model.store?.tccAggregates(query)) ?? []
+    }
+
+    private func reload() {
+        rows = (try? model.store?.tccAggregates(query(limit: 2_000))) ?? []
+    }
+
+    /// The same filters as the table, without its row limit.
+    private func export() {
+        CSVSaver.save(suggestedName: "AppAlibi Permissions") {
+            let rows = (try? model.store?.tccAggregates(query(limit: .max))) ?? []
+            return CSVExport.permissions(rows) { identifier, binaryPath in
+                AppInfo.info(for: identifier, binaryPath: binaryPath.isEmpty ? nil : binaryPath).name
+            }
+        }
     }
 }
 

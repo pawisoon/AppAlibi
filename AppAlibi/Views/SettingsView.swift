@@ -8,8 +8,11 @@ struct SettingsView: View {
     @Environment(\.showOnboardingAction) private var showOnboardingAction
     @State private var opensAtLogin = MacPreferences.opensAtLogin
     @State private var confirmDelete = false
+    /// A shorter retention waiting for the user to confirm the deletion it causes.
+    @State private var pendingRetention: HistoryRetention?
     @AppStorage(AlertPreferences.sensorsKey) private var sensorAlerts: SensorAlertMode = .off
     @AppStorage(AlertPreferences.firstPermissionKey) private var permissionAlerts = false
+    @AppStorage(AlertPreferences.lockedUseKey) private var lockedUseAlerts = false
     @AppStorage(AlertPreferences.dailyKey) private var dailySummary = false
     @AppStorage(AlertPreferences.weeklyKey) private var weeklySummary = false
     @AppStorage(AlertPreferences.minuteKey) private var summaryMinute = AlertPreferences.defaultMinute
@@ -56,6 +59,12 @@ struct SettingsView: View {
 
             Section("History") {
                 LabeledContent("Status", value: model.statusText)
+                Picker(selection: retention) {
+                    ForEach(HistoryRetention.allCases) { Text($0.title).tag($0) }
+                } label: {
+                    Text("Keep history")
+                    Text("Older sessions and permission checks are deleted from this Mac.")
+                }
                 LabeledContent("Database") {
                     Button("Show in Finder") { model.revealDatabase() }
                 }
@@ -81,6 +90,17 @@ struct SettingsView: View {
         } message: {
             Text("Sensor sessions and permission checks are removed from this Mac. This cannot be undone.")
         }
+        .confirmationDialog(
+            "Keep history for \((pendingRetention ?? .forever).title.lowercased())?",
+            isPresented: Binding(get: { pendingRetention != nil }, set: { if !$0 { pendingRetention = nil } })
+        ) {
+            Button("Delete Older History", role: .destructive) {
+                if let pendingRetention { model.setRetention(pendingRetention) }
+                pendingRetention = nil
+            }
+        } message: {
+            Text("History older than that is deleted now, and from then on as it ages. This cannot be undone.")
+        }
     }
 
     // MARK: Notifications
@@ -96,6 +116,10 @@ struct SettingsView: View {
             Toggle(isOn: $permissionAlerts) {
                 Text("First access to protected data")
                 Text("When an app first reaches for your folders, contacts, photos and so on.")
+            }
+            Toggle(isOn: $lockedUseAlerts) {
+                Text("Use while the screen is locked")
+                Text("When you unlock: anything that used the camera, microphone or screen while you were away, system services included.")
             }
 
             Toggle(isOn: $dailySummary) {
@@ -132,8 +156,23 @@ struct SettingsView: View {
         }
         .onChange(of: sensorAlerts) { askIfNeeded() }
         .onChange(of: permissionAlerts) { askIfNeeded() }
+        .onChange(of: lockedUseAlerts) { askIfNeeded() }
         .onChange(of: dailySummary) { _, on in summaryToggled(.day, on: on) }
         .onChange(of: weeklySummary) { _, on in summaryToggled(.week, on: on) }
+    }
+
+    /// A shorter setting deletes history, so it waits for confirmation.
+    private var retention: Binding<HistoryRetention> {
+        Binding(
+            get: { model.retention },
+            set: { value in
+                if model.retention.isLonger(than: value) {
+                    pendingRetention = value
+                } else {
+                    model.setRetention(value)
+                }
+            }
+        )
     }
 
     /// Minutes after midnight, edited as a time of day.

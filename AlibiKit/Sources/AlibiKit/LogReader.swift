@@ -17,8 +17,10 @@ public enum LogReaderError: Error, CustomStringConvertible {
 public enum LogReader {
     public static let executable = URL(fileURLWithPath: "/usr/bin/log")
 
-    public static func showArguments(predicate: String, start: Date) -> [String] {
-        ["show", "--style", "ndjson", "--info", "--start", LogTimestamp.argument(for: start), "--predicate", predicate]
+    public static func showArguments(predicate: String, start: Date, end: Date? = nil) -> [String] {
+        ["show", "--style", "ndjson", "--info", "--start", LogTimestamp.argument(for: start)]
+            + (end.map { ["--end", LogTimestamp.argument(for: $0)] } ?? [])
+            + ["--predicate", predicate]
     }
 
     public static func streamArguments(predicate: String) -> [String] {
