@@ -1,0 +1,410 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		09250B2AB08C09EC7B90947D /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D8BC0CB48EB45EA873D82E /* AppModel.swift */; };
+		1806C3DA3CE91DD8B5E2D100 /* MacComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FD9DD0A0C209F48890C8A9 /* MacComponents.swift */; };
+		327A88B8166CD68D68C19772 /* MacFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E911C016E050719DA75591A5 /* MacFoundation.swift */; };
+		88FCAC2DC0CB3D4C604E5BF9 /* AlibiKit in Frameworks */ = {isa = PBXBuildFile; productRef = 83EA70C61FEBD972F1C8C7C8 /* AlibiKit */; };
+		960AE2EC382A5C17826E5B4F /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557C1E92D1D0049A660E7BCB /* HistoryView.swift */; };
+		97FFB7E630474748799A01F5 /* MenuContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DBB3104133D9256C919E8 /* MenuContentView.swift */; };
+		9849A9EE5AA43BF4B968A557 /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7553550D720D6551E6C6FC9 /* Formatting.swift */; };
+		A8190E4F0F46B543AC4BDAD2 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA7CBC5DDE9842DF742FF94 /* AppInfo.swift */; };
+		BB29756E7C695F0EB84F4AD7 /* MacOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED844739C7B126C760EDFB9 /* MacOnboardingView.swift */; };
+		D86D4DA133808C931D6CC0F8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82004A715356100548A02B4 /* SettingsView.swift */; };
+		DEC161602472EC5ADEF879EC /* AppAlibiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C81561F403BEFA370680634 /* AppAlibiApp.swift */; };
+		FCC872F4FFFD813CED59E0F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3785523D3BBA81F811A1B819 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		27D8BC0CB48EB45EA873D82E /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		3785523D3BBA81F811A1B819 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		44FD9DD0A0C209F48890C8A9 /* MacComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacComponents.swift; sourceTree = "<group>"; };
+		4712AF1284A0D67DF08B4B49 /* AlibiKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AlibiKit; path = AlibiKit; sourceTree = SOURCE_ROOT; };
+		557C1E92D1D0049A660E7BCB /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		8BA7CBC5DDE9842DF742FF94 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
+		8ED844739C7B126C760EDFB9 /* MacOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOnboardingView.swift; sourceTree = "<group>"; };
+		9C81561F403BEFA370680634 /* AppAlibiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAlibiApp.swift; sourceTree = "<group>"; };
+		B7BCCAC9118C12B576B016BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B82004A715356100548A02B4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		C93DBB3104133D9256C919E8 /* MenuContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuContentView.swift; sourceTree = "<group>"; };
+		E7553550D720D6551E6C6FC9 /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
+		E911C016E050719DA75591A5 /* MacFoundation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacFoundation.swift; sourceTree = "<group>"; };
+		F9745A082C18925A74918909 /* AppAlibi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppAlibi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		236B6FCF5BA1BE773E75142C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				88FCAC2DC0CB3D4C604E5BF9 /* AlibiKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		010507815BA5D13D3775A8F4 /* AppAlibi */ = {
+			isa = PBXGroup;
+			children = (
+				9C81561F403BEFA370680634 /* AppAlibiApp.swift */,
+				8BA7CBC5DDE9842DF742FF94 /* AppInfo.swift */,
+				27D8BC0CB48EB45EA873D82E /* AppModel.swift */,
+				3785523D3BBA81F811A1B819 /* Assets.xcassets */,
+				B7BCCAC9118C12B576B016BC /* Info.plist */,
+				39C0CABE82A3CE8B2335BEF2 /* MacUI */,
+				F3A90ADFF97FD3AFAF5E3411 /* Views */,
+			);
+			path = AppAlibi;
+			sourceTree = "<group>";
+		};
+		39C0CABE82A3CE8B2335BEF2 /* MacUI */ = {
+			isa = PBXGroup;
+			children = (
+				44FD9DD0A0C209F48890C8A9 /* MacComponents.swift */,
+				E911C016E050719DA75591A5 /* MacFoundation.swift */,
+				8ED844739C7B126C760EDFB9 /* MacOnboardingView.swift */,
+			);
+			path = MacUI;
+			sourceTree = "<group>";
+		};
+		75D9223E4FE6400299008174 = {
+			isa = PBXGroup;
+			children = (
+				010507815BA5D13D3775A8F4 /* AppAlibi */,
+				B615BD4DCAA3173179541CA0 /* Packages */,
+				850D0EE7BDDC6DAC38E73EE7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		850D0EE7BDDC6DAC38E73EE7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F9745A082C18925A74918909 /* AppAlibi.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B615BD4DCAA3173179541CA0 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				4712AF1284A0D67DF08B4B49 /* AlibiKit */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		F3A90ADFF97FD3AFAF5E3411 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E7553550D720D6551E6C6FC9 /* Formatting.swift */,
+				557C1E92D1D0049A660E7BCB /* HistoryView.swift */,
+				C93DBB3104133D9256C919E8 /* MenuContentView.swift */,
+				B82004A715356100548A02B4 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8335B68356C1B74735506FBA /* AppAlibi */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 207228D54C6ABB546CD5CF98 /* Build configuration list for PBXNativeTarget "AppAlibi" */;
+			buildPhases = (
+				34FB4897A584CAA8978502E0 /* Sources */,
+				5B6181F6DD1FA0A1120DA89F /* Resources */,
+				236B6FCF5BA1BE773E75142C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AppAlibi;
+			packageProductDependencies = (
+				83EA70C61FEBD972F1C8C7C8 /* AlibiKit */,
+			);
+			productName = AppAlibi;
+			productReference = F9745A082C18925A74918909 /* AppAlibi.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B7FC9436E72E731E1E3E453E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					8335B68356C1B74735506FBA = {
+						DevelopmentTeam = 297W77MNZY;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = B096745568F46CC591ACE266 /* Build configuration list for PBXProject "AppAlibi" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 75D9223E4FE6400299008174;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6F94B9711E26573F8E1A3983 /* XCLocalSwiftPackageReference "AlibiKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 850D0EE7BDDC6DAC38E73EE7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8335B68356C1B74735506FBA /* AppAlibi */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5B6181F6DD1FA0A1120DA89F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCC872F4FFFD813CED59E0F7 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		34FB4897A584CAA8978502E0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DEC161602472EC5ADEF879EC /* AppAlibiApp.swift in Sources */,
+				A8190E4F0F46B543AC4BDAD2 /* AppInfo.swift in Sources */,
+				09250B2AB08C09EC7B90947D /* AppModel.swift in Sources */,
+				9849A9EE5AA43BF4B968A557 /* Formatting.swift in Sources */,
+				960AE2EC382A5C17826E5B4F /* HistoryView.swift in Sources */,
+				1806C3DA3CE91DD8B5E2D100 /* MacComponents.swift in Sources */,
+				327A88B8166CD68D68C19772 /* MacFoundation.swift in Sources */,
+				BB29756E7C695F0EB84F4AD7 /* MacOnboardingView.swift in Sources */,
+				97FFB7E630474748799A01F5 /* MenuContentView.swift in Sources */,
+				D86D4DA133808C931D6CC0F8 /* SettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		34E0A7BFDF5973D6F9651C4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = AppAlibi/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.szydlowsky.AppAlibi;
+				PRODUCT_NAME = AppAlibi;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		7314EE525C02B3496CBBD714 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 297W77MNZY;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		BE230780BC22FB1256266C8F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = AppAlibi/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.szydlowsky.AppAlibi;
+				PRODUCT_NAME = AppAlibi;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		DD0A61A519B0AE982A0B8B34 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 297W77MNZY;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		207228D54C6ABB546CD5CF98 /* Build configuration list for PBXNativeTarget "AppAlibi" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE230780BC22FB1256266C8F /* Debug */,
+				34E0A7BFDF5973D6F9651C4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B096745568F46CC591ACE266 /* Build configuration list for PBXProject "AppAlibi" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD0A61A519B0AE982A0B8B34 /* Debug */,
+				7314EE525C02B3496CBBD714 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		6F94B9711E26573F8E1A3983 /* XCLocalSwiftPackageReference "AlibiKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = AlibiKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		83EA70C61FEBD972F1C8C7C8 /* AlibiKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AlibiKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = B7FC9436E72E731E1E3E453E /* Project object */;
+}

@@ -1,0 +1,65 @@
+# Generate the Xcode project with: xcodegen generate
+name: AppAlibi
+options:
+  bundleIdPrefix: com.szydlowsky
+  deploymentTarget:
+    # 15: defaultLaunchBehavior, windowDismissBehavior and restorationBehavior,
+    # used by the window handling ported from ZuckOff's Mac target.
+    macOS: "15.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+
+packages:
+  AlibiKit:
+    path: AlibiKit
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: 297W77MNZY
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+
+targets:
+  AppAlibi:
+    type: application
+    platform: macOS
+    sources:
+      - path: AppAlibi
+    dependencies:
+      - package: AlibiKit
+        product: AlibiKit
+    info:
+      path: AppAlibi/Info.plist
+      properties:
+        CFBundleDisplayName: AppAlibi
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSUIElement: true
+        LSApplicationCategoryType: public.app-category.utilities
+        NSHumanReadableCopyright: "Copyright © 2026 Pawel Szydlowski"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.szydlowsky.AppAlibi
+        PRODUCT_NAME: AppAlibi
+        # Not sandboxed: the sandbox blocks spawning /usr/bin/log.
+        ENABLE_APP_SANDBOX: NO
+        ENABLE_HARDENED_RUNTIME: YES
+        COMBINE_HIDPI_IMAGES: YES
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+
+schemes:
+  AppAlibi:
+    build:
+      targets:
+        AppAlibi: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - package: AlibiKit/AlibiKitTests
+    archive:
+      config: Release
