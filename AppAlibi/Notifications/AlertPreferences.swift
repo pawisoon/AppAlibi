@@ -49,6 +49,21 @@ enum AlertPreferences {
         "appalibi.reports.lastDelivered.\(period.rawValue)"
     }
 
+    /// What the welcome tour's "Turn On Notifications" switches on.
+    static func enableDefaults() {
+        defaults.set(SensorAlertMode.firstUse.rawValue, forKey: sensorsKey)
+        defaults.set(true, forKey: dailyKey)
+        setLastDelivered(Date(), for: .day)
+    }
+
+    /// Undoes `enableDefaults` when the user declines the system prompt.
+    static func disableAll() {
+        defaults.set(SensorAlertMode.off.rawValue, forKey: sensorsKey)
+        defaults.set(false, forKey: firstPermissionKey)
+        defaults.set(false, forKey: dailyKey)
+        defaults.set(false, forKey: weeklyKey)
+    }
+
     static var wantsNotifications: Bool {
         alertSettings.isEnabled || ReportPeriod.allCases.contains(where: isEnabled)
     }

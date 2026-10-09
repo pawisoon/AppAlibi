@@ -42,7 +42,7 @@ enum MacPreferences {
     static let onboardingVersionKey = "appalibi.mac.onboardingVersionSeen"
 
     /// Raise when the onboarding changes enough that existing users should see it once more.
-    static let onboardingVersion = 1
+    static let onboardingVersion = 2
 
     private static let logger = Logger(subsystem: "com.szydlowsky.AppAlibi", category: "MacPreferences")
 

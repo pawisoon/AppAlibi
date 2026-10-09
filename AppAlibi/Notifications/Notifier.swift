@@ -40,6 +40,8 @@ final class Notifier: NSObject {
 
     var isDenied: Bool { status == .denied }
 
+    var isAuthorized: Bool { [.authorized, .provisional].contains(status) }
+
     /// Asks once. Later calls only read the current answer.
     func requestAuthorization() async {
         do {

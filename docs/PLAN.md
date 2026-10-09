@@ -107,7 +107,10 @@ Each batch is written in one SQLite transaction together with the new
   - *Permissions:* daily aggregates with app, service, result, count, last seen.
     Apple system processes and preflight checks are hidden by default.
 - **Settings:** launch at login, show location, notifications, reveal database, delete history.
-- **Notifications** (all off by default, permission asked on first switch-on):
+- **Notifications** (all off by default). The welcome tour has a page with a
+  "Turn On Notifications" button: it asks macOS for permission and, if granted,
+  turns on first-use sensor alerts and the daily summary. Settings asks too, the
+  first time any notification is switched on.
   - camera, mic or screen started by an app: first use per app and sensor, or every session.
     Camera and mic from one app in one batch are one notification. Restarts inside
     the merge gap stay quiet.
@@ -143,7 +146,7 @@ Each batch is written in one SQLite transaction together with the new
    Window handling and onboarding ported from ZuckOff's macOS target. Minimum macOS raised to 15.
 3. **M2 Polish:** app icon (done 2026-10-09, `design/AppIcon.svg`, rendered by
    `design/render-icon.sh`), notifications and daily or weekly summaries (done 2026-10-09),
-   Summary tab (done 2026-10-09). Still to do: alert for use while the screen is locked,
+   Summary tab (done 2026-10-09). Onboarding version 2 adds the notifications page. Still to do: alert for use while the screen is locked,
    CSV export, data retention setting.
 4. **M3 Ship:** Developer ID signing, notarization, Sparkle updates, website on appalibi.com.
 5. **Later:** Endpoint Security extension for real file access history.
