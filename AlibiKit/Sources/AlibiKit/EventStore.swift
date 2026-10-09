@@ -278,6 +278,16 @@ public final class EventStore: @unchecked Sendable {
         }
     }
 
+    /// How many times the app made a real (not preflight) check for the service, on any day.
+    public func tccAccessCount(app: String, service: String) throws -> Int {
+        try locked {
+            let counts = try database.prepare("""
+                SELECT COALESCE(SUM(count), 0) FROM tcc_access WHERE app = ? AND service = ? AND preflight = 0
+                """).query([.text(app), .text(service)]) { Int($0.int(0)) }
+            return counts.first ?? 0
+        }
+    }
+
     private static func inClause(_ column: String, count: Int) -> String {
         "\(column) IN (\(Array(repeating: "?", count: count).joined(separator: ",")))"
     }

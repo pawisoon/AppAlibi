@@ -10,6 +10,8 @@ struct MacOnboardingView: View {
 
     @State private var page = 0
     @State private var opensAtLogin = MacPreferences.opensAtLogin
+    @State private var askingForNotifications = false
+    private let notifier = Notifier.shared
 
     private let onFinish: () -> Void
 
@@ -18,7 +20,7 @@ struct MacOnboardingView: View {
     }
 
     private enum Page: Int, CaseIterable {
-        case welcome, records, source, running, home
+        case welcome, records, source, running, notifications, home
     }
 
     private var pages: [Page] { Page.allCases }
@@ -80,6 +82,7 @@ struct MacOnboardingView: View {
             .padding(.bottom, 24)
         }
         .frame(width: 600, height: 560)
+        .task { await notifier.refreshStatus() }
         .tint(.orange)
         .background(
             Button("") { go(1) }
@@ -180,6 +183,15 @@ struct MacOnboardingView: View {
                     opensAtLogin = MacPreferences.opensAtLogin
                 }
             }
+        case .notifications:
+            template(
+                title: "Hear about it as it happens",
+                body: "AppAlibi can tell you when an app turns on your camera, microphone or screen for the first time, and sum up each day at \(defaultSummaryTime). Change either one, or add a weekly summary, in Settings."
+            ) {
+                AnimatedSymbol(name: "bell.badge", size: 68, effect: .bounce)
+            } extra: {
+                notificationsControl
+            }
         case .home:
             template(title: "Where should AppAlibi live?", body: nil) {
                 Image.appIcon
@@ -194,6 +206,49 @@ struct MacOnboardingView: View {
                 }
                 .padding(.horizontal, 40)
                 Text("You can change this any time in Settings.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    /// 18:00, or 6:00 PM, as the Mac shows times.
+    private var defaultSummaryTime: String {
+        let minute = AlertPreferences.defaultMinute
+        let date = Calendar.current.date(bySettingHour: minute / 60, minute: minute % 60, second: 0, of: Date()) ?? Date()
+        return date.formatted(date: .omitted, time: .shortened)
+    }
+
+    /// The permission prompt comes from a button, never on its own, so the
+    /// tour reads the same whether the answer is yes or no.
+    @ViewBuilder
+    private var notificationsControl: some View {
+        switch notifier.status {
+        case .authorized, .provisional:
+            Label("Notifications are on", systemImage: "checkmark.circle.fill")
+                .foregroundStyle(.green)
+        case .denied:
+            VStack(spacing: 8) {
+                Text("Notifications are turned off for AppAlibi.")
+                    .foregroundStyle(.secondary)
+                Button("Open System Settings") { notifier.openSystemSettings() }
+            }
+        default:
+            VStack(spacing: 8) {
+                Button {
+                    askingForNotifications = true
+                    Task {
+                        AlertPreferences.enableDefaults()
+                        await notifier.requestAuthorization()
+                        if !notifier.isAuthorized { AlertPreferences.disableAll() }
+                        askingForNotifications = false
+                    }
+                } label: {
+                    Text("Turn On Notifications").frame(minWidth: 180)
+                }
+                .controlSize(.large)
+                .disabled(askingForNotifications)
+                Text("Or skip this and stay quiet. Nothing is lost, the history keeps recording.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

@@ -5,23 +5,23 @@ struct HistoryView: View {
     let model: AppModel
 
     enum Tab: String, CaseIterable, Identifiable {
+        case summary = "Summary"
         case sensors = "Sensors"
         case permissions = "Permissions"
         var id: Self { self }
     }
 
-    @State private var tab: Tab = .sensors
-
     var body: some View {
         Group {
-            switch tab {
+            switch model.historyTab {
+            case .summary: SummaryView(model: model)
             case .sensors: SensorHistoryView(model: model)
             case .permissions: PermissionHistoryView(model: model)
             }
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Picker("View", selection: $tab) {
+                Picker("View", selection: Binding(get: { model.historyTab }, set: { model.historyTab = $0 })) {
                     ForEach(Tab.allCases) { Text($0.rawValue).tag($0) }
                 }
                 .pickerStyle(.segmented)

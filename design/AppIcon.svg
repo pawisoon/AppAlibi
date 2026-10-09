@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- AppAlibi icon: an eye whose pupil is a clock. Watching, and keeping time.
+       Follows the macOS icon grid: 824pt rounded square centred on a 1024 canvas.
+       Render with design/render-icon.sh. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2E2747"/>
+      <stop offset="1" stop-color="#120F1E"/>
+    </linearGradient>
+    <linearGradient id="sclera" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#E9E3F2"/>
+    </linearGradient>
+    <radialGradient id="iris" cx="0.42" cy="0.38" r="0.7">
+      <stop offset="0" stop-color="#FFC15C"/>
+      <stop offset="0.6" stop-color="#FF8A1F"/>
+      <stop offset="1" stop-color="#E8590C"/>
+    </radialGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow" color-interpolation-filters="sRGB" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+    <filter id="tileShadow" color-interpolation-filters="sRGB" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000000" flood-opacity="0.30"/>
+    </filter>
+    <clipPath id="eyeClip">
+      <path d="M196,512 C300,330 410,262 512,262 C614,262 724,330 828,512 C724,694 614,762 512,762 C410,762 300,694 196,512 Z"/>
+    </clipPath>
+  </defs>
+
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="#000000" filter="url(#tileShadow)"/>
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bg)"/>
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#gloss)"/>
+
+  <g filter="url(#shadow)">
+    <path d="M196,512 C300,330 410,262 512,262 C614,262 724,330 828,512 C724,694 614,762 512,762 C410,762 300,694 196,512 Z" fill="url(#sclera)"/>
+  </g>
+
+  <g clip-path="url(#eyeClip)">
+    <circle cx="512" cy="512" r="172" fill="url(#iris)"/>
+    <circle cx="512" cy="512" r="172" fill="none" stroke="#B8460A" stroke-opacity="0.35" stroke-width="6"/>
+    <!-- Pupil as a clock face -->
+    <circle cx="512" cy="512" r="104" fill="#1A1529"/>
+    <g stroke="#FFB04A" stroke-linecap="round">
+      <line x1="512" y1="424" x2="512" y2="440" stroke-width="10"/>
+      <line x1="600" y1="512" x2="584" y2="512" stroke-width="10"/>
+      <line x1="512" y1="600" x2="512" y2="584" stroke-width="10"/>
+      <line x1="424" y1="512" x2="440" y2="512" stroke-width="10"/>
+    </g>
+    <g stroke="#FFFFFF" stroke-linecap="round">
+      <line x1="512" y1="512" x2="512" y2="452" stroke-width="16"/>
+      <line x1="512" y1="512" x2="562" y2="540" stroke-width="12"/>
+    </g>
+    <circle cx="512" cy="512" r="13" fill="#FFFFFF"/>
+    <!-- Catchlight -->
+    <ellipse cx="436" cy="404" rx="28" ry="20" fill="#FFFFFF" fill-opacity="0.85" transform="rotate(-35 436 404)"/>
+  </g>
+</svg>

@@ -28,4 +28,5 @@ Everything stays on your Mac in a local SQLite database. See [docs/](docs/).
 
 ## Status
 
-Milestone 1: working menu bar app with history. See [docs/PLAN.md](docs/PLAN.md).
+Milestone 1: working menu bar app with history. Milestone 2 in progress: app icon,
+access notifications, and daily or weekly summaries with a Screen Time style Summary tab. See [docs/PLAN.md](docs/PLAN.md).

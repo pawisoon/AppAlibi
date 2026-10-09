@@ -15,6 +15,12 @@ final class AppModel {
     private(set) var storeError: String?
     private(set) var showLocation: Bool
     private(set) var showSystemInMenu: Bool
+    /// The history window's tab. Here rather than in the view so a click on a
+    /// notification can pick it.
+    var historyTab: HistoryView.Tab = .summary
+    var summaryPeriod: ReportPeriod = .day
+    /// Any date inside the day or week the Summary tab shows.
+    var summaryDate = Date()
 
     let store: EventStore?
     @ObservationIgnored private var collector: Collector?
@@ -41,17 +47,32 @@ final class AppModel {
 
     func start() {
         guard collector == nil, let store else { return }
-        let collector = Collector(store: store) { state, wroteEvents in
-            Task { @MainActor in AppModel.shared.handle(state: state, wroteEvents: wroteEvents) }
+        let collector = Collector(store: store) { state, events in
+            Task { @MainActor in AppModel.shared.handle(state: state, events: events) }
         }
         self.collector = collector
         Task { await collector.start() }
         refresh()
     }
 
-    private func handle(state: CollectorState, wroteEvents: Bool) {
+    private func handle(state: CollectorState, events: [CollectedEvent]) {
         self.state = state
-        if wroteEvents { scheduleRefresh() }
+        guard !events.isEmpty else { return }
+        scheduleRefresh()
+        postAlerts(for: events)
+    }
+
+    /// Runs on every stored batch. The planner drops anything older than a
+    /// couple of minutes, so catching up on the log at launch stays quiet.
+    private func postAlerts(for events: [CollectedEvent]) {
+        let settings = AlertPreferences.alertSettings
+        guard settings.isEnabled, let store else { return }
+        let planner = AlertPlanner(store: store, settings: settings) { identifier, binaryPath in
+            MainActor.assumeIsolated { AppInfo.kind(for: identifier, binaryPath: binaryPath) == .app }
+        }
+        for alert in (try? planner.alerts(for: events)) ?? [] {
+            Notifier.shared.post(alert)
+        }
     }
 
     /// Coalesces bursts (catch-up writes many batches) into one refresh.
@@ -100,6 +121,25 @@ final class AppModel {
             kinds[app] = AppInfo.kind(for: app, binaryPath: path)
         }
         return Set(kinds.filter { $0.value == kind }.keys)
+    }
+
+    /// Activity in the interval, split into chart bars if `bucket` is given.
+    func report(_ interval: DateInterval, now: Date = Date(), bucket: Calendar.Component? = nil,
+                scope: AppScope = .apps) -> ActivityReport? {
+        guard let store else { return nil }
+        return try? ActivityReport.build(store: store, interval: interval, now: now, bucket: bucket,
+                                         includeLocation: showLocation) { identifier, binaryPath in
+            MainActor.assumeIsolated {
+                guard let kind = scope.kind else { return true }
+                return AppInfo.kind(for: identifier, binaryPath: binaryPath) == kind
+            }
+        }
+    }
+
+    func showSummary(_ period: ReportPeriod) {
+        summaryPeriod = period
+        summaryDate = Date()
+        historyTab = .summary
     }
 
     var isSensitiveSensorActive: Bool {

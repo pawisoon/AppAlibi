@@ -66,6 +66,9 @@ AlibiKit/                 Swift package, all logic, unit-tested with `swift test
   TCCCorrelator           CTX + ATTRIBUTION + RESULT -> TCCAccessEvent
   EventProcessor          LogEntry stream -> domain events (pure, testable)
   EventStore              SQLite (system libsqlite3, no dependencies)
+  AlertPlanner            stored batch -> notifications worth posting (fresh events only)
+  ActivityReport          day or week summary: per-app time, hourly or daily bars, permission checks
+  ReportSchedule          when the daily or weekly summary notification is due
   LogReader               runs /usr/bin/log, yields batches of LogEntry
   Collector               actor: catch-up with `log show`, then `log stream`
 ```
@@ -96,11 +99,27 @@ Each batch is written in one SQLite transaction together with the new
 
 - **Menu bar icon:** an eye, filled while camera, mic or screen recording is active.
 - **Menu bar panel:** status, "Active now", the last few sessions, Open History, Settings, Quit.
-- **History window**, two tabs:
+- **History window**, three tabs:
+  - *Summary:* Day or Week, laid out like Screen Time: total time with camera,
+    mic or screen on, a bar per hour or day, apps by time, then protected data
+    per app. A call with camera and mic on counts once (spans are merged).
   - *Sensors:* table of sessions with app icon, sensor, start, duration. Filter by sensor and app.
   - *Permissions:* daily aggregates with app, service, result, count, last seen.
     Apple system processes and preflight checks are hidden by default.
-- **Settings:** launch at login, show location, reveal database, delete history.
+- **Settings:** launch at login, show location, notifications, reveal database, delete history.
+- **Notifications** (all off by default). The welcome tour has a page with a
+  "Turn On Notifications" button: it asks macOS for permission and, if granted,
+  turns on first-use sensor alerts and the daily summary. Settings asks too, the
+  first time any notification is switched on.
+  - camera, mic or screen started by an app: first use per app and sensor, or every session.
+    Camera and mic from one app in one batch are one notification. Restarts inside
+    the merge gap stay quiet.
+  - first real (not preflight) check by an app for a TCC service.
+  - daily and weekly summary at a chosen time (default 18:00, weekly on Friday).
+    A timer checks every minute and on wake, so a Mac asleep at that time gets it
+    on wake if within 6 hours.
+  - Events older than 2 minutes never notify, so the catch-up at launch is silent.
+  - Clicking a notification opens the matching history tab.
 
 ## Decisions
 
@@ -125,8 +144,10 @@ Each batch is written in one SQLite transaction together with the new
 2b. **M1.5 (done 2026-10-09):** apps-versus-system filter (history scope picker, menu
    shows apps only by default), menu bar or Dock presentation, first-run welcome tour.
    Window handling and onboarding ported from ZuckOff's macOS target. Minimum macOS raised to 15.
-3. **M2 Polish:** app icon, notifications (first use of a sensor by an app,
-   use while the screen is locked), CSV export, data retention setting.
+3. **M2 Polish:** app icon (done 2026-10-09, `design/AppIcon.svg`, rendered by
+   `design/render-icon.sh`), notifications and daily or weekly summaries (done 2026-10-09),
+   Summary tab (done 2026-10-09). Onboarding version 2 adds the notifications page. Still to do: alert for use while the screen is locked,
+   CSV export, data retention setting.
 4. **M3 Ship:** Developer ID signing, notarization, Sparkle updates, website on appalibi.com.
 5. **Later:** Endpoint Security extension for real file access history.
 

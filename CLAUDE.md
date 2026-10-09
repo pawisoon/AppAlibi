@@ -16,6 +16,8 @@ screen recording and TCC-protected resources. Data comes from the unified log
 - `AppAlibi/MacUI/` window handling, menu bar or Dock presentation, onboarding tour and small
   components, ported from ZuckOff's macOS target (`zuckoff` repo, `Mac/ZuckoffMacApp.swift` and
   `Packages/ZuckoffCore/Sources/ZuckoffCore/MacUI/`, on the Mac branches). Keep them in step when one changes.
+- `AppAlibi/Notifications/` notification posting, alert and summary preferences, summary scheduler.
+- `design/AppIcon.svg` app icon source. `design/render-icon.sh` renders it into the asset catalog.
 - `project.yml` XcodeGen spec. `AppAlibi.xcodeproj` is generated from it; edit the spec, not the project.
 
 ## Commands
@@ -45,6 +47,6 @@ The app's database is `~/Library/Application Support/AppAlibi/alibi.sqlite`.
   in Xcode's settings. It builds and previews; it cannot create projects.
 
 Status (2026-10-09): M1 done, plus apps-versus-system filter, menu bar or Dock mode, and the welcome tour.
-The welcome tour was checked visually. The history and settings windows were not. No app icon yet.
-Repo: github.com/pawisoon/AppAlibi (private). The generated Xcode project is committed so Xcode Cloud
-builds without XcodeGen: run `xcodegen generate` and commit the result whenever project.yml changes.
+M2 in progress: app icon, access notifications, daily and weekly summaries, and the Summary tab are in.
+The welcome tour, Summary tab and Settings were checked visually. Notification delivery was not
+(it needs the permission prompt answered).
