@@ -63,3 +63,15 @@ final class ControlCenterParserTests: XCTestCase {
         XCTAssertNil(ControlCenterParser.snapshot(from: "Active activity attributions changed to garbage"))
     }
 }
+
+final class LocalizationTests: XCTestCase {
+    /// Sensor, permission and result names ship in English and Polish.
+    func testPolishNamesAreBundled() throws {
+        let path = try XCTUnwrap(Bundle.module.path(forResource: "pl", ofType: "lproj"))
+        let polish = try XCTUnwrap(Bundle(path: path))
+        XCTAssertEqual(polish.localizedString(forKey: "Camera", value: nil, table: nil), "Kamera")
+        XCTAssertEqual(polish.localizedString(forKey: "Full Disk Access", value: nil, table: nil), "Pełny dostęp do dysku")
+        XCTAssertEqual(polish.localizedString(forKey: "Denied", value: nil, table: nil), "Odrzucone")
+        XCTAssertEqual(polish.localizedString(forKey: "Value %lld", value: nil, table: nil), "Wartość %lld")
+    }
+}

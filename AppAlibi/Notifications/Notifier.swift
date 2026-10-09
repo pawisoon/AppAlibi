@@ -69,25 +69,25 @@ final class Notifier: NSObject {
         case let .sensors(app, sensors, firstUse, date):
             let name = AppInfo.info(for: app).name
             let list = ListFormatter.localizedString(byJoining: sensors.map { $0.displayName.lowercased() })
-            content.title = "\(name) is using your \(list)"
+            content.title = String(localized: "\(name) is using your \(list)")
             content.body = firstUse
-                ? "The first time AppAlibi has seen this app do that. Started \(Formatting.time(date))."
-                : "Started \(Formatting.time(date))."
+                ? String(localized: "The first time AppAlibi has seen this app do that. Started \(Formatting.time(date)).")
+                : String(localized: "Started \(Formatting.time(date)).")
             content.threadIdentifier = "sensors"
             content.userInfo = ["open": "sensors"]
         case let .permission(app, binaryPath, service, authValue, _):
             let name = AppInfo.info(for: app, binaryPath: binaryPath.isEmpty ? nil : binaryPath).name
             let what = TCCService.displayName(for: service)
             content.title = switch authValue {
-            case 0: "\(name) was denied \(what)"
-            case 2, 3: "\(name) accessed \(what)"
-            default: "\(name) asked for \(what)"
+            case 0: String(localized: "\(name) was denied \(what)")
+            case 2, 3: String(localized: "\(name) accessed \(what)")
+            default: String(localized: "\(name) asked for \(what)")
             }
-            content.body = "The first time AppAlibi has seen this app do that."
+            content.body = String(localized: "The first time AppAlibi has seen this app do that.")
             content.threadIdentifier = "permissions"
             content.userInfo = ["open": "permissions"]
         case let .lockedUse(lock, apps):
-            content.title = "Used while your Mac was locked"
+            content.title = String(localized: "Used while your Mac was locked")
             content.body = Self.lockedUseText(lock: lock, apps: apps)
             content.threadIdentifier = "locked"
             content.userInfo = ["open": "locked"]
@@ -98,7 +98,7 @@ final class Notifier: NSObject {
 
     func post(_ report: ActivityReport, period: ReportPeriod) {
         let content = UNMutableNotificationContent()
-        content.title = period == .day ? "Your day in AppAlibi" : "Your week in AppAlibi"
+        content.title = period == .day ? String(localized: "Your day in AppAlibi") : String(localized: "Your week in AppAlibi")
         content.body = Self.summaryText(report)
         content.threadIdentifier = "summary"
         content.userInfo = ["open": "summary", "period": period.rawValue]
@@ -110,17 +110,19 @@ final class Notifier: NSObject {
         var lines: [String] = []
         let apps = report.apps
         if apps.isEmpty {
-            lines.append("No app used your camera, microphone or screen.")
+            lines.append(String(localized: "No app used your camera, microphone or screen."))
         } else {
             let top = apps.prefix(3).map { "\(AppInfo.info(for: $0.app).name) \(Formatting.duration($0.duration))" }
-            let more = apps.count > 3 ? ", +\(apps.count - 3) more" : ""
-            lines.append("Camera, mic or screen: \(top.joined(separator: ", "))\(more)")
+            var names = top
+            if apps.count > 3 { names.append(String(localized: "+\(apps.count - 3) more")) }
+            lines.append(String(localized: "Camera, mic or screen: \(names.joined(separator: ", "))"))
         }
         let permissionApps = report.permissionApps.count
         if permissionApps > 0 {
             let denied = report.deniedChecks
-            let apps = permissionApps == 1 ? "1 app" : "\(permissionApps) apps"
-            lines.append("Protected data: \(apps)" + (denied > 0 ? ", \(denied) denied" : ""))
+            lines.append(denied > 0
+                ? String(localized: "Apps reaching for protected data: \(permissionApps), checks denied: \(denied)")
+                : String(localized: "Apps reaching for protected data: \(permissionApps)"))
         }
         return lines.joined(separator: "\n")
     }
@@ -131,8 +133,8 @@ final class Notifier: NSObject {
             let sensors = ListFormatter.localizedString(byJoining: usage.sensors.map { $0.displayName.lowercased() })
             return "\(AppInfo.info(for: usage.app).name): \(sensors), \(Formatting.duration(usage.duration))"
         }
-        if apps.count > 3 { lines.append("+\(apps.count - 3) more") }
-        lines.append("Locked \(Formatting.time(lock.start)) to \(Formatting.time(lock.end)).")
+        if apps.count > 3 { lines.append(String(localized: "+\(apps.count - 3) more")) }
+        lines.append(String(localized: "Locked \(Formatting.time(lock.start)) to \(Formatting.time(lock.end))."))
         return lines.joined(separator: "\n")
     }
 

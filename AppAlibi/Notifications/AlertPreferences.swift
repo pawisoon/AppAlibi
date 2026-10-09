@@ -76,9 +76,9 @@ enum AlertPreferences {
 extension SensorAlertMode {
     var title: String {
         switch self {
-        case .off: "Off"
-        case .firstUse: "First time an app uses one"
-        case .everyUse: "Every time"
+        case .off: String(localized: "Off")
+        case .firstUse: String(localized: "First time an app uses one")
+        case .everyUse: String(localized: "Every time")
         }
     }
 }
@@ -86,8 +86,8 @@ extension SensorAlertMode {
 extension ReportPeriod {
     var title: String {
         switch self {
-        case .day: "Today"
-        case .week: "Last 7 Days"
+        case .day: String(localized: "Today")
+        case .week: String(localized: "Last 7 Days")
         }
     }
 }

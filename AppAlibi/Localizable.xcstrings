@@ -1,0 +1,1907 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+      "shouldTranslate" : false
+    },
+    "%@ (check)" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (sprawdzenie)"
+          }
+        }
+      }
+    },
+    "%@ accessed %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ accessed %2$@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ uzyskuje dostęp: %@"
+          }
+        }
+      }
+    },
+    "%@ asked for %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ asked for %2$@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ prosi o dostęp: %@"
+          }
+        }
+      }
+    },
+    "%@ is using your %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ is using your %2$@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ używa: %@"
+          }
+        }
+      }
+    },
+    "%@ of it while the screen was locked" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ z tego przy zablokowanym ekranie"
+          }
+        }
+      }
+    },
+    "%@ since %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ since %2$@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ od %@"
+          }
+        }
+      }
+    },
+    "%@ was denied %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ was denied %2$@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ – odmowa dostępu: %@"
+          }
+        }
+      }
+    },
+    "%lld" : {
+      "shouldTranslate" : false
+    },
+    "%lldh" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld godz."
+          }
+        }
+      }
+    },
+    "%lldm" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min"
+          }
+        }
+      }
+    },
+    "+%lld more" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%lld więcej"
+          }
+        }
+      }
+    },
+    "0m" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0 min"
+          }
+        }
+      }
+    },
+    "1 Month" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 miesiąc"
+          }
+        }
+      }
+    },
+    "1 Year" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 rok"
+          }
+        }
+      }
+    },
+    "1 month" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 miesiąc"
+          }
+        }
+      }
+    },
+    "1 year" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 rok"
+          }
+        }
+      }
+    },
+    "24 hours" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "24 godziny"
+          }
+        }
+      }
+    },
+    "3 Months" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 miesiące"
+          }
+        }
+      }
+    },
+    "3 months" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 miesiące"
+          }
+        }
+      }
+    },
+    "30 days" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30 dni"
+          }
+        }
+      }
+    },
+    "6 Months" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 miesięcy"
+          }
+        }
+      }
+    },
+    "6 months" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 miesięcy"
+          }
+        }
+      }
+    },
+    "7 days" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7 dni"
+          }
+        }
+      }
+    },
+    "<1m" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<1 min"
+          }
+        }
+      }
+    },
+    "A regular app with a Dock icon and the history window." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zwykła aplikacja z ikoną w Docku i oknem historii."
+          }
+        }
+      }
+    },
+    "Active" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trwa"
+          }
+        }
+      }
+    },
+    "Active now" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teraz w użyciu"
+          }
+        }
+      }
+    },
+    "All" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wszystkie"
+          }
+        }
+      }
+    },
+    "Allowed: %lld" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dozwolone: %lld"
+          }
+        }
+      }
+    },
+    "An eye in the menu bar that fills while a sensor is in use. No Dock icon." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oko na pasku menu, które wypełnia się, gdy czujnik jest w użyciu. Bez ikony w Docku."
+          }
+        }
+      }
+    },
+    "App" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacja"
+          }
+        }
+      }
+    },
+    "App or path" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacja lub ścieżka"
+          }
+        }
+      }
+    },
+    "AppAlibi" : {
+      "shouldTranslate" : false
+    },
+    "AppAlibi History" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historia AppAlibi"
+          }
+        }
+      }
+    },
+    "AppAlibi Permissions" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AppAlibi – uprawnienia"
+          }
+        }
+      }
+    },
+    "AppAlibi Sensors" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AppAlibi – czujniki"
+          }
+        }
+      }
+    },
+    "AppAlibi can tell you when an app turns on your camera, microphone or screen for the first time, what used them while your Mac was locked, and sum up each day at %@. Change any of these, or add a weekly summary, in Settings." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AppAlibi może dać ci znać, gdy aplikacja po raz pierwszy włączy kamerę, mikrofon lub ekran, pokazać, co z nich korzystało, gdy Mac był zablokowany, i podsumować każdy dzień o %@. Każdą z tych opcji możesz zmienić, a podsumowanie tygodniowe dodać, w Ustawieniach."
+          }
+        }
+      }
+    },
+    "AppAlibi reads the same macOS log entries that light up the privacy dots. The history stays in a database on this Mac. There is no account and nothing is uploaded." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AppAlibi odczytuje te same wpisy dziennika macOS, które zapalają kropki prywatności. Historia zostaje w bazie danych na tym Macu. Nie ma konta i nic nie jest wysyłane."
+          }
+        }
+      }
+    },
+    "AppAlibi records while it runs, and catches up on the last few days of the log when it starts. Closing the window does not stop it. Quitting does." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AppAlibi zapisuje, dopóki działa, a po uruchomieniu nadrabia ostatnie kilka dni dziennika. Zamknięcie okna go nie zatrzymuje. Zakończenie działania – tak."
+          }
+        }
+      }
+    },
+    "AppAlibi, sensor in use" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AppAlibi, czujnik w użyciu"
+          }
+        }
+      }
+    },
+    "Apple background services, such as screenshots taken by the system." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usługi Apple działające w tle, np. zrzuty ekranu wykonywane przez system."
+          }
+        }
+      }
+    },
+    "Apps" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacje"
+          }
+        }
+      }
+    },
+    "Apps and system services are kept apart, so the background noise of macOS stays out of the way." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacje i usługi systemowe są rozdzielone, więc szum tła macOS nie przeszkadza."
+          }
+        }
+      }
+    },
+    "Apps reaching for protected data: %lld" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacje sięgające po chronione dane: %lld"
+          }
+        }
+      }
+    },
+    "Apps reaching for protected data: %lld, checks denied: %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Apps reaching for protected data: %1$lld, checks denied: %2$lld"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacje sięgające po chronione dane: %lld, odmowy: %lld"
+          }
+        }
+      }
+    },
+    "Apps you installed or opened, or the system services that run in the background." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacje zainstalowane lub otwarte na tym Macu albo usługi systemowe działające w tle."
+          }
+        }
+      }
+    },
+    "Back" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wstecz"
+          }
+        }
+      }
+    },
+    "Bundle ID" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Identyfikator pakietu"
+          }
+        }
+      }
+    },
+    "Camera, Microphone and Screen" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamera, mikrofon i ekran"
+          }
+        }
+      }
+    },
+    "Camera, mic or screen: %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamera, mikrofon lub ekran: %@"
+          }
+        }
+      }
+    },
+    "Camera, microphone and screen recording sessions, with start time and length." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sesje kamery, mikrofonu i nagrywania ekranu, z godziną rozpoczęcia i czasem trwania."
+          }
+        }
+      }
+    },
+    "Camera, microphone or screen" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamera, mikrofon lub ekran"
+          }
+        }
+      }
+    },
+    "Camera, microphone or screen in use" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamera, mikrofon lub ekran w użyciu"
+          }
+        }
+      }
+    },
+    "Catching up since %@…" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nadrabianie od %@…"
+          }
+        }
+      }
+    },
+    "Could not delete history: %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się usunąć historii: %@"
+          }
+        }
+      }
+    },
+    "Could not delete old history: %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się usunąć starej historii: %@"
+          }
+        }
+      }
+    },
+    "Could not open the history database: %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się otworzyć bazy danych historii: %@"
+          }
+        }
+      }
+    },
+    "Count" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liczba"
+          }
+        }
+      }
+    },
+    "Daily average" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Średnia dzienna"
+          }
+        }
+      }
+    },
+    "Daily summary" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podsumowanie dzienne"
+          }
+        }
+      }
+    },
+    "Database" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baza danych"
+          }
+        }
+      }
+    },
+    "Day" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dzień"
+          }
+        }
+      }
+    },
+    "Delete History" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usuń historię"
+          }
+        }
+      }
+    },
+    "Delete History…" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usuń historię…"
+          }
+        }
+      }
+    },
+    "Delete Older History" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usuń starszą historię"
+          }
+        }
+      }
+    },
+    "Delete all recorded history?" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usunąć całą zapisaną historię?"
+          }
+        }
+      }
+    },
+    "Denied: %lld" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odmowy: %lld"
+          }
+        }
+      }
+    },
+    "Dock" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dock"
+          }
+        }
+      }
+    },
+    "Duration" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czas trwania"
+          }
+        }
+      }
+    },
+    "Error: %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Błąd: %@"
+          }
+        }
+      }
+    },
+    "Every app has to account for itself." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Każda aplikacja musi się rozliczyć."
+          }
+        }
+      }
+    },
+    "Every time" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Za każdym razem"
+          }
+        }
+      }
+    },
+    "Everything stays on this Mac and there is no account. AppAlibi reads the macOS log and never sends it anywhere." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wszystko zostaje na tym Macu i nie ma konta. AppAlibi odczytuje dziennik macOS i nigdzie go nie wysyła."
+          }
+        }
+      }
+    },
+    "Export as CSV…" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eksportuj jako CSV…"
+          }
+        }
+      }
+    },
+    "Export…" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eksportuj…"
+          }
+        }
+      }
+    },
+    "Files & folders only" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tylko pliki i foldery"
+          }
+        }
+      }
+    },
+    "First access to protected data" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pierwszy dostęp do chronionych danych"
+          }
+        }
+      }
+    },
+    "First time an app uses one" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gdy aplikacja użyje ich pierwszy raz"
+          }
+        }
+      }
+    },
+    "Forever" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zawsze"
+          }
+        }
+      }
+    },
+    "Hear about it as it happens" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dowiaduj się na bieżąco"
+          }
+        }
+      }
+    },
+    "History" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historia"
+          }
+        }
+      }
+    },
+    "History older than that is deleted now, and from then on as it ages. This cannot be undone." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starsza historia zostanie usunięta teraz, a potem na bieżąco, gdy się zestarzeje. Tego nie można cofnąć."
+          }
+        }
+      }
+    },
+    "History…" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historia…"
+          }
+        }
+      }
+    },
+    "How it knows" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skąd to wie"
+          }
+        }
+      }
+    },
+    "Keep history" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przechowuj historię"
+          }
+        }
+      }
+    },
+    "Keep history for %@?" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przechowywać historię przez %@?"
+          }
+        }
+      }
+    },
+    "Keeps the record going from the moment you log in." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapis trwa od chwili zalogowania."
+          }
+        }
+      }
+    },
+    "Last 7 Days" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ostatnie 7 dni"
+          }
+        }
+      }
+    },
+    "Last Seen" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ostatnio"
+          }
+        }
+      }
+    },
+    "Leave it running" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zostaw włączone"
+          }
+        }
+      }
+    },
+    "Locked %@ to %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Locked %1$@ to %2$@."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zablokowano od %@ do %@."
+          }
+        }
+      }
+    },
+    "Menu" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menu"
+          }
+        }
+      }
+    },
+    "Menu bar" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasek menu"
+          }
+        }
+      }
+    },
+    "Minutes" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minuty"
+          }
+        }
+      }
+    },
+    "Next" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dalej"
+          }
+        }
+      }
+    },
+    "Next day" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Następny dzień"
+          }
+        }
+      }
+    },
+    "Next week" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Następny tydzień"
+          }
+        }
+      }
+    },
+    "No Permission Checks" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak sprawdzeń uprawnień"
+          }
+        }
+      }
+    },
+    "No Sessions" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak sesji"
+          }
+        }
+      }
+    },
+    "No activity recorded yet." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie zapisano jeszcze żadnej aktywności."
+          }
+        }
+      }
+    },
+    "No app is using your camera, microphone or screen." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żadna aplikacja nie używa kamery, mikrofonu ani ekranu."
+          }
+        }
+      }
+    },
+    "No app used them." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żadna aplikacja z nich nie korzystała."
+          }
+        }
+      }
+    },
+    "No app used your camera, microphone or screen." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żadna aplikacja nie korzystała z kamery, mikrofonu ani ekranu."
+          }
+        }
+      }
+    },
+    "No system service used them." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żadna usługa systemowa z nich nie korzystała."
+          }
+        }
+      }
+    },
+    "Not a guarantee. AppAlibi can only record what macOS logs, and a macOS update can change those entries." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To nie gwarancja. AppAlibi zapisuje tylko to, co rejestruje macOS, a aktualizacja macOS może zmienić te wpisy."
+          }
+        }
+      }
+    },
+    "Nothing is using your camera, microphone or screen." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nic nie używa kamery, mikrofonu ani ekranu."
+          }
+        }
+      }
+    },
+    "Nothing matched in this range." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak wyników w tym zakresie."
+          }
+        }
+      }
+    },
+    "Nothing reached for protected data." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nic nie sięgało po chronione dane."
+          }
+        }
+      }
+    },
+    "Notifications" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Powiadomienia"
+          }
+        }
+      }
+    },
+    "Notifications are on" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Powiadomienia są włączone"
+          }
+        }
+      }
+    },
+    "Notifications are turned off for AppAlibi." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Powiadomienia AppAlibi są wyłączone."
+          }
+        }
+      }
+    },
+    "Off" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyłączone"
+          }
+        }
+      }
+    },
+    "Off by default because macOS checks your location every few minutes." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Domyślnie wyłączone, bo macOS sprawdza twoją lokalizację co kilka minut."
+          }
+        }
+      }
+    },
+    "Older sessions and permission checks are deleted from this Mac." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starsze sesje i sprawdzenia uprawnień są usuwane z tego Maca."
+          }
+        }
+      }
+    },
+    "Only use while the screen was locked." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tylko użycie przy zablokowanym ekranie."
+          }
+        }
+      }
+    },
+    "Open System Settings" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz Ustawienia systemowe"
+          }
+        }
+      }
+    },
+    "Open at login" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwieraj po zalogowaniu"
+          }
+        }
+      }
+    },
+    "Or skip this and stay quiet. Nothing is lost, the history keeps recording." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Możesz też to pominąć i obejść się bez powiadomień. Nic nie przepadnie, historia zapisuje się dalej."
+          }
+        }
+      }
+    },
+    "Partly while the screen was locked" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Częściowo przy zablokowanym ekranie"
+          }
+        }
+      }
+    },
+    "Period" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okres"
+          }
+        }
+      }
+    },
+    "Permission" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uprawnienie"
+          }
+        }
+      }
+    },
+    "Permission checks for your folders, Full Disk Access, contacts and more, and whether macOS allowed them." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprawdzenia uprawnień do folderów, pełnego dostępu do dysku, kontaktów i nie tylko, oraz czy macOS na nie pozwolił."
+          }
+        }
+      }
+    },
+    "Permissions" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uprawnienia"
+          }
+        }
+      }
+    },
+    "Preflight checks" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprawdzenia wstępne"
+          }
+        }
+      }
+    },
+    "Preflight checks ask whether access is allowed without accessing anything." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprawdzenie wstępne pyta, czy dostęp jest dozwolony, niczego nie otwierając."
+          }
+        }
+      }
+    },
+    "Previous day" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poprzedni dzień"
+          }
+        }
+      }
+    },
+    "Previous week" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poprzedni tydzień"
+          }
+        }
+      }
+    },
+    "Protected Data" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chronione dane"
+          }
+        }
+      }
+    },
+    "Quit" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zakończ"
+          }
+        }
+      }
+    },
+    "Range" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zakres"
+          }
+        }
+      }
+    },
+    "Real access checks only. Preflight checks, where an app asks whether it may without accessing anything, are left out." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tylko rzeczywiste próby dostępu. Sprawdzenia wstępne, w których aplikacja pyta, czy może, niczego nie otwierając, są pominięte."
+          }
+        }
+      }
+    },
+    "Recent" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ostatnie"
+          }
+        }
+      }
+    },
+    "Recommended" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zalecane"
+          }
+        }
+      }
+    },
+    "Result" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wynik"
+          }
+        }
+      }
+    },
+    "Send Today’s Summary Now" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyślij teraz dzisiejsze podsumowanie"
+          }
+        }
+      }
+    },
+    "Sensor" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czujnik"
+          }
+        }
+      }
+    },
+    "Sensor sessions and permission checks are removed from this Mac. This cannot be undone." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sesje czujników i sprawdzenia uprawnień zostaną usunięte z tego Maca. Tego nie można cofnąć."
+          }
+        }
+      }
+    },
+    "Sensors" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czujniki"
+          }
+        }
+      }
+    },
+    "Sessions: %lld" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sesje: %lld"
+          }
+        }
+      }
+    },
+    "Settings…" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ustawienia…"
+          }
+        }
+      }
+    },
+    "Show" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokaż"
+          }
+        }
+      }
+    },
+    "Show AppAlibi in" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gdzie pokazywać AppAlibi"
+          }
+        }
+      }
+    },
+    "Show Welcome Tour Again" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokaż ponownie przewodnik powitalny"
+          }
+        }
+      }
+    },
+    "Show in Finder" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokaż w Finderze"
+          }
+        }
+      }
+    },
+    "Show location" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokazuj lokalizację"
+          }
+        }
+      }
+    },
+    "Show system services" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokazuj usługi systemowe"
+          }
+        }
+      }
+    },
+    "Skip" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pomiń"
+          }
+        }
+      }
+    },
+    "Start Watching" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zacznij obserwować"
+          }
+        }
+      }
+    },
+    "Started" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Początek"
+          }
+        }
+      }
+    },
+    "Started %@." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Początek: %@."
+          }
+        }
+      }
+    },
+    "Starting…" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uruchamianie…"
+          }
+        }
+      }
+    },
+    "Status" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stan"
+          }
+        }
+      }
+    },
+    "Summary" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podsumowanie"
+          }
+        }
+      }
+    },
+    "Summary time" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Godzina podsumowania"
+          }
+        }
+      }
+    },
+    "System" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        }
+      }
+    },
+    "The first time AppAlibi has seen this app do that." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AppAlibi widzi to u tej aplikacji po raz pierwszy."
+          }
+        }
+      }
+    },
+    "The first time AppAlibi has seen this app do that. Started %@." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AppAlibi widzi to u tej aplikacji po raz pierwszy. Początek: %@."
+          }
+        }
+      }
+    },
+    "This Week" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ten tydzień"
+          }
+        }
+      }
+    },
+    "Time" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czas"
+          }
+        }
+      }
+    },
+    "Time with camera, microphone or screen in use, by day" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czas z kamerą, mikrofonem lub ekranem w użyciu, według dni"
+          }
+        }
+      }
+    },
+    "Time with camera, microphone or screen in use, by hour" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czas z kamerą, mikrofonem lub ekranem w użyciu, według godzin"
+          }
+        }
+      }
+    },
+    "Today" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dzisiaj"
+          }
+        }
+      }
+    },
+    "Total" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Łącznie"
+          }
+        }
+      }
+    },
+    "Try including preflight checks or another scope." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spróbuj uwzględnić sprawdzenia wstępne lub zmienić zakres."
+          }
+        }
+      }
+    },
+    "Turn On Notifications" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Włącz powiadomienia"
+          }
+        }
+      }
+    },
+    "Use while the screen is locked" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użycie przy zablokowanym ekranie"
+          }
+        }
+      }
+    },
+    "Used while your Mac was locked" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użycie, gdy Mac był zablokowany"
+          }
+        }
+      }
+    },
+    "View" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Widok"
+          }
+        }
+      }
+    },
+    "Watching" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obserwuje"
+          }
+        }
+      }
+    },
+    "Week" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tydzień"
+          }
+        }
+      }
+    },
+    "Weekly on" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dzień tygodnia"
+          }
+        }
+      }
+    },
+    "Weekly summary" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podsumowanie tygodniowe"
+          }
+        }
+      }
+    },
+    "Welcome to AppAlibi" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Witaj w AppAlibi"
+          }
+        }
+      }
+    },
+    "What it keeps" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Co zapisuje"
+          }
+        }
+      }
+    },
+    "When an app first reaches for your folders, contacts, photos and so on." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gdy aplikacja pierwszy raz sięga po twoje foldery, kontakty, zdjęcia itd."
+          }
+        }
+      }
+    },
+    "When an app starts using one. System services are left out." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gdy aplikacja zaczyna z nich korzystać. Bez usług systemowych."
+          }
+        }
+      }
+    },
+    "When you unlock: anything that used the camera, microphone or screen while you were away, system services included." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Po odblokowaniu: wszystko, co korzystało z kamery, mikrofonu lub ekranu pod twoją nieobecność, łącznie z usługami systemowymi."
+          }
+        }
+      }
+    },
+    "Where should AppAlibi live?" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gdzie ma być AppAlibi?"
+          }
+        }
+      }
+    },
+    "Which apps used your camera, microphone and screen today." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Które aplikacje korzystały dziś z kamery, mikrofonu i ekranu."
+          }
+        }
+      }
+    },
+    "While locked" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przy blokadzie ekranu"
+          }
+        }
+      }
+    },
+    "Yesterday" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wczoraj"
+          }
+        }
+      }
+    },
+    "You can change this any time in Settings." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Możesz to zmienić w każdej chwili w Ustawieniach."
+          }
+        }
+      }
+    },
+    "Your day in AppAlibi" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Twój dzień w AppAlibi"
+          }
+        }
+      }
+    },
+    "Your week in AppAlibi" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Twój tydzień w AppAlibi"
+          }
+        }
+      }
+    },
+    "forever" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "zawsze"
+          }
+        }
+      }
+    },
+    "macOS shows a dot while an app uses your camera, microphone or screen, then forgets. AppAlibi writes down which app it was, when, and for how long." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS pokazuje kropkę, gdy aplikacja używa kamery, mikrofonu lub ekranu, a potem zapomina. AppAlibi zapisuje, która to była aplikacja, kiedy i jak długo."
+          }
+        }
+      }
+    },
+    "via %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "przez %@"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

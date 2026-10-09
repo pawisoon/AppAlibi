@@ -18,10 +18,10 @@ public struct Sensor: RawRepresentable, Hashable, Comparable, Sendable, Codable 
 
     public var displayName: String {
         switch self {
-        case .camera: "Camera"
-        case .microphone: "Microphone"
-        case .screen: "Screen Recording"
-        case .location: "Location"
+        case .camera: String(localized: "Camera", bundle: .module)
+        case .microphone: String(localized: "Microphone", bundle: .module)
+        case .screen: String(localized: "Screen Recording", bundle: .module)
+        case .location: String(localized: "Location", bundle: .module)
         default: rawValue.uppercased()
         }
     }

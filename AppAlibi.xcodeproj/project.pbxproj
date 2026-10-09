@@ -17,6 +17,7 @@
 		960AE2EC382A5C17826E5B4F /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557C1E92D1D0049A660E7BCB /* HistoryView.swift */; };
 		97FFB7E630474748799A01F5 /* MenuContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DBB3104133D9256C919E8 /* MenuContentView.swift */; };
 		9849A9EE5AA43BF4B968A557 /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7553550D720D6551E6C6FC9 /* Formatting.swift */; };
+		99E024C406C9829797DFDBD5 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FD4DE9DB4341BC28D41E692D /* Localizable.xcstrings */; };
 		A8190E4F0F46B543AC4BDAD2 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA7CBC5DDE9842DF742FF94 /* AppInfo.swift */; };
 		B19C25E129C818968FFA2D4A /* ReportScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E3083B657C6DD6D324ED0E /* ReportScheduler.swift */; };
 		BB29756E7C695F0EB84F4AD7 /* MacOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED844739C7B126C760EDFB9 /* MacOnboardingView.swift */; };
@@ -48,6 +49,7 @@
 		E7553550D720D6551E6C6FC9 /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
 		E911C016E050719DA75591A5 /* MacFoundation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacFoundation.swift; sourceTree = "<group>"; };
 		F9745A082C18925A74918909 /* AppAlibi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppAlibi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD4DE9DB4341BC28D41E692D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				27D8BC0CB48EB45EA873D82E /* AppModel.swift */,
 				3785523D3BBA81F811A1B819 /* Assets.xcassets */,
 				B7BCCAC9118C12B576B016BC /* Info.plist */,
+				FD4DE9DB4341BC28D41E692D /* Localizable.xcstrings */,
 				39C0CABE82A3CE8B2335BEF2 /* MacUI */,
 				6EE6A4879181540EAEAA180B /* Notifications */,
 				F3A90ADFF97FD3AFAF5E3411 /* Views */,
@@ -202,6 +205,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FCC872F4FFFD813CED59E0F7 /* Assets.xcassets in Resources */,
+				99E024C406C9829797DFDBD5 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +306,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 0.1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -309,6 +314,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 			};
@@ -388,6 +394,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 0.1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -396,6 +403,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};

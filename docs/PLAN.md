@@ -172,6 +172,10 @@ Shortening it asks first. The checkpoint stays, so nothing is imported again.
   (`xcrun mcpbridge`, configured in `.mcp.json`) handles builds and previews
   once Xcode has the project open. It has no project-creation tool.
 - Bundle ID `com.szydlowsky.AppAlibi`, team `297W77MNZY`.
+- **English and Polish.** String catalogs in the app and in AlibiKit (sensor,
+  permission and result names live there and are used by the CSV export too).
+  Polish was translated with DeepL and edited by hand. Counts are written as
+  "Label: N" so no Polish plural variations are needed.
 
 ## Milestones
 
