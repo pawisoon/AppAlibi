@@ -8,14 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		09250B2AB08C09EC7B90947D /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D8BC0CB48EB45EA873D82E /* AppModel.swift */; };
+		0D61ABA9F1383668741FF5F9 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC660CA0B895C7E71A5D487C /* SummaryView.swift */; };
 		1806C3DA3CE91DD8B5E2D100 /* MacComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FD9DD0A0C209F48890C8A9 /* MacComponents.swift */; };
 		327A88B8166CD68D68C19772 /* MacFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E911C016E050719DA75591A5 /* MacFoundation.swift */; };
+		6889135C8946D68DC83B9B93 /* Notifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D37DC5BF8EA3BF8C531BB64 /* Notifier.swift */; };
 		88FCAC2DC0CB3D4C604E5BF9 /* AlibiKit in Frameworks */ = {isa = PBXBuildFile; productRef = 83EA70C61FEBD972F1C8C7C8 /* AlibiKit */; };
 		960AE2EC382A5C17826E5B4F /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557C1E92D1D0049A660E7BCB /* HistoryView.swift */; };
 		97FFB7E630474748799A01F5 /* MenuContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DBB3104133D9256C919E8 /* MenuContentView.swift */; };
 		9849A9EE5AA43BF4B968A557 /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7553550D720D6551E6C6FC9 /* Formatting.swift */; };
 		A8190E4F0F46B543AC4BDAD2 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA7CBC5DDE9842DF742FF94 /* AppInfo.swift */; };
+		B19C25E129C818968FFA2D4A /* ReportScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E3083B657C6DD6D324ED0E /* ReportScheduler.swift */; };
 		BB29756E7C695F0EB84F4AD7 /* MacOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED844739C7B126C760EDFB9 /* MacOnboardingView.swift */; };
+		D04B543956D66120853E0A74 /* AlertPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1168319881CD354FE2C30F9 /* AlertPreferences.swift */; };
 		D86D4DA133808C931D6CC0F8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82004A715356100548A02B4 /* SettingsView.swift */; };
 		DEC161602472EC5ADEF879EC /* AppAlibiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C81561F403BEFA370680634 /* AppAlibiApp.swift */; };
 		FCC872F4FFFD813CED59E0F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3785523D3BBA81F811A1B819 /* Assets.xcassets */; };
@@ -23,16 +27,20 @@
 
 /* Begin PBXFileReference section */
 		27D8BC0CB48EB45EA873D82E /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		2D37DC5BF8EA3BF8C531BB64 /* Notifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifier.swift; sourceTree = "<group>"; };
 		3785523D3BBA81F811A1B819 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		44FD9DD0A0C209F48890C8A9 /* MacComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacComponents.swift; sourceTree = "<group>"; };
 		4712AF1284A0D67DF08B4B49 /* AlibiKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AlibiKit; path = AlibiKit; sourceTree = SOURCE_ROOT; };
+		50E3083B657C6DD6D324ED0E /* ReportScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportScheduler.swift; sourceTree = "<group>"; };
 		557C1E92D1D0049A660E7BCB /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		8BA7CBC5DDE9842DF742FF94 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		8ED844739C7B126C760EDFB9 /* MacOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOnboardingView.swift; sourceTree = "<group>"; };
 		9C81561F403BEFA370680634 /* AppAlibiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAlibiApp.swift; sourceTree = "<group>"; };
 		B7BCCAC9118C12B576B016BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B82004A715356100548A02B4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		C1168319881CD354FE2C30F9 /* AlertPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPreferences.swift; sourceTree = "<group>"; };
 		C93DBB3104133D9256C919E8 /* MenuContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuContentView.swift; sourceTree = "<group>"; };
+		DC660CA0B895C7E71A5D487C /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
 		E7553550D720D6551E6C6FC9 /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
 		E911C016E050719DA75591A5 /* MacFoundation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacFoundation.swift; sourceTree = "<group>"; };
 		F9745A082C18925A74918909 /* AppAlibi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppAlibi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,6 +67,7 @@
 				3785523D3BBA81F811A1B819 /* Assets.xcassets */,
 				B7BCCAC9118C12B576B016BC /* Info.plist */,
 				39C0CABE82A3CE8B2335BEF2 /* MacUI */,
+				6EE6A4879181540EAEAA180B /* Notifications */,
 				F3A90ADFF97FD3AFAF5E3411 /* Views */,
 			);
 			path = AppAlibi;
@@ -72,6 +81,16 @@
 				8ED844739C7B126C760EDFB9 /* MacOnboardingView.swift */,
 			);
 			path = MacUI;
+			sourceTree = "<group>";
+		};
+		6EE6A4879181540EAEAA180B /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				C1168319881CD354FE2C30F9 /* AlertPreferences.swift */,
+				2D37DC5BF8EA3BF8C531BB64 /* Notifier.swift */,
+				50E3083B657C6DD6D324ED0E /* ReportScheduler.swift */,
+			);
+			path = Notifications;
 			sourceTree = "<group>";
 		};
 		75D9223E4FE6400299008174 = {
@@ -106,6 +125,7 @@
 				557C1E92D1D0049A660E7BCB /* HistoryView.swift */,
 				C93DBB3104133D9256C919E8 /* MenuContentView.swift */,
 				B82004A715356100548A02B4 /* SettingsView.swift */,
+				DC660CA0B895C7E71A5D487C /* SummaryView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -186,6 +206,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D04B543956D66120853E0A74 /* AlertPreferences.swift in Sources */,
 				DEC161602472EC5ADEF879EC /* AppAlibiApp.swift in Sources */,
 				A8190E4F0F46B543AC4BDAD2 /* AppInfo.swift in Sources */,
 				09250B2AB08C09EC7B90947D /* AppModel.swift in Sources */,
@@ -195,7 +216,10 @@
 				327A88B8166CD68D68C19772 /* MacFoundation.swift in Sources */,
 				BB29756E7C695F0EB84F4AD7 /* MacOnboardingView.swift in Sources */,
 				97FFB7E630474748799A01F5 /* MenuContentView.swift in Sources */,
+				6889135C8946D68DC83B9B93 /* Notifier.swift in Sources */,
+				B19C25E129C818968FFA2D4A /* ReportScheduler.swift in Sources */,
 				D86D4DA133808C931D6CC0F8 /* SettingsView.swift in Sources */,
+				0D61ABA9F1383668741FF5F9 /* SummaryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

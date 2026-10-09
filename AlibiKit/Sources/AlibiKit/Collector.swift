@@ -10,7 +10,9 @@ public enum CollectorState: Equatable, Sendable {
 /// Keeps the store in sync with the unified log: catches up with `log show`,
 /// then follows `log stream`, restarting it if it exits.
 public actor Collector {
-    public typealias Update = @Sendable (CollectorState, _ wroteEvents: Bool) -> Void
+    /// Called with the current state, and with the events of each batch once
+    /// they are stored. Events are empty for a plain state change.
+    public typealias Update = @Sendable (CollectorState, _ events: [CollectedEvent]) -> Void
 
     private let store: EventStore
     private let initialBackfill: TimeInterval
@@ -44,9 +46,9 @@ public actor Collector {
         publish(.idle)
     }
 
-    private func publish(_ newState: CollectorState, wroteEvents: Bool = false) {
+    private func publish(_ newState: CollectorState, events: [CollectedEvent] = []) {
         state = newState
-        onUpdate(newState, wroteEvents)
+        onUpdate(newState, events)
     }
 
     private func runForever() async {
@@ -99,6 +101,6 @@ public actor Collector {
         guard newest != lastProcessed else { return }
         try store.record(events, lastProcessed: newest)
         lastProcessed = newest
-        if !events.isEmpty { publish(state, wroteEvents: true) }
+        if !events.isEmpty { publish(state, events: events) }
     }
 }

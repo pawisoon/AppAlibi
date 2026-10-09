@@ -148,6 +148,21 @@ final class MacAppDelegate: NSObject, NSApplicationDelegate {
 
     // MARK: Lifecycle
 
+    /// The notification delegate has to be in place before launch finishes, or
+    /// a click on a notification that launched the app is lost.
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        Notifier.shared.open = { [weak self] destination in
+            guard let self else { return }
+            switch destination {
+            case .sensors: model.historyTab = .sensors
+            case .permissions: model.historyTab = .permissions
+            case .summary(let period): model.showSummary(period)
+            }
+            showMainWindow()
+        }
+        Notifier.shared.install()
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         // LSUIElement keeps the Dock icon from flashing at launch. Onboarding
         // runs as a regular app so its window can take focus from whatever is
@@ -156,6 +171,7 @@ final class MacAppDelegate: NSObject, NSApplicationDelegate {
         // Unlike ZuckOff there are no permission prompts to wait for, so
         // recording starts now and the catch-up runs during the tour.
         model.start()
+        ReportScheduler.shared.start()
         if MacPreferences.needsOnboarding {
             activateForUserRequest()
         } else {
