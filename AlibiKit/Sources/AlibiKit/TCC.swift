@@ -41,33 +41,34 @@ public struct TCCAccessEvent: Equatable, Sendable {
 }
 
 public enum TCCService {
+    /// Localized when first read, in the language the app runs in.
     private static let names: [String: String] = [
-        "Camera": "Camera",
-        "Microphone": "Microphone",
-        "ScreenCapture": "Screen Recording",
-        "AudioCapture": "System Audio Recording",
-        "SystemPolicyAllFiles": "Full Disk Access",
-        "SystemPolicyDocumentsFolder": "Documents Folder",
-        "SystemPolicyDesktopFolder": "Desktop Folder",
-        "SystemPolicyDownloadsFolder": "Downloads Folder",
-        "SystemPolicyRemovableVolumes": "Removable Volumes",
-        "SystemPolicyNetworkVolumes": "Network Volumes",
-        "SystemPolicyAppBundles": "App Management",
-        "SystemPolicyAppData": "App Data",
-        "SystemPolicyAppDataDetailed": "App Data",
-        "AddressBook": "Contacts",
-        "Calendar": "Calendars",
-        "Reminders": "Reminders",
-        "Photos": "Photos",
-        "Accessibility": "Accessibility",
-        "ListenEvent": "Input Monitoring",
-        "PostEvent": "Keyboard Control",
-        "AppleEvents": "Automation",
-        "BluetoothAlways": "Bluetooth",
-        "DeveloperTool": "Developer Tools",
-        "MediaLibrary": "Media Library",
-        "SpeechRecognition": "Speech Recognition",
-        "Location": "Location",
+        "Camera": String(localized: "Camera", bundle: .module),
+        "Microphone": String(localized: "Microphone", bundle: .module),
+        "ScreenCapture": String(localized: "Screen Recording", bundle: .module),
+        "AudioCapture": String(localized: "System Audio Recording", bundle: .module),
+        "SystemPolicyAllFiles": String(localized: "Full Disk Access", bundle: .module),
+        "SystemPolicyDocumentsFolder": String(localized: "Documents Folder", bundle: .module),
+        "SystemPolicyDesktopFolder": String(localized: "Desktop Folder", bundle: .module),
+        "SystemPolicyDownloadsFolder": String(localized: "Downloads Folder", bundle: .module),
+        "SystemPolicyRemovableVolumes": String(localized: "Removable Volumes", bundle: .module),
+        "SystemPolicyNetworkVolumes": String(localized: "Network Volumes", bundle: .module),
+        "SystemPolicyAppBundles": String(localized: "App Management", bundle: .module),
+        "SystemPolicyAppData": String(localized: "App Data", bundle: .module),
+        "SystemPolicyAppDataDetailed": String(localized: "App Data", bundle: .module),
+        "AddressBook": String(localized: "Contacts", bundle: .module),
+        "Calendar": String(localized: "Calendars", bundle: .module),
+        "Reminders": String(localized: "Reminders", bundle: .module),
+        "Photos": String(localized: "Photos", bundle: .module),
+        "Accessibility": String(localized: "Accessibility", bundle: .module),
+        "ListenEvent": String(localized: "Input Monitoring", bundle: .module),
+        "PostEvent": String(localized: "Keyboard Control", bundle: .module),
+        "AppleEvents": String(localized: "Automation", bundle: .module),
+        "BluetoothAlways": String(localized: "Bluetooth", bundle: .module),
+        "DeveloperTool": String(localized: "Developer Tools", bundle: .module),
+        "MediaLibrary": String(localized: "Media Library", bundle: .module),
+        "SpeechRecognition": String(localized: "Speech Recognition", bundle: .module),
+        "Location": String(localized: "Location", bundle: .module),
     ]
 
     /// `kTCCServiceSystemPolicyAllFiles` -> "Full Disk Access".
@@ -82,11 +83,11 @@ public enum TCCService {
 
     public static func resultName(for authValue: Int) -> String {
         switch authValue {
-        case 0: "Denied"
-        case 1: "Unknown"
-        case 2: "Allowed"
-        case 3: "Limited"
-        default: "Value \(authValue)"
+        case 0: String(localized: "Denied", bundle: .module)
+        case 1: String(localized: "Unknown", bundle: .module)
+        case 2: String(localized: "Allowed", bundle: .module)
+        case 3: String(localized: "Limited", bundle: .module)
+        default: String(localized: "Value \(authValue)", bundle: .module)
         }
     }
 }

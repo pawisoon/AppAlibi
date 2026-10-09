@@ -39,7 +39,7 @@ final class AppModel {
             store = try EventStore()
         } catch {
             store = nil
-            storeError = "Could not open the history database: \(error)"
+            storeError = String(localized: "Could not open the history database: \(String(describing: error))")
         }
     }
 
@@ -155,10 +155,10 @@ final class AppModel {
 
     var statusText: String {
         switch state {
-        case .idle: "Starting…"
-        case .catchingUp(let since): "Catching up since \(since.formatted(date: .abbreviated, time: .shortened))…"
-        case .watching: "Watching"
-        case .failed(let message): "Error: \(message)"
+        case .idle: String(localized: "Starting…")
+        case .catchingUp(let since): String(localized: "Catching up since \(since.formatted(date: .abbreviated, time: .shortened))…")
+        case .watching: String(localized: "Watching")
+        case .failed(let message): String(localized: "Error: \(message)")
         }
     }
 
@@ -205,7 +205,7 @@ final class AppModel {
                     await MainActor.run { AppModel.shared.refresh() }
                 }
             } catch {
-                await MainActor.run { AppModel.shared.storeError = "Could not delete old history: \(error)" }
+                await MainActor.run { AppModel.shared.storeError = String(localized: "Could not delete old history: \(String(describing: error))") }
             }
         }
     }
@@ -221,7 +221,7 @@ final class AppModel {
         do {
             try store?.deleteAll()
         } catch {
-            storeError = "Could not delete history: \(error)"
+            storeError = String(localized: "Could not delete history: \(String(describing: error))")
         }
         refresh()
     }

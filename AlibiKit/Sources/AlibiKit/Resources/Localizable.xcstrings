@@ -1,0 +1,306 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Accessibility" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dostępność"
+          }
+        }
+      }
+    },
+    "Allowed" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dozwolone"
+          }
+        }
+      }
+    },
+    "App Data" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dane aplikacji"
+          }
+        }
+      }
+    },
+    "App Management" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zarządzanie aplikacjami"
+          }
+        }
+      }
+    },
+    "Automation" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatyzacja"
+          }
+        }
+      }
+    },
+    "Bluetooth" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bluetooth"
+          }
+        }
+      }
+    },
+    "Calendars" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalendarze"
+          }
+        }
+      }
+    },
+    "Camera" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamera"
+          }
+        }
+      }
+    },
+    "Contacts" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontakty"
+          }
+        }
+      }
+    },
+    "Denied" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odrzucone"
+          }
+        }
+      }
+    },
+    "Desktop Folder" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder Biurko"
+          }
+        }
+      }
+    },
+    "Developer Tools" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Narzędzia programistyczne"
+          }
+        }
+      }
+    },
+    "Documents Folder" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder Dokumenty"
+          }
+        }
+      }
+    },
+    "Downloads Folder" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder Pobrane"
+          }
+        }
+      }
+    },
+    "Full Disk Access" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pełny dostęp do dysku"
+          }
+        }
+      }
+    },
+    "Input Monitoring" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monitorowanie wprowadzania"
+          }
+        }
+      }
+    },
+    "Keyboard Control" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sterowanie klawiaturą"
+          }
+        }
+      }
+    },
+    "Limited" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ograniczone"
+          }
+        }
+      }
+    },
+    "Location" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokalizacja"
+          }
+        }
+      }
+    },
+    "Media Library" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biblioteka multimediów"
+          }
+        }
+      }
+    },
+    "Microphone" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mikrofon"
+          }
+        }
+      }
+    },
+    "Network Volumes" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woluminy sieciowe"
+          }
+        }
+      }
+    },
+    "Photos" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zdjęcia"
+          }
+        }
+      }
+    },
+    "Reminders" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przypomnienia"
+          }
+        }
+      }
+    },
+    "Removable Volumes" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woluminy wymienne"
+          }
+        }
+      }
+    },
+    "Screen Recording" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagrywanie ekranu"
+          }
+        }
+      }
+    },
+    "Speech Recognition" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rozpoznawanie mowy"
+          }
+        }
+      }
+    },
+    "System Audio Recording" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagrywanie dźwięku systemowego"
+          }
+        }
+      }
+    },
+    "Unknown" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieznane"
+          }
+        }
+      }
+    },
+    "Value %lld" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wartość %lld"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

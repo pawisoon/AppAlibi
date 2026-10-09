@@ -62,6 +62,14 @@ enum AppScope: String, CaseIterable, Identifiable {
 
     var id: Self { self }
 
+    var title: LocalizedStringResource {
+        switch self {
+        case .apps: "Apps"
+        case .system: "System"
+        case .all: "All"
+        }
+    }
+
     var kind: AppKind? {
         switch self {
         case .apps: .app

@@ -6,7 +6,7 @@ struct MenuBarLabel: View {
 
     var body: some View {
         Image(systemName: model.isSensitiveSensorActive ? "eye.fill" : "eye")
-            .accessibilityLabel(model.isSensitiveSensorActive ? "AppAlibi, sensor in use" : "AppAlibi")
+            .accessibilityLabel(model.isSensitiveSensorActive ? Text("AppAlibi, sensor in use") : Text(verbatim: "AppAlibi"))
     }
 }
 
@@ -68,14 +68,14 @@ struct MenuContentView: View {
         }
     }
 
-    private func section(_ title: String, @ViewBuilder content: () -> some View) -> some View {
+    private func section(_ title: LocalizedStringKey, @ViewBuilder content: () -> some View) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title).font(.subheadline.weight(.semibold)).foregroundStyle(.secondary)
             content()
         }
     }
 
-    private func placeholder(_ text: String) -> some View {
+    private func placeholder(_ text: LocalizedStringKey) -> some View {
         Text(text).font(.callout).foregroundStyle(.secondary)
     }
 }
@@ -116,7 +116,7 @@ struct SessionRow: View {
 
     private var detail: String {
         if session.isActive {
-            return "\(session.sensor.displayName) since \(Formatting.time(session.startedAt))"
+            return String(localized: "\(session.sensor.displayName) since \(Formatting.time(session.startedAt))")
         }
         return "\(session.sensor.displayName) · \(Formatting.time(session.startedAt)) · \(Formatting.duration(session.duration()))"
     }

@@ -12,11 +12,22 @@ enum HistoryRetention: Int, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .forever: "Forever"
-        case .month: "1 Month"
-        case .threeMonths: "3 Months"
-        case .sixMonths: "6 Months"
-        case .year: "1 Year"
+        case .forever: String(localized: "Forever")
+        case .month: String(localized: "1 Month")
+        case .threeMonths: String(localized: "3 Months")
+        case .sixMonths: String(localized: "6 Months")
+        case .year: String(localized: "1 Year")
+        }
+    }
+
+    /// For "Keep history for …?". Never asked about Forever, which deletes nothing.
+    var duration: String {
+        switch self {
+        case .forever: String(localized: "forever")
+        case .month: String(localized: "1 month")
+        case .threeMonths: String(localized: "3 months")
+        case .sixMonths: String(localized: "6 months")
+        case .year: String(localized: "1 year")
         }
     }
 

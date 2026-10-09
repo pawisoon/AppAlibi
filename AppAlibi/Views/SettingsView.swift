@@ -91,7 +91,7 @@ struct SettingsView: View {
             Text("Sensor sessions and permission checks are removed from this Mac. This cannot be undone.")
         }
         .confirmationDialog(
-            "Keep history for \((pendingRetention ?? .forever).title.lowercased())?",
+            "Keep history for \((pendingRetention ?? .forever).duration)?",
             isPresented: Binding(get: { pendingRetention != nil }, set: { if !$0 { pendingRetention = nil } })
         ) {
             Button("Delete Older History", role: .destructive) {

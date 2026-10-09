@@ -57,14 +57,14 @@ struct SummaryView: View {
     private var navigator: some View {
         HStack(spacing: 4) {
             Button { step(-1) } label: { Image(systemName: "chevron.left") }
-                .help(period == .day ? "Previous day" : "Previous week")
+                .help(period == .day ? Text("Previous day") : Text("Previous week"))
             Text(title)
                 .font(.headline)
                 .monospacedDigit()
                 .frame(minWidth: 150)
             Button { step(1) } label: { Image(systemName: "chevron.right") }
                 .disabled(isCurrent)
-                .help(period == .day ? "Next day" : "Next week")
+                .help(period == .day ? Text("Next day") : Text("Next week"))
         }
         .buttonStyle(.borderless)
     }
@@ -80,11 +80,11 @@ struct SummaryView: View {
         let calendar = Calendar.current
         switch period {
         case .day:
-            if calendar.isDateInToday(interval.start) { return "Today" }
-            if calendar.isDateInYesterday(interval.start) { return "Yesterday" }
+            if calendar.isDateInToday(interval.start) { return String(localized: "Today") }
+            if calendar.isDateInYesterday(interval.start) { return String(localized: "Yesterday") }
             return interval.start.formatted(.dateTime.weekday(.wide).month(.abbreviated).day())
         case .week:
-            if isCurrent { return "This Week" }
+            if isCurrent { return String(localized: "This Week") }
             let last = interval.end.addingTimeInterval(-1)
             return "\(interval.start.formatted(.dateTime.month(.abbreviated).day())) – \(last.formatted(.dateTime.month(.abbreviated).day()))"
         }
@@ -96,7 +96,7 @@ struct SummaryView: View {
         Section {
             HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(period == .day ? "Camera, microphone or screen in use" : "Daily average")
+                    (period == .day ? Text("Camera, microphone or screen in use") : Text("Daily average"))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                     Text(Self.long(period == .day ? report.activeTime : dailyAverage(report)))
@@ -160,13 +160,15 @@ struct SummaryView: View {
                 AxisGridLine()
                 AxisValueLabel {
                     if let minutes = value.as(Double.self) {
-                        Text(minutes >= 60 ? "\(Int(minutes / 60))h" : "\(Int(minutes))m")
+                        minutes >= 60 ? Text("\(Int(minutes / 60))h") : Text("\(Int(minutes))m")
                     }
                 }
             }
         }
         .chartYScale(domain: 0...max(period == .day ? 15 : 60, (report.timeline.map(\.duration).max() ?? 0) / 60))
-        .accessibilityLabel("Time with camera, microphone or screen in use, by \(period == .day ? "hour" : "day")")
+        .accessibilityLabel(period == .day
+            ? Text("Time with camera, microphone or screen in use, by hour")
+            : Text("Time with camera, microphone or screen in use, by day"))
     }
 
     /// Over the days of the week that have started.
@@ -180,7 +182,7 @@ struct SummaryView: View {
     private func appsSection(_ report: ActivityReport) -> some View {
         Section("Camera, Microphone and Screen") {
             if report.apps.isEmpty {
-                Text(scope == .system ? "No system service used them." : "No app used them.")
+                (scope == .system ? Text("No system service used them.") : Text("No app used them."))
                     .foregroundStyle(.secondary)
             } else {
                 let longest = report.apps.first?.duration ?? 1
@@ -212,8 +214,8 @@ struct SummaryView: View {
     // MARK: Formatting
 
     static func long(_ interval: TimeInterval) -> String {
-        if interval <= 0 { return "0m" }
-        if interval < 60 { return "<1m" }
+        if interval <= 0 { return String(localized: "0m") }
+        if interval < 60 { return String(localized: "<1m") }
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute]
         formatter.unitsStyle = .abbreviated
@@ -310,10 +312,10 @@ private struct PermissionGroupRow: View {
             Spacer()
             VStack(alignment: .trailing, spacing: 2) {
                 if group.allowed > 0 {
-                    Text("\(group.allowed) allowed").monospacedDigit()
+                    Text("Allowed: \(group.allowed)").monospacedDigit()
                 }
                 if group.denied > 0 {
-                    Text("\(group.denied) denied").monospacedDigit().foregroundStyle(.red)
+                    Text("Denied: \(group.denied)").monospacedDigit().foregroundStyle(.red)
                 }
             }
             .font(.callout)

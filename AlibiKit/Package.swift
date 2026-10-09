@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "AlibiKit",
+    defaultLocalization: "en",
     platforms: [.macOS(.v14)],
     products: [
         .library(name: "AlibiKit", targets: ["AlibiKit"]),
@@ -11,6 +12,7 @@ let package = Package(
     targets: [
         .target(
             name: "AlibiKit",
+            resources: [.process("Resources")],
             linkerSettings: [.linkedLibrary("sqlite3")]
         ),
         .executableTarget(name: "alibi-probe", dependencies: ["AlibiKit"]),

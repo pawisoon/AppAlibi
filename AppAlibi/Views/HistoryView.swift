@@ -9,6 +9,14 @@ struct HistoryView: View {
         case sensors = "Sensors"
         case permissions = "Permissions"
         var id: Self { self }
+
+        var title: LocalizedStringResource {
+            switch self {
+            case .summary: "Summary"
+            case .sensors: "Sensors"
+            case .permissions: "Permissions"
+            }
+        }
     }
 
     var body: some View {
@@ -22,7 +30,7 @@ struct HistoryView: View {
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Picker("View", selection: Binding(get: { model.historyTab }, set: { model.historyTab = $0 })) {
-                    ForEach(Tab.allCases) { Text($0.rawValue).tag($0) }
+                    ForEach(Tab.allCases) { Text($0.title).tag($0) }
                 }
                 .pickerStyle(.segmented)
                 .labelsHidden()
@@ -39,6 +47,15 @@ enum TimeRange: String, CaseIterable, Identifiable {
     case all = "All"
 
     var id: Self { self }
+
+    var title: LocalizedStringResource {
+        switch self {
+        case .day: "24 hours"
+        case .week: "7 days"
+        case .month: "30 days"
+        case .all: "All"
+        }
+    }
 
     var since: Date? {
         switch self {
@@ -72,14 +89,14 @@ struct SensorHistoryView: View {
                 }
                 .frame(width: 220)
                 Picker("Range", selection: $range) {
-                    ForEach(TimeRange.allCases) { Text($0.rawValue).tag($0) }
+                    ForEach(TimeRange.allCases) { Text($0.title).tag($0) }
                 }
                 .frame(width: 180)
                 Toggle("While locked", isOn: lockedOnly)
                     .toggleStyle(.checkbox)
                     .help("Only use while the screen was locked.")
                 Spacer()
-                Text("\(sessions.count) sessions").foregroundStyle(.secondary)
+                Text("Sessions: \(sessions.count)").foregroundStyle(.secondary)
                 Button("Export\u{2026}", action: export)
                     .disabled(sessions.isEmpty)
             }
@@ -100,7 +117,7 @@ struct SensorHistoryView: View {
                 .width(min: 150, ideal: 180)
                 TableColumn("Duration") { session in
                     HStack(spacing: 4) {
-                        Text(session.isActive ? "Active" : Formatting.duration(session.duration()))
+                        Text(session.isActive ? String(localized: "Active") : Formatting.duration(session.duration()))
                             .foregroundStyle(session.isActive ? Color.orange : Color.primary)
                         let locked = lockedTime(session)
                         if locked >= ScreenLockSpans.minimumOverlap {
@@ -164,7 +181,7 @@ struct SensorHistoryView: View {
 
     /// The same filters as the table, without its row limit.
     private func export() {
-        CSVSaver.save(suggestedName: "AppAlibi Sensors") {
+        CSVSaver.save(suggestedName: String(localized: "AppAlibi Sensors")) {
             let now = Date()
             let locks = model.screenLocks(since: nil)
             var rows = (try? model.store?.sessions(query(limit: .max))) ?? []
@@ -196,7 +213,7 @@ struct PermissionHistoryView: View {
             HStack(spacing: 16) {
                 ScopePicker(scope: $scope)
                 Picker("Range", selection: $range) {
-                    ForEach(TimeRange.allCases) { Text($0.rawValue).tag($0) }
+                    ForEach(TimeRange.allCases) { Text($0.title).tag($0) }
                 }
                 .frame(width: 180)
                 Toggle("Files & folders only", isOn: $filesOnly)
@@ -211,7 +228,7 @@ struct PermissionHistoryView: View {
 
             Table(rows) {
                 TableColumn("App") { row in
-                    AppCell(identifier: row.app, binaryPath: row.binaryPath, detail: row.accessor.isEmpty || row.accessor == row.app ? nil : "via \(row.accessor)")
+                    AppCell(identifier: row.app, binaryPath: row.binaryPath, detail: row.accessor.isEmpty || row.accessor == row.app ? nil : String(localized: "via \(row.accessor)"))
                 }
                 .width(min: 200, ideal: 280)
                 TableColumn("Permission") { row in
@@ -219,7 +236,7 @@ struct PermissionHistoryView: View {
                 }
                 .width(min: 120, ideal: 150)
                 TableColumn("Result") { row in
-                    Text(row.preflight ? "\(row.resultName) (check)" : row.resultName)
+                    Text(row.preflight ? String(localized: "\(row.resultName) (check)") : row.resultName)
                         .foregroundStyle(row.authValue == 0 ? Color.red : row.authValue == 2 ? Color.primary : Color.secondary)
                 }
                 .width(min: 90, ideal: 110)
@@ -274,7 +291,7 @@ struct PermissionHistoryView: View {
 
     /// The same filters as the table, without its row limit.
     private func export() {
-        CSVSaver.save(suggestedName: "AppAlibi Permissions") {
+        CSVSaver.save(suggestedName: String(localized: "AppAlibi Permissions")) {
             let rows = (try? model.store?.tccAggregates(query(limit: .max))) ?? []
             return CSVExport.permissions(rows) { identifier, binaryPath in
                 AppInfo.info(for: identifier, binaryPath: binaryPath.isEmpty ? nil : binaryPath).name
@@ -289,7 +306,7 @@ struct ScopePicker: View {
 
     var body: some View {
         Picker("Show", selection: $scope) {
-            ForEach(AppScope.allCases) { Text($0.rawValue).tag($0) }
+            ForEach(AppScope.allCases) { Text($0.title).tag($0) }
         }
         .pickerStyle(.segmented)
         .labelsHidden()

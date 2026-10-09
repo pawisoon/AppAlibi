@@ -18,6 +18,8 @@ screen recording and TCC-protected resources. Data comes from the unified log
   `Packages/ZuckoffCore/Sources/ZuckoffCore/MacUI/`, on the Mac branches). Keep them in step when one changes.
 - `AppAlibi/Notifications/` notification posting, alert and summary preferences, summary scheduler.
 - `design/AppIcon.svg` app icon source. `design/render-icon.sh` renders it into the asset catalog.
+- `AppAlibi/Localizable.xcstrings` and `AlibiKit/Sources/AlibiKit/Resources/Localizable.xcstrings`
+  string catalogs: English source, Polish translations.
 - `project.yml` XcodeGen spec. `AppAlibi.xcodeproj` is generated from it; edit the spec, not the project.
 
 ## Commands
@@ -30,6 +32,7 @@ swift test --package-path AlibiKit                  # unit tests (fast, no Xcode
 swift run --package-path AlibiKit alibi-probe 6     # check log formats still parse (last 6 hours)
 xcodebuild -project AppAlibi.xcodeproj -scheme AppAlibi -derivedDataPath build/DerivedData build
 open build/DerivedData/Build/Products/Debug/AppAlibi.app
+scripts/sync-strings.sh                             # after a build: new UI strings into the catalogs
 ```
 
 The app's database is `~/Library/Application Support/AppAlibi/alibi.sqlite`.
@@ -40,6 +43,12 @@ The app's database is `~/Library/Application Support/AppAlibi/alibi.sqlite`.
 - After a macOS update, run `alibi-probe` first. Parser changes need a test with a real captured line.
 - No third-party dependencies so far. SQLite goes through the system library. ZuckOff's Mac
   onboarding is a custom view, not OnboardingKit (that package is only linked into ZuckOff for iOS).
+- Every user-facing string is localized (English and Polish). SwiftUI literals are picked up
+  automatically; strings built as `String` go through `String(localized:)` (in AlibiKit with
+  `bundle: .module`). Ternaries of literals pick `String`, so wrap each branch in `Text(...)`.
+  Avoid Polish plural forms by writing counts as "Label: N". Translations come from DeepL and are
+  reviewed by hand: Apple's Polish terms (Biurko, Pełny dostęp do dysku), informal "ty",
+  no gendered past tense for apps or the user.
 - The app targets macOS 15 (scene launch and dismiss behaviors). AlibiKit stays at 14.
 - Apps versus system services: `AppClassifier` in AlibiKit. Anything inside an Applications folder is an app.
 - `.mcp.json` configures Apple's Xcode MCP bridge (`xcrun mcpbridge`). It works only
@@ -51,4 +60,5 @@ M2 done: app icon, access notifications, daily and weekly summaries, Summary tab
 while the screen is locked, CSV export, data retention. The welcome tour, Summary tab and Settings
 were checked visually before the last three items; their UI (Settings "Keep history" and lock toggle,
 Sensors lock icon, filter and Export) was not. Notification delivery was not checked either
-(it needs the permission prompt answered).
+(it needs the permission prompt answered). English and Polish localization in; the Polish UI was
+not checked visually.
