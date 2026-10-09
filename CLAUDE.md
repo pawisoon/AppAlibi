@@ -10,7 +10,7 @@ screen recording and TCC-protected resources. Data comes from the unified log
 ## Layout
 
 - `AlibiKit/` Swift package with all logic. Apple's private log formats are only
-  known by `LogPredicates.swift`, `ControlCenterParser.swift` and `TCC.swift`.
+  known by `LogPredicates.swift`, `ControlCenterParser.swift`, `TCC.swift` and `ScreenLock.swift`.
 - `AlibiKit/Sources/alibi-probe/` CLI that replays recent log history through the pipeline.
 - `AppAlibi/` SwiftUI app (thin UI over AlibiKit). Shows in the menu bar or the Dock (user choice).
 - `AppAlibi/MacUI/` window handling, menu bar or Dock presentation, onboarding tour and small
@@ -47,6 +47,8 @@ The app's database is `~/Library/Application Support/AppAlibi/alibi.sqlite`.
   in Xcode's settings. It builds and previews; it cannot create projects.
 
 Status (2026-10-09): M1 done, plus apps-versus-system filter, menu bar or Dock mode, and the welcome tour.
-M2 in progress: app icon, access notifications, daily and weekly summaries, and the Summary tab are in.
-The welcome tour, Summary tab and Settings were checked visually. Notification delivery was not
+M2 done: app icon, access notifications, daily and weekly summaries, Summary tab, alert for use
+while the screen is locked, CSV export, data retention. The welcome tour, Summary tab and Settings
+were checked visually before the last three items; their UI (Settings "Keep history" and lock toggle,
+Sensors lock icon, filter and Export) was not. Notification delivery was not checked either
 (it needs the permission prompt answered).

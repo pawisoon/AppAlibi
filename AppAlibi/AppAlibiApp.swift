@@ -77,8 +77,14 @@ struct AppAlibiApp: App {
 struct MacCommands: Commands {
     let openMainWindow: @MainActor () -> Void
     let showOnboarding: @MainActor () -> Void
+    @FocusedValue(\.exportAction) private var exportAction
 
     var body: some Commands {
+        CommandGroup(replacing: .importExport) {
+            Button("Export as CSV\u{2026}") { exportAction?.run() }
+                .keyboardShortcut("e")
+                .disabled(exportAction == nil)
+        }
         CommandGroup(before: .windowList) {
             Button("AppAlibi History") { openMainWindow() }
                 .keyboardShortcut("0", modifiers: .command)
@@ -155,6 +161,9 @@ final class MacAppDelegate: NSObject, NSApplicationDelegate {
             guard let self else { return }
             switch destination {
             case .sensors: model.historyTab = .sensors
+            case .lockedUse:
+                model.sensorsLockedOnly = true
+                model.historyTab = .sensors
             case .permissions: model.historyTab = .permissions
             case .summary(let period): model.showSummary(period)
             }

@@ -15,9 +15,12 @@ final class AppModel {
     private(set) var storeError: String?
     private(set) var showLocation: Bool
     private(set) var showSystemInMenu: Bool
+    private(set) var retention: HistoryRetention
     /// The history window's tab. Here rather than in the view so a click on a
     /// notification can pick it.
     var historyTab: HistoryView.Tab = .summary
+    /// The Sensors tab's "While locked" filter, set by a click on the unlock notification.
+    var sensorsLockedOnly = false
     var summaryPeriod: ReportPeriod = .day
     /// Any date inside the day or week the Summary tab shows.
     var summaryDate = Date()
@@ -25,11 +28,13 @@ final class AppModel {
     let store: EventStore?
     @ObservationIgnored private var collector: Collector?
     @ObservationIgnored private var refreshPending = false
+    @ObservationIgnored private var pruneTimer: Timer?
 
     private init() {
         let defaults = UserDefaults.standard
         showLocation = defaults.bool(forKey: Keys.showLocation)
         showSystemInMenu = defaults.bool(forKey: Keys.showSystemInMenu)
+        retention = HistoryRetention(rawValue: defaults.integer(forKey: Keys.retention)) ?? .forever
         do {
             store = try EventStore()
         } catch {
@@ -41,6 +46,7 @@ final class AppModel {
     private enum Keys {
         static let showLocation = "showLocation"
         static let showSystemInMenu = "showSystemInMenu"
+        static let retention = "appalibi.history.retentionMonths"
     }
 
     // MARK: Collection
@@ -53,6 +59,7 @@ final class AppModel {
         self.collector = collector
         Task { await collector.start() }
         refresh()
+        startPruning()
     }
 
     private func handle(state: CollectorState, events: [CollectedEvent]) {
@@ -171,6 +178,43 @@ final class AppModel {
         showSystemInMenu = value
         UserDefaults.standard.set(value, forKey: Keys.showSystemInMenu)
         refresh()
+    }
+
+    /// Applies the retention setting now and every few hours after.
+    private func startPruning() {
+        pruneHistory()
+        let timer = Timer(timeInterval: 6 * 3600, repeats: true) { _ in
+            MainActor.assumeIsolated { AppModel.shared.pruneHistory() }
+        }
+        timer.tolerance = 600
+        RunLoop.main.add(timer, forMode: .common)
+        pruneTimer = timer
+    }
+
+    func setRetention(_ value: HistoryRetention) {
+        retention = value
+        UserDefaults.standard.set(value.rawValue, forKey: Keys.retention)
+        pruneHistory()
+    }
+
+    func pruneHistory(now: Date = Date()) {
+        guard let store, let cutoff = retention.cutoff(before: now) else { return }
+        Task.detached(priority: .utility) {
+            do {
+                if try store.deleteOlderThan(cutoff) > 0 {
+                    await MainActor.run { AppModel.shared.refresh() }
+                }
+            } catch {
+                await MainActor.run { AppModel.shared.storeError = "Could not delete old history: \(error)" }
+            }
+        }
+    }
+
+    /// Locks from `since` until now, for marking use while nobody was at the Mac.
+    func screenLocks(since: Date?) -> ScreenLockSpans {
+        let now = Date()
+        let interval = since.map { DateInterval(start: min($0, now), end: now) }
+        return (try? store?.screenLocks(overlapping: interval, now: now)) ?? ScreenLockSpans([])
     }
 
     func deleteHistory() {

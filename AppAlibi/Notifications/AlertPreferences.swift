@@ -6,6 +6,7 @@ import Foundation
 enum AlertPreferences {
     static let sensorsKey = "appalibi.alerts.sensors"
     static let firstPermissionKey = "appalibi.alerts.firstPermission"
+    static let lockedUseKey = "appalibi.alerts.lockedUse"
     static let dailyKey = "appalibi.reports.daily"
     static let weeklyKey = "appalibi.reports.weekly"
     static let minuteKey = "appalibi.reports.minuteOfDay"
@@ -21,7 +22,8 @@ enum AlertPreferences {
     static var alertSettings: AlertSettings {
         AlertSettings(
             sensors: defaults.string(forKey: sensorsKey).flatMap(SensorAlertMode.init(rawValue:)) ?? .off,
-            firstPermissionUse: defaults.bool(forKey: firstPermissionKey)
+            firstPermissionUse: defaults.bool(forKey: firstPermissionKey),
+            lockedUse: defaults.bool(forKey: lockedUseKey)
         )
     }
 
@@ -52,6 +54,7 @@ enum AlertPreferences {
     /// What the welcome tour's "Turn On Notifications" switches on.
     static func enableDefaults() {
         defaults.set(SensorAlertMode.firstUse.rawValue, forKey: sensorsKey)
+        defaults.set(true, forKey: lockedUseKey)
         defaults.set(true, forKey: dailyKey)
         setLastDelivered(Date(), for: .day)
     }
@@ -60,6 +63,7 @@ enum AlertPreferences {
     static func disableAll() {
         defaults.set(SensorAlertMode.off.rawValue, forKey: sensorsKey)
         defaults.set(false, forKey: firstPermissionKey)
+        defaults.set(false, forKey: lockedUseKey)
         defaults.set(false, forKey: dailyKey)
         defaults.set(false, forKey: weeklyKey)
     }

@@ -9,6 +9,7 @@ searchable history of:
   or location, from when to when.
 - **Permission checks:** which app asked tccd for a protected resource (folders,
   Full Disk Access, contacts, screen capture and so on), and whether it was allowed.
+- **Screen locks:** when the screen was locked, to flag sensor use while nobody was at the Mac.
 
 ## Data sources (verified 2026-10-09, macOS 27.0.1)
 
@@ -47,6 +48,21 @@ AUTHREQ_RESULT: msgID=47863.1, authValue=2, authReason=11, ...
 - Volume is high: about 4,000 checks in 3 hours on the dev Mac. The app stores
   daily aggregates, not raw rows.
 
+### Screen lock (loginwindow)
+
+```
+-[SessionAgentNotificationCenter sendDistributedNotification:object:] | sendDistributedNotification: com.apple.screenIsLocked, with object:501
+-[SessionAgentNotificationCenter sendDistributedNotification:object:] | sendDistributedNotification: com.apple.screenIsUnlocked, with object:501
+```
+
+- The object is the user ID of the session. Lines for another user (Fast User
+  Switching) are ignored.
+- Lock and unlock came in clean pairs over 3 days on the dev Mac (about 20 lines).
+  `-[LWScreenLock setScreenIsLocked:] ... setting to 1` says the same without the user ID.
+- A Mac that shuts down while locked never logs the unlock. A lock still open
+  from before the last boot (`kern.boottime`) is closed at the boot time.
+- Adds about 20% to the time of a `log show` catch-up (17s to 21s for 12 hours).
+
 ### Framing
 
 - Use `--style ndjson`. `log stream` prints a plain-text header line first.
@@ -62,11 +78,13 @@ AlibiKit/                 Swift package, all logic, unit-tested with `swift test
   LogEntry                NDJSON line decoding, timestamp parsing
   LogPredicates           the one place that knows Apple's message formats
   ControlCenterParser     snapshot line -> Set<Attribution>
+  ScreenLockParser        loginwindow line -> locked or unlocked (ScreenLock.swift)
   SessionTracker          snapshot diff -> started / ended events
   TCCCorrelator           CTX + ATTRIBUTION + RESULT -> TCCAccessEvent
   EventProcessor          LogEntry stream -> domain events (pure, testable)
   EventStore              SQLite (system libsqlite3, no dependencies)
   AlertPlanner            stored batch -> notifications worth posting (fresh events only)
+  CSVExport               sessions or permission rows -> RFC 4180 CSV
   ActivityReport          day or week summary: per-app time, hourly or daily bars, permission checks
   ReportSchedule          when the daily or weekly summary notification is due
   LogReader               runs /usr/bin/log, yields batches of LogEntry
@@ -75,7 +93,10 @@ AlibiKit/                 Swift package, all logic, unit-tested with `swift test
 
 ### Collector lifecycle
 
-1. Restore the tracker from sessions that are still open in the database.
+1. Restore the tracker from sessions that are still open in the database, and
+   the lock state from a lock that is still open. A lock open from before the
+   last boot is closed first. A database made before lock tracking gets one
+   import of the lock lines before its checkpoint (`meta.screen_locks_imported`).
 2. Start `log stream` first, so nothing is missed while catching up.
 3. Run `log show --start <last processed timestamp>` (first launch: last 3 days)
    and process it.
@@ -93,7 +114,13 @@ Each batch is written in one SQLite transaction together with the new
 |---|---|
 | `sessions` | id, sensor, app, started_at, ended_at (NULL while active) |
 | `tcc_access` | day, service, app, accessor, binary_path, auth_value, preflight, count, first_seen, last_seen |
-| `meta` | last_processed timestamp |
+| `screen_locks` | id, locked_at, unlocked_at (NULL while locked) |
+| `meta` | last_processed timestamp, screen_locks_imported |
+
+Retention (Settings, "Keep history": Forever by default, or 1, 3, 6 or 12 months)
+deletes closed sessions and locks that ended before the cutoff, and permission
+rows by day. It runs at launch, every 6 hours, and when the setting changes.
+Shortening it asks first. The checkpoint stays, so nothing is imported again.
 
 ### UI
 
@@ -104,17 +131,30 @@ Each batch is written in one SQLite transaction together with the new
     mic or screen on, a bar per hour or day, apps by time, then protected data
     per app. A call with camera and mic on counts once (spans are merged).
   - *Sensors:* table of sessions with app icon, sensor, start, duration. Filter by sensor and app.
+    A lock icon marks sessions that ran at least 5 seconds while the screen was
+    locked; the "While locked" filter shows only those.
   - *Permissions:* daily aggregates with app, service, result, count, last seen.
     Apple system processes and preflight checks are hidden by default.
+  - *Export:* Sensors and Permissions export their current filters, without the
+    table's row limit, as CSV (button, or File > Export as CSV…, Command-E).
+    Times are ISO 8601 with the local offset. Cells that start with `= + - @` get a
+    leading apostrophe, because app names come from whoever built the app and a
+    spreadsheet would run them as formulas.
 - **Settings:** launch at login, show location, notifications, reveal database, delete history.
 - **Notifications** (all off by default). The welcome tour has a page with a
   "Turn On Notifications" button: it asks macOS for permission and, if granted,
-  turns on first-use sensor alerts and the daily summary. Settings asks too, the
+  turns on first-use sensor alerts, the locked-screen alert and the daily summary. Settings asks too, the
   first time any notification is switched on.
   - camera, mic or screen started by an app: first use per app and sensor, or every session.
     Camera and mic from one app in one batch are one notification. Restarts inside
     the merge gap stay quiet.
   - first real (not preflight) check by an app for a TCC service.
+  - use while the screen was locked: one notification on unlock, never while
+    locked (a lock-screen banner can be read by anyone at the Mac). It lists camera,
+    mic and screen use inside the lock, system services included (Screen Sharing
+    on a locked Mac is the point), location left out. Less than 5 seconds of overlap
+    does not count: an app letting go as the screen locks, or starting as you unlock.
+    Clicking it opens Sensors with the "While locked" filter on.
   - daily and weekly summary at a chosen time (default 18:00, weekly on Friday).
     A timer checks every minute and on wake, so a Mac asleep at that time gets it
     on wake if within 6 hours.
@@ -146,8 +186,10 @@ Each batch is written in one SQLite transaction together with the new
    Window handling and onboarding ported from ZuckOff's macOS target. Minimum macOS raised to 15.
 3. **M2 Polish:** app icon (done 2026-10-09, `design/AppIcon.svg`, rendered by
    `design/render-icon.sh`), notifications and daily or weekly summaries (done 2026-10-09),
-   Summary tab (done 2026-10-09). Onboarding version 2 adds the notifications page. Still to do: alert for use while the screen is locked,
-   CSV export, data retention setting.
+   Summary tab (done 2026-10-09). Onboarding version 2 adds the notifications page.
+   Alert for use while the screen is locked, CSV export, data retention setting
+   (done 2026-10-09). Not checked on a real lock yet: the unlock notification, and
+   how a remote Screen Sharing session is attributed in `scr`.
 4. **M3 Ship:** Developer ID signing, notarization, Sparkle updates, website on appalibi.com.
 5. **Later:** Endpoint Security extension for real file access history.
 

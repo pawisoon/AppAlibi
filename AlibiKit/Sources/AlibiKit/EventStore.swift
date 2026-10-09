@@ -129,6 +129,12 @@ public final class EventStore: @unchecked Sendable {
         );
         CREATE INDEX IF NOT EXISTS tcc_last_seen ON tcc_access(last_seen DESC);
         CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+        CREATE TABLE IF NOT EXISTS screen_locks (
+            id INTEGER PRIMARY KEY,
+            locked_at REAL NOT NULL,
+            unlocked_at REAL
+        );
+        CREATE INDEX IF NOT EXISTS screen_locks_locked ON screen_locks(locked_at DESC);
         """)
     }
 
@@ -163,6 +169,13 @@ public final class EventStore: @unchecked Sendable {
                         first_seen = min(first_seen, excluded.first_seen),
                         last_seen = max(last_seen, excluded.last_seen)
                     """)
+                let lockScreen = try database.prepare("""
+                    INSERT INTO screen_locks (locked_at)
+                    SELECT ? WHERE NOT EXISTS (SELECT 1 FROM screen_locks WHERE unlocked_at IS NULL)
+                    """)
+                // An unlock with no lock before it (the first import started mid-lock) is dropped.
+                let unlockScreen = try database.prepare(
+                    "UPDATE screen_locks SET unlocked_at = ? WHERE unlocked_at IS NULL")
 
                 for event in events {
                     switch event {
@@ -186,6 +199,9 @@ public final class EventStore: @unchecked Sendable {
                             .int(Int64(tcc.authValue)), .int(tcc.preflight ? 1 : 0),
                             .double(time), .double(time),
                         ])
+                    case .screenLock(let lock):
+                        let time = lock.date.timeIntervalSince1970
+                        try (lock.locked ? lockScreen : unlockScreen).run([.double(time)])
                     }
                 }
 
@@ -201,7 +217,38 @@ public final class EventStore: @unchecked Sendable {
     /// re-import the deleted past from the unified log on its next restart.
     public func deleteAll() throws {
         try locked {
-            try database.execute("DELETE FROM sessions; DELETE FROM tcc_access; VACUUM;")
+            try database.execute("DELETE FROM sessions; DELETE FROM tcc_access; DELETE FROM screen_locks; VACUUM;")
+        }
+    }
+
+    /// Deletes history from before the cutoff, for the retention setting. A
+    /// session or lock counts by its end, so one that runs across the cutoff, or
+    /// is still open, stays whole. Permission rows go by day. Keeps the checkpoint.
+    /// Returns the number of rows deleted.
+    @discardableResult
+    public func deleteOlderThan(_ cutoff: Date) throws -> Int {
+        let time = cutoff.timeIntervalSince1970
+        return try locked {
+            try database.transaction {
+                var deleted = 0
+                try database.prepare("DELETE FROM sessions WHERE ended_at IS NOT NULL AND ended_at < ?").run([.double(time)])
+                deleted += Int(database.changes)
+                try database.prepare("DELETE FROM tcc_access WHERE day < ?").run([.text(Self.dayFormatter.string(from: cutoff))])
+                deleted += Int(database.changes)
+                try database.prepare("DELETE FROM screen_locks WHERE unlocked_at IS NOT NULL AND unlocked_at < ?").run([.double(time)])
+                deleted += Int(database.changes)
+                return deleted
+            }
+        }
+    }
+
+    /// The Mac shut down or restarted while locked, so loginwindow never logged
+    /// the unlock. Ends a lock still open from before `bootTime` at that time,
+    /// so the session after the restart does not count as locked.
+    public func endScreenLock(openBefore bootTime: Date) throws {
+        try locked {
+            try database.prepare("UPDATE screen_locks SET unlocked_at = ? WHERE unlocked_at IS NULL AND locked_at < ?")
+                .run([.double(bootTime.timeIntervalSince1970), .double(bootTime.timeIntervalSince1970)])
         }
     }
 
@@ -212,6 +259,57 @@ public final class EventStore: @unchecked Sendable {
             let values = try database.prepare("SELECT value FROM meta WHERE key = 'last_processed'")
                 .query { $0.text(0) }
             return values.first.flatMap(Double.init).map(Date.init(timeIntervalSince1970:))
+        }
+    }
+
+    /// Lock tracking came after the first release. Databases from before it
+    /// have a checkpoint past the lock lines still in the log, so they get one
+    /// import of those (`Collector`). New databases start with locks in the catch-up.
+    public func needsLockHistoryImport() throws -> Bool {
+        try locked {
+            try database.prepare("SELECT 1 FROM meta WHERE key = 'screen_locks_imported'").query { _ in true }.isEmpty
+        }
+    }
+
+    public func markLockHistoryImported() throws {
+        try locked {
+            try database.execute("INSERT OR REPLACE INTO meta (key, value) VALUES ('screen_locks_imported', '1')")
+        }
+    }
+
+    /// A lock with no unlock yet.
+    public func isScreenLocked() throws -> Bool {
+        try locked {
+            try database.prepare("SELECT 1 FROM screen_locks WHERE unlocked_at IS NULL LIMIT 1").query { _ in true }.isEmpty == false
+        }
+    }
+
+    /// Locks that overlap the interval, or all of them. An open lock runs to `now`.
+    public func screenLocks(overlapping interval: DateInterval? = nil, now: Date = Date()) throws -> ScreenLockSpans {
+        var sql = "SELECT locked_at, unlocked_at FROM screen_locks"
+        var values: [SQLiteStatement.Value] = []
+        if let interval {
+            sql += " WHERE locked_at < ? AND (unlocked_at IS NULL OR unlocked_at > ?)"
+            values = [.double(interval.end.timeIntervalSince1970), .double(interval.start.timeIntervalSince1970)]
+        }
+        let spans = try locked {
+            try database.prepare(sql + " ORDER BY locked_at").query(values) { row -> DateInterval in
+                let start = Date(timeIntervalSince1970: row.double(0))
+                let end = row.isNull(1) ? max(now, start) : Date(timeIntervalSince1970: row.double(1))
+                return DateInterval(start: start, end: max(end, start))
+            }
+        }
+        return ScreenLockSpans(spans)
+    }
+
+    /// The lock that the unlock at `date` ended.
+    public func screenLock(endingAt date: Date) throws -> DateInterval? {
+        try locked {
+            try database.prepare("""
+                SELECT locked_at, unlocked_at FROM screen_locks WHERE unlocked_at = ? LIMIT 1
+                """).query([.double(date.timeIntervalSince1970)]) {
+                DateInterval(start: Date(timeIntervalSince1970: $0.double(0)), end: Date(timeIntervalSince1970: $0.double(1)))
+            }.first
         }
     }
 

@@ -13,25 +13,24 @@ public struct AlertSettings: Sendable, Equatable {
     public var sensors: SensorAlertMode
     /// The first real (not preflight) permission check by an app for a service.
     public var firstPermissionUse: Bool
+    /// On unlock: what used the camera, microphone or screen while the screen was locked.
+    public var lockedUse: Bool
 
-    public init(sensors: SensorAlertMode = .off, firstPermissionUse: Bool = false) {
+    public init(sensors: SensorAlertMode = .off, firstPermissionUse: Bool = false, lockedUse: Bool = false) {
         self.sensors = sensors
         self.firstPermissionUse = firstPermissionUse
+        self.lockedUse = lockedUse
     }
 
-    public var isEnabled: Bool { sensors != .off || firstPermissionUse }
+    public var isEnabled: Bool { sensors != .off || firstPermissionUse || lockedUse }
 }
 
 public enum AccessAlert: Equatable, Sendable {
     /// An app started one or more sensors at once (Teams turns on camera and mic together).
     case sensors(app: String, sensors: [Sensor], firstUse: Bool, date: Date)
     case permission(app: String, binaryPath: String, service: String, authValue: Int, date: Date)
-
-    public var app: String {
-        switch self {
-        case .sensors(let app, _, _, _), .permission(let app, _, _, _, _): app
-        }
-    }
+    /// Posted on unlock. Apps longest first; each duration is the part inside the lock.
+    case lockedUse(lock: DateInterval, apps: [ActivityReport.AppUsage])
 }
 
 /// Decides which freshly stored events deserve a notification. Runs after the
@@ -41,6 +40,7 @@ public struct AlertPlanner {
     public let settings: AlertSettings
     /// Events older than this are history being caught up on, not news.
     public var maxAge: TimeInterval = 120
+    public var minimumLockedUse = ScreenLockSpans.minimumOverlap
     /// Whether an identifier (and the binary tccd logged, if any) is an app rather
     /// than a system service. The app side knows where bundles live.
     public let isApp: (_ identifier: String, _ binaryPath: String?) -> Bool
@@ -55,7 +55,21 @@ public struct AlertPlanner {
     public func alerts(for events: [CollectedEvent], now: Date = Date()) throws -> [AccessAlert] {
         guard settings.isEnabled else { return [] }
         let fresh = events.filter { now.timeIntervalSince($0.date) <= maxAge }
-        return try sensorAlerts(fresh) + permissionAlerts(fresh)
+        return try sensorAlerts(fresh) + permissionAlerts(fresh) + lockedUseAlerts(fresh, now: now)
+    }
+
+    /// Unlike the other alerts, system services count: Screen Sharing on a locked
+    /// Mac is exactly what this is for. Location does not.
+    private func lockedUseAlerts(_ events: [CollectedEvent], now: Date) throws -> [AccessAlert] {
+        guard settings.lockedUse else { return [] }
+        var alerts: [AccessAlert] = []
+        for case .screenLock(let event) in events where !event.locked {
+            guard let lock = try store.screenLock(endingAt: event.date) else { continue }
+            let report = try ActivityReport.build(store: store, interval: lock, now: now) { _, _ in true }
+            let apps = report.apps.filter { $0.duration >= minimumLockedUse }
+            if !apps.isEmpty { alerts.append(.lockedUse(lock: lock, apps: apps)) }
+        }
+        return alerts
     }
 
     private func sensorAlerts(_ events: [CollectedEvent]) throws -> [AccessAlert] {
@@ -116,6 +130,7 @@ extension CollectedEvent {
         switch self {
         case .sensor(let event): event.date
         case .tcc(let event): event.date
+        case .screenLock(let event): event.date
         }
     }
 }

@@ -16,6 +16,12 @@ enum Fixtures {
 
     static let tccAttributionRequestingOnly = "AUTHREQ_ATTRIBUTION: msgID=45510.1, attribution={requesting={TCCDProcess: identifier=com.apple.AddressBookSourceSync, pid=45510, auid=501, euid=501, binary_path=/System/Library/Frameworks/AddressBook.framework/Versions/A/Helpers/AddressBookSourceSync.app/Contents/MacOS/AddressBookSourceSync}, },"
 
+    // loginwindow, 2026-10-08 23:43:02 and 2026-10-09 08:46:09.
+    static let screenLocked = "-[SessionAgentNotificationCenter sendDistributedNotification:object:] | sendDistributedNotification: com.apple.screenIsLocked, with object:501"
+    static let screenUnlockedNDJSON = #"{"timezoneName":"","messageType":"Default","eventType":"logEvent","source":null,"launchPersonaName":"","formatString":"%s | sendDistributedNotification: %@, with object:%@","userID":0,"activityIdentifier":0,"subsystem":"com.apple.loginwindow.logging","category":"Standard","personaType":-1,"threadID":2471,"launchPersonaType":-1,"senderImageUUID":"A4105964-169F-34F0-8F40-5CAF14911540","launchPersonaID":4294967295,"backtrace":{"frames":[{"imageOffset":354232,"imageUUID":"A4105964-169F-34F0-8F40-5CAF14911540"}]},"bootUUID":"6494F9AD-C0B3-4F31-A5D3-AAA1E09B87E5","processImagePath":"\/System\/Library\/CoreServices\/loginwindow.app\/Contents\/MacOS\/loginwindow","senderImagePath":"\/System\/Library\/CoreServices\/loginwindow.app\/Contents\/MacOS\/loginwindow","personaID":4294967295,"timestamp":"2026-10-09 08:46:09.253722+0200","machTimestamp":12363710203942,"personaName":"","eventMessage":"-[SessionAgentNotificationCenter sendDistributedNotification:object:] | sendDistributedNotification: com.apple.screenIsUnlocked, with object:501","processImageUUID":"A4105964-169F-34F0-8F40-5CAF14911540","traceID":4702830376124420,"processID":246,"senderProgramCounter":354232,"parentActivityIdentifier":0}"#
+    // The same moment from another loginwindow line that must not count as a lock.
+    static let screenLockUIShown = "-[SessionAgentNotificationCenter sendDistributedNotification:object:] | sendDistributedNotification: com.apple.screenLockUIIsShown, with object:501"
+
     static func entry(_ message: String, at seconds: TimeInterval = 0, pid: Int = 579) -> LogEntry {
         LogEntry(timestamp: Date(timeIntervalSince1970: 1_791_500_000 + seconds), eventMessage: message, processID: pid)
     }
