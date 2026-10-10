@@ -130,6 +130,13 @@ final class AppModel {
         return Set(kinds.filter { $0.value == kind }.keys)
     }
 
+    /// App paths with admin rights that fall in the scope. nil means no filter.
+    func adminRightApps(in scope: AppScope) -> Set<String>? {
+        guard let kind = scope.kind, let store else { return nil }
+        let apps = (try? store.adminRightApps()) ?? []
+        return Set(apps.filter { AppInfo.kind(for: ($0 as NSString).lastPathComponent, binaryPath: $0) == kind })
+    }
+
     /// Activity in the interval, split into chart bars if `bucket` is given.
     func report(_ interval: DateInterval, now: Date = Date(), bucket: Calendar.Component? = nil,
                 scope: AppScope = .apps) -> ActivityReport? {

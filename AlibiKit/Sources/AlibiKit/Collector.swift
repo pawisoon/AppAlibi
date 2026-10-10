@@ -72,7 +72,7 @@ public actor Collector {
     private func runOnce() async throws {
         lastProcessed = try store.lastProcessed()
         let since = lastProcessed ?? Date().addingTimeInterval(-initialBackfill)
-        try await importLockHistory(upTo: lastProcessed)
+        try await importHistory(upTo: lastProcessed)
         if let bootTime = SystemClock.bootTime() { try store.endScreenLock(openBefore: bootTime) }
         processor = EventProcessor(active: try store.openAttributions(), screenLocked: try store.isScreenLocked())
 
@@ -92,24 +92,27 @@ public actor Collector {
         }
     }
 
-    /// Once per database: the lock lines from before the checkpoint, which a
-    /// database made before lock tracking skipped. Without a checkpoint the
+    /// Once per database and source: the lines from before the checkpoint for
+    /// sources a database made before them skipped. Without a checkpoint the
     /// normal catch-up reads them.
-    private func importLockHistory(upTo checkpoint: Date?) async throws {
-        guard try store.needsLockHistoryImport() else { return }
+    private func importHistory(upTo checkpoint: Date?) async throws {
+        let sources = try EventStore.HistorySource.allCases.filter { try store.needsHistoryImport($0) }
+        guard !sources.isEmpty else { return }
         if let checkpoint {
             publish(.catchingUp(since: checkpoint.addingTimeInterval(-initialBackfill)))
-            var locks = EventProcessor()
+            // A fresh processor: locks and grants carry no state across the checkpoint.
+            var processor = EventProcessor()
             var events: [CollectedEvent] = []
-            let arguments = LogReader.showArguments(predicate: LogPredicates.screenLock,
+            let predicate = sources.map(\.predicate).joined(separator: " OR ")
+            let arguments = LogReader.showArguments(predicate: predicate,
                                                     start: checkpoint.addingTimeInterval(-initialBackfill), end: checkpoint)
             for try await batch in LogReader.run(arguments) {
                 try Task.checkCancellation()
-                for entry in batch where entry.timestamp <= checkpoint { events += locks.process(entry) }
+                for entry in batch where entry.timestamp <= checkpoint { events += processor.process(entry) }
             }
             try store.record(events, lastProcessed: nil)
         }
-        try store.markLockHistoryImported()
+        for source in sources { try store.markHistoryImported(source) }
     }
 
     private func handle(_ batch: [LogEntry]) throws {

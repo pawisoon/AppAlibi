@@ -165,6 +165,7 @@ final class MacAppDelegate: NSObject, NSApplicationDelegate {
                 model.sensorsLockedOnly = true
                 model.historyTab = .sensors
             case .permissions: model.historyTab = .permissions
+            case .admin: model.historyTab = .admin
             case .summary(let period): model.showSummary(period)
             }
             showMainWindow()

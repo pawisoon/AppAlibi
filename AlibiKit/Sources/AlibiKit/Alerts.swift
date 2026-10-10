@@ -15,14 +15,18 @@ public struct AlertSettings: Sendable, Equatable {
     public var firstPermissionUse: Bool
     /// On unlock: what used the camera, microphone or screen while the screen was locked.
     public var lockedUse: Bool
+    /// Every time an app (not a system service) is granted an admin right.
+    public var adminRights: Bool
 
-    public init(sensors: SensorAlertMode = .off, firstPermissionUse: Bool = false, lockedUse: Bool = false) {
+    public init(sensors: SensorAlertMode = .off, firstPermissionUse: Bool = false, lockedUse: Bool = false,
+                adminRights: Bool = false) {
         self.sensors = sensors
         self.firstPermissionUse = firstPermissionUse
         self.lockedUse = lockedUse
+        self.adminRights = adminRights
     }
 
-    public var isEnabled: Bool { sensors != .off || firstPermissionUse || lockedUse }
+    public var isEnabled: Bool { sensors != .off || firstPermissionUse || lockedUse || adminRights }
 }
 
 public enum AccessAlert: Equatable, Sendable {
@@ -31,6 +35,8 @@ public enum AccessAlert: Equatable, Sendable {
     case permission(app: String, binaryPath: String, service: String, authValue: Int, date: Date)
     /// Posted on unlock. Apps longest first; each duration is the part inside the lock.
     case lockedUse(lock: DateInterval, apps: [ActivityReport.AppUsage])
+    /// An app was granted admin rights. `app` is a path; rights in the order granted, without repeats.
+    case adminRights(app: String, rights: [String], date: Date)
 }
 
 /// Decides which freshly stored events deserve a notification. Runs after the
@@ -56,6 +62,7 @@ public struct AlertPlanner {
         guard settings.isEnabled else { return [] }
         let fresh = events.filter { now.timeIntervalSince($0.date) <= maxAge }
         return try sensorAlerts(fresh) + permissionAlerts(fresh) + lockedUseAlerts(fresh, now: now)
+            + adminRightAlerts(fresh)
     }
 
     /// Unlike the other alerts, system services count: Screen Sharing on a locked
@@ -98,6 +105,23 @@ public struct AlertPlanner {
         }
     }
 
+    /// One alert per app and batch: an installer takes several rights at once.
+    private func adminRightAlerts(_ events: [CollectedEvent]) -> [AccessAlert] {
+        guard settings.adminRights else { return [] }
+        var byApp: [String: (rights: [String], date: Date)] = [:]
+        var order: [String] = []
+        for case .adminRight(let event) in events {
+            let name = (event.app as NSString).lastPathComponent
+            guard isApp(name, event.app) else { continue }
+            if byApp[event.app] == nil {
+                order.append(event.app)
+                byApp[event.app] = ([], event.date)
+            }
+            if !byApp[event.app]!.rights.contains(event.right) { byApp[event.app]!.rights.append(event.right) }
+        }
+        return order.map { .adminRights(app: $0, rights: byApp[$0]!.rights, date: byApp[$0]!.date) }
+    }
+
     private func permissionAlerts(_ events: [CollectedEvent]) throws -> [AccessAlert] {
         guard settings.firstPermissionUse else { return [] }
         struct Key: Hashable { let app: String; let service: String }
@@ -131,6 +155,7 @@ extension CollectedEvent {
         case .sensor(let event): event.date
         case .tcc(let event): event.date
         case .screenLock(let event): event.date
+        case .adminRight(let event): event.date
         }
     }
 }

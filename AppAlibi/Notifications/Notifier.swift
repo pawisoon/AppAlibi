@@ -16,6 +16,7 @@ final class Notifier: NSObject {
         /// Sensors, filtered to use while the screen was locked.
         case lockedUse
         case permissions
+        case admin
         case summary(ReportPeriod)
     }
 
@@ -91,6 +92,13 @@ final class Notifier: NSObject {
             content.body = Self.lockedUseText(lock: lock, apps: apps)
             content.threadIdentifier = "locked"
             content.userInfo = ["open": "locked"]
+        case let .adminRights(app, rights, date):
+            let name = AppInfo.info(for: (app as NSString).lastPathComponent, binaryPath: app).name
+            content.title = String(localized: "\(name) got administrator rights")
+            let list = ListFormatter.localizedString(byJoining: rights.map(AdminRight.displayName(for:)))
+            content.body = String(localized: "\(list), \(Formatting.time(date)).")
+            content.threadIdentifier = "admin"
+            content.userInfo = ["open": "admin"]
         }
         content.sound = .default
         deliver(content)
@@ -159,6 +167,7 @@ extension Notifier: UNUserNotificationCenterDelegate {
         let destination: Destination = switch info["open"] as? String {
         case "permissions": .permissions
         case "locked": .lockedUse
+        case "admin": .admin
         case "summary": .summary((info["period"] as? String).flatMap(ReportPeriod.init(rawValue:)) ?? .day)
         default: .sensors
         }

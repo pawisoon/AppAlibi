@@ -84,11 +84,11 @@ final class ScreenLockStoreTests: XCTestCase {
     }
 
     func testLockHistoryImportRunsOnce() throws {
-        XCTAssertTrue(try store.needsLockHistoryImport())
-        try store.markLockHistoryImported()
+        XCTAssertTrue(try store.needsHistoryImport(.screenLocks))
+        try store.markHistoryImported(.screenLocks)
         store = nil
         store = try EventStore(url: url)
-        XCTAssertFalse(try store.needsLockHistoryImport())
+        XCTAssertFalse(try store.needsHistoryImport(.screenLocks))
     }
 
     func testLockFromBeforeARestartEndsAtBoot() throws {
