@@ -98,6 +98,12 @@ final class TCCCorrelatorTests: XCTestCase {
     func testServiceNames() {
         XCTAssertEqual(TCCService.displayName(for: "kTCCServiceSystemPolicyAllFiles"), "Full Disk Access")
         XCTAssertEqual(TCCService.displayName(for: "kTCCServiceSomethingNew"), "SomethingNew")
+        // Seen on macOS 27.0.1 without a name before.
+        XCTAssertEqual(TCCService.displayName(for: "kTCCServiceUbiquity"), "iCloud Drive")
+        XCTAssertEqual(TCCService.displayName(for: "kTCCServiceWillow"), "Home")
+        XCTAssertEqual(TCCService.displayName(for: "kTCCServiceVoiceBanking"), "Personal Voice")
+        XCTAssertEqual(TCCService.displayName(for: "kTCCServiceWebBrowserPublicKeyCredential"), "Passkeys for Web Browsers")
+        XCTAssertEqual(TCCService.displayName(for: "kTCCServicePhotosAdd"), "Add to Photos")
         XCTAssertTrue(TCCService.isFileAccess("kTCCServiceSystemPolicyDesktopFolder"))
         XCTAssertEqual(TCCService.resultName(for: 0), "Denied")
     }

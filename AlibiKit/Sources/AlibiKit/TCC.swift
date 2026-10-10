@@ -69,6 +69,22 @@ public enum TCCService {
         "MediaLibrary": String(localized: "Media Library", bundle: .module),
         "SpeechRecognition": String(localized: "Speech Recognition", bundle: .module),
         "Location": String(localized: "Location", bundle: .module),
+        "Ubiquity": String(localized: "iCloud Drive", bundle: .module),
+        "Willow": String(localized: "Home", bundle: .module),
+        "VoiceBanking": String(localized: "Personal Voice", bundle: .module),
+        "WebBrowserPublicKeyCredential": String(localized: "Passkeys for Web Browsers", bundle: .module),
+        "PhotosAdd": String(localized: "Add to Photos", bundle: .module),
+        "SystemPolicySysAdminFiles": String(localized: "Admin Files", bundle: .module),
+        "FileProviderDomain": String(localized: "File Provider", bundle: .module),
+        "FileProviderPresence": String(localized: "File Provider Presence", bundle: .module),
+        "FocusStatus": String(localized: "Focus", bundle: .module),
+        "RemoteDesktop": String(localized: "Remote Desktop", bundle: .module),
+        "EndpointSecurityClient": String(localized: "Endpoint Security", bundle: .module),
+        "Siri": String(localized: "Siri", bundle: .module),
+        "UserTracking": String(localized: "Tracking", bundle: .module),
+        "ContactsLimited": String(localized: "Contacts", bundle: .module),
+        "ContactsFull": String(localized: "Contacts", bundle: .module),
+        "BluetoothPeripheral": String(localized: "Bluetooth", bundle: .module),
     ]
 
     /// `kTCCServiceSystemPolicyAllFiles` -> "Full Disk Access".

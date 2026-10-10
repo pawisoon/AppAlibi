@@ -22,6 +22,12 @@ enum Fixtures {
     // The same moment from another loginwindow line that must not count as a lock.
     static let screenLockUIShown = "-[SessionAgentNotificationCenter sendDistributedNotification:object:] | sendDistributedNotification: com.apple.screenLockUIIsShown, with object:501"
 
+    // authd, macOS 27.0.1.
+    static let adminRightMDM = "Succeeded authorizing right 'system.privilege.admin' by client '/usr/libexec/mdmclient' [7788] for authorization created by '/usr/libexec/mdmclient' [7788] (13,0) (engine 1358)"
+    static let adminRightSoftwareUpdate = "Succeeded authorizing right 'com.apple.SoftwareUpdate.modify-settings' by client '/System/Library/CoreServices/Software Update.app/Contents/Resources/softwareupdated' [26693] for authorization created by '/System/Library/PrivateFrameworks/SoftwareUpdate.framework/Versions/A/Resources/SoftwareUpdateNotificationManager.app' [9849] (6,0) (engine 1411)"
+    static let adminRightScreensaver = "Succeeded authorizing right 'system.login.screensaver' by client '/System/Library/CoreServices/loginwindow.app' [246] for authorization created by '/System/Library/CoreServices/loginwindow.app' [246] (302,0) (engine 1287)"
+    static let adminRightDenied = "Fatal: authorization denied (kAuthorizationFlagExtendRights not set) (engine 1413)"
+
     static func entry(_ message: String, at seconds: TimeInterval = 0, pid: Int = 579) -> LogEntry {
         LogEntry(timestamp: Date(timeIntervalSince1970: 1_791_500_000 + seconds), eventMessage: message, processID: pid)
     }

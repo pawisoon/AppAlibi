@@ -88,4 +88,29 @@ public enum CSVExport {
                      "result", "preflight", "count", "first_seen", "last_seen"],
             rows: lines)
     }
+
+    /// - Parameter name: the display name for an app path.
+    public static func adminRights(
+        _ rows: [AdminRightAggregate],
+        timeZone: TimeZone = .current,
+        name: (_ path: String) -> String
+    ) -> String {
+        let timestamp = timestamps(in: timeZone)
+        let lines = rows.map { row -> [String] in
+            [
+                row.day,
+                name(row.app),
+                row.app,
+                row.client,
+                row.rightName,
+                row.right,
+                String(row.count),
+                timestamp(row.firstSeen),
+                timestamp(row.lastSeen),
+            ]
+        }
+        return CSV.document(
+            header: ["day", "app", "app_path", "client_path", "admin_right", "right", "count", "first_seen", "last_seen"],
+            rows: lines)
+    }
 }

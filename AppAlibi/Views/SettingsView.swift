@@ -13,6 +13,7 @@ struct SettingsView: View {
     @AppStorage(AlertPreferences.sensorsKey) private var sensorAlerts: SensorAlertMode = .off
     @AppStorage(AlertPreferences.firstPermissionKey) private var permissionAlerts = false
     @AppStorage(AlertPreferences.lockedUseKey) private var lockedUseAlerts = false
+    @AppStorage(AlertPreferences.adminRightsKey) private var adminRightAlerts = false
     @AppStorage(AlertPreferences.dailyKey) private var dailySummary = false
     @AppStorage(AlertPreferences.weeklyKey) private var weeklySummary = false
     @AppStorage(AlertPreferences.minuteKey) private var summaryMinute = AlertPreferences.defaultMinute
@@ -63,7 +64,7 @@ struct SettingsView: View {
                     ForEach(HistoryRetention.allCases) { Text($0.title).tag($0) }
                 } label: {
                     Text("Keep history")
-                    Text("Older sessions and permission checks are deleted from this Mac.")
+                    Text("Older history is deleted from this Mac.")
                 }
                 LabeledContent("Database") {
                     Button("Show in Finder") { model.revealDatabase() }
@@ -88,7 +89,7 @@ struct SettingsView: View {
         .confirmationDialog("Delete all recorded history?", isPresented: $confirmDelete) {
             Button("Delete History", role: .destructive) { model.deleteHistory() }
         } message: {
-            Text("Sensor sessions and permission checks are removed from this Mac. This cannot be undone.")
+            Text("Sensor sessions, permission checks, admin rights and screen locks are removed from this Mac. This cannot be undone.")
         }
         .confirmationDialog(
             "Keep history for \((pendingRetention ?? .forever).duration)?",
@@ -120,6 +121,10 @@ struct SettingsView: View {
             Toggle(isOn: $lockedUseAlerts) {
                 Text("Use while the screen is locked")
                 Text("When you unlock: anything that used the camera, microphone or screen while you were away, system services included.")
+            }
+            Toggle(isOn: $adminRightAlerts) {
+                Text("Administrator rights")
+                Text("Every time an app is allowed to install software or make other changes that need an admin password.")
             }
 
             Toggle(isOn: $dailySummary) {
@@ -157,6 +162,7 @@ struct SettingsView: View {
         .onChange(of: sensorAlerts) { askIfNeeded() }
         .onChange(of: permissionAlerts) { askIfNeeded() }
         .onChange(of: lockedUseAlerts) { askIfNeeded() }
+        .onChange(of: adminRightAlerts) { askIfNeeded() }
         .onChange(of: dailySummary) { _, on in summaryToggled(.day, on: on) }
         .onChange(of: weeklySummary) { _, on in summaryToggled(.week, on: on) }
     }

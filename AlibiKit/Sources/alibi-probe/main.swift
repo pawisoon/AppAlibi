@@ -27,7 +27,9 @@ try store.record(events, lastProcessed: Date())
 
 let sensorEvents = events.filter { if case .sensor = $0 { true } else { false } }.count
 let lockEvents = events.filter { if case .screenLock = $0 { true } else { false } }.count
-print("Parsed \(lines) log lines in \(String(format: "%.1f", Date().timeIntervalSince(started)))s: \(sensorEvents) sensor events, \(lockEvents) screen locks and unlocks, \(events.count - sensorEvents - lockEvents) permission checks.\n")
+let adminEvents = events.filter { if case .adminRight = $0 { true } else { false } }.count
+let tccEvents = events.count - sensorEvents - lockEvents - adminEvents
+print("Parsed \(lines) log lines in \(String(format: "%.1f", Date().timeIntervalSince(started)))s: \(sensorEvents) sensor events, \(lockEvents) screen locks and unlocks, \(tccEvents) permission checks, \(adminEvents) admin rights.\n")
 
 let duration = DateComponentsFormatter()
 duration.allowedUnits = [.hour, .minute, .second]
@@ -61,6 +63,14 @@ print("\nPermission checks (non-Apple, including preflight):")
 for row in try store.tccAggregates(TCCQuery(includePreflight: true, limit: 25)) {
     let kind = row.preflight ? "preflight" : "request"
     print("  \(row.serviceName.padding(toLength: 22, withPad: " ", startingAt: 0)) \(row.resultName.padding(toLength: 8, withPad: " ", startingAt: 0)) \(kind.padding(toLength: 10, withPad: " ", startingAt: 0)) x\(row.count)  \(row.app)")
+}
+
+print("\nAdmin rights granted:")
+let rights = try store.adminRights(AdminRightQuery(limit: 25))
+if rights.isEmpty { print("  none in this window") }
+for row in rights {
+    let via = row.client == row.app ? "" : "  via \(row.client)"
+    print("  \(row.rightName.padding(toLength: 32, withPad: " ", startingAt: 0)) x\(row.count)  \(row.app)\(via)")
 }
 
 try? FileManager.default.removeItem(at: url.deletingLastPathComponent())

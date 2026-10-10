@@ -10,10 +10,12 @@ searchable history of:
 - **Permission checks:** which app asked tccd for a protected resource (folders,
   Full Disk Access, contacts, screen capture and so on), and whether it was allowed.
 - **Screen locks:** when the screen was locked, to flag sensor use while nobody was at the Mac.
+- **Admin rights:** which app or service authd granted an authorization right
+  (admin password, software install, changing system daemons).
 
 ## Data sources (verified 2026-10-09, macOS 27.0.1)
 
-One `log` process watches both sources with a single combined predicate, so
+One `log` process watches every source with a single combined predicate, so
 events arrive in order.
 
 ### Control Center snapshots
@@ -63,6 +65,38 @@ AUTHREQ_RESULT: msgID=47863.1, authValue=2, authReason=11, ...
   from before the last boot (`kern.boottime`) is closed at the boot time.
 - Adds about 20% to the time of a `log show` catch-up (17s to 21s for 12 hours).
 
+### Admin rights (authd)
+
+```
+Succeeded authorizing right 'system.privilege.admin' by client '/usr/libexec/mdmclient' [7788] for authorization created by '/usr/libexec/mdmclient' [7788] (13,0) (engine 1358)
+```
+
+- Paths, not bundle IDs, both in clear text. Paths can hold spaces (`Software Update.app`),
+  so a path ends at the `' [` before its pid.
+- The creator is the app to blame (Software Update: the notification manager asks, the daemon
+  works), the client is shown as "via" when it differs.
+- `system.login.*` is skipped: loginwindow takes `system.login.screensaver` on every password unlock.
+- Rights whose rule class is `allow` (`system.burn`, `system.hdd.smart`) are skipped: any
+  process gets them without asking, so they are not admin rights. `AuthorizationRightGet`
+  reads the rule without root (`AdminRight.isOpenToEveryone`).
+- Checked end to end on 2026-10-10 with a test binary in an `Applications` folder: grant
+  logged, stored, notification presented about 0.3s later.
+- Only grants are logged with the right and client. A refusal is just
+  `Fatal: authorization denied (...) (engine N)`, so denials are not recorded.
+  `Process /path (PID N) evaluates N rights ... (engine N, token N): ( "right" )` (Info level)
+  names the process and right and shares the engine number, but appears only for some
+  clients (about 7 a day against about 25 grants), so it cannot back a denial record.
+  Not checked: what a user cancelling a password prompt logs (no cancel in 7 days of logs).
+- A grant the user approved in a password or Touch ID prompt has extra lines in the same
+  engine before the `Succeeded` line (checked 2026-10-10 with `security authorize -u -e system.privilege.admin`):
+  `engine 1593: running mechanism builtin:authenticate (1 of 3)` and
+  `UID 501 authenticated as user pawisoon (UID 501) for right 'system.privilege.admin'`.
+  Silent grants (mdmclient, Software Update) have neither. Not used yet: it could mark
+  grants that asked the user.
+- About 25 grants a day on the dev Mac, mostly `mdmclient` and Software Update.
+  Adds roughly 10 to 25% to the time of a `log show` catch-up (noisy: 35 to 44s for 12 hours).
+- sudo goes through PAM, not authd, so it is not in here.
+
 ### Framing
 
 - Use `--style ndjson`. `log stream` prints a plain-text header line first.
@@ -79,6 +113,7 @@ AlibiKit/                 Swift package, all logic, unit-tested with `swift test
   LogPredicates           the one place that knows Apple's message formats
   ControlCenterParser     snapshot line -> Set<Attribution>
   ScreenLockParser        loginwindow line -> locked or unlocked (ScreenLock.swift)
+  AdminRightParser        authd grant line -> AdminRightEvent (AdminRights.swift)
   SessionTracker          snapshot diff -> started / ended events
   TCCCorrelator           CTX + ATTRIBUTION + RESULT -> TCCAccessEvent
   EventProcessor          LogEntry stream -> domain events (pure, testable)
@@ -95,8 +130,9 @@ AlibiKit/                 Swift package, all logic, unit-tested with `swift test
 
 1. Restore the tracker from sessions that are still open in the database, and
    the lock state from a lock that is still open. A lock open from before the
-   last boot is closed first. A database made before lock tracking gets one
-   import of the lock lines before its checkpoint (`meta.screen_locks_imported`).
+   last boot is closed first. A database made before a source existed gets one
+   import of that source's lines before its checkpoint (`meta.screen_locks_imported`,
+   `meta.admin_rights_imported`, see `EventStore.HistorySource`).
 2. Start `log stream` first, so nothing is missed while catching up.
 3. Run `log show --start <last processed timestamp>` (first launch: last 3 days)
    and process it.
@@ -115,18 +151,19 @@ Each batch is written in one SQLite transaction together with the new
 | `sessions` | id, sensor, app, started_at, ended_at (NULL while active) |
 | `tcc_access` | day, service, app, accessor, binary_path, auth_value, preflight, count, first_seen, last_seen |
 | `screen_locks` | id, locked_at, unlocked_at (NULL while locked) |
-| `meta` | last_processed timestamp, screen_locks_imported |
+| `admin_rights` | day, right_name, app (creator path), client (path), count, first_seen, last_seen |
+| `meta` | last_processed timestamp, screen_locks_imported, admin_rights_imported |
 
 Retention (Settings, "Keep history": Forever by default, or 1, 3, 6 or 12 months)
 deletes closed sessions and locks that ended before the cutoff, and permission
-rows by day. It runs at launch, every 6 hours, and when the setting changes.
+and admin rows by day. It runs at launch, every 6 hours, and when the setting changes.
 Shortening it asks first. The checkpoint stays, so nothing is imported again.
 
 ### UI
 
 - **Menu bar icon:** an eye, filled while camera, mic or screen recording is active.
 - **Menu bar panel:** status, "Active now", the last few sessions, Open History, Settings, Quit.
-- **History window**, three tabs:
+- **History window**, four tabs:
   - *Summary:* Day or Week, laid out like Screen Time: total time with camera,
     mic or screen on, a bar per hour or day, apps by time, then protected data
     per app. A call with camera and mic on counts once (spans are merged).
@@ -135,6 +172,8 @@ Shortening it asks first. The checkpoint stays, so nothing is imported again.
     locked; the "While locked" filter shows only those.
   - *Permissions:* daily aggregates with app, service, result, count, last seen.
     Apple system processes and preflight checks are hidden by default.
+  - *Admin:* daily aggregates of granted admin rights with app, right, count, last seen.
+    Apps scope by default, so a normal Mac shows nothing until an installer asks.
   - *Export:* Sensors and Permissions export their current filters, without the
     table's row limit, as CSV (button, or File > Export as CSV…, Command-E).
     Times are ISO 8601 with the local offset. Cells that start with `= + - @` get a
@@ -158,6 +197,9 @@ Shortening it asks first. The checkpoint stays, so nothing is imported again.
   - daily and weekly summary at a chosen time (default 18:00, weekly on Friday).
     A timer checks every minute and on wake, so a Mac asleep at that time gets it
     on wake if within 6 hours.
+  - an app (not a system service) granted an admin right: every time, one
+    notification per app and batch listing its rights. Off by default and not
+    switched on by the welcome tour.
   - Events older than 2 minutes never notify, so the catch-up at launch is silent.
   - Clicking a notification opens the matching history tab.
 
@@ -196,6 +238,32 @@ Shortening it asks first. The checkpoint stays, so nothing is imported again.
    how a remote Screen Sharing session is attributed in `scr`.
 4. **M3 Ship:** Developer ID signing, notarization, Sparkle updates, website on appalibi.com.
 5. **Later:** Endpoint Security extension for real file access history.
+
+## Coverage review (2026-10-10, macOS 27.0.1)
+
+Control Center logged only `cam`, `mic`, `scr` and `loc` in 7 days. tccd logged 26
+services in 3 days. `Ubiquity`, `Willow`, `VoiceBanking`, `WebBrowserPublicKeyCredential`
+and `PhotosAdd` had no display name and now do, along with other known services
+not yet seen here.
+
+Automation (`AppleEvents`) records the sender only. No AppleEvents check appeared in
+3 days, and `AUTHREQ_CTX` redacts `daemon_dict`, so the target app is probably not logged.
+
+Candidate new sources, best first:
+
+1. **Admin authorizations** (`process == "authd"`): done 2026-10-10, see "Admin rights (authd)" above.
+2. **Login items and background tasks** (`subsystem == "com.apple.backgroundtaskmanagement"`):
+   `registerLaunchItem: ... name=X, type=...` has the name in clear, but some lines
+   redact the bundle ID. About 100,000 lines a day, so the predicate must be tight.
+3. **Remote access:** Screen Sharing (`screensharingd`) and SSH (`sshd-session`).
+   No lines captured yet. Needs a test session.
+4. **Touch ID and passkey prompts** (`com.apple.LocalAuthentication`): about 38,000
+   lines a day, attribution and redaction not checked.
+5. **System extension installs** (`sysextd`): rare, format not captured.
+
+Not possible from the log: clipboard reads by app (only Biome noise), ongoing keyboard
+monitoring or Accessibility use (only the tccd check), keychain reads (too noisy).
+Each new source slows the `log show` catch-up, so measure with `alibi-probe`.
 
 ## Open questions
 

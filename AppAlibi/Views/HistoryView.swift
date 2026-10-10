@@ -8,6 +8,7 @@ struct HistoryView: View {
         case summary = "Summary"
         case sensors = "Sensors"
         case permissions = "Permissions"
+        case admin = "Admin"
         var id: Self { self }
 
         var title: LocalizedStringResource {
@@ -15,6 +16,7 @@ struct HistoryView: View {
             case .summary: "Summary"
             case .sensors: "Sensors"
             case .permissions: "Permissions"
+            case .admin: "Admin"
             }
         }
     }
@@ -25,6 +27,7 @@ struct HistoryView: View {
             case .summary: SummaryView(model: model)
             case .sensors: SensorHistoryView(model: model)
             case .permissions: PermissionHistoryView(model: model)
+            case .admin: AdminHistoryView(model: model)
             }
         }
         .toolbar {
@@ -296,6 +299,96 @@ struct PermissionHistoryView: View {
             return CSVExport.permissions(rows) { identifier, binaryPath in
                 AppInfo.info(for: identifier, binaryPath: binaryPath.isEmpty ? nil : binaryPath).name
             }
+        }
+    }
+}
+
+// MARK: - Admin rights
+
+struct AdminHistoryView: View {
+    let model: AppModel
+
+    @State private var scope: AppScope = .apps
+    @State private var range: TimeRange = .month
+    @State private var search = ""
+    @State private var rows: [AdminRightAggregate] = []
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 16) {
+                ScopePicker(scope: $scope)
+                Picker("Range", selection: $range) {
+                    ForEach(TimeRange.allCases) { Text($0.title).tag($0) }
+                }
+                .frame(width: 180)
+                Spacer()
+                Button("Export\u{2026}", action: export)
+                    .disabled(rows.isEmpty)
+            }
+            .padding(10)
+
+            Table(rows) {
+                TableColumn("App") { row in
+                    AppCell(identifier: Self.name(row.app), binaryPath: row.app,
+                            detail: row.client == row.app ? nil : String(localized: "via \(Self.name(row.client))"))
+                }
+                .width(min: 200, ideal: 250)
+                TableColumn("Right") { row in
+                    Text(row.rightName)
+                        .lineLimit(2)
+                        .help(row.rightName + "\n" + row.right)
+                }
+                .width(min: 180, ideal: 320)
+                TableColumn("Count") { row in
+                    Text("\(row.count)").monospacedDigit()
+                }
+                .width(min: 50, ideal: 60)
+                TableColumn("Last Seen") { row in
+                    Text(row.lastSeen.formatted(date: .abbreviated, time: .shortened))
+                }
+                .width(min: 130, ideal: 160)
+            }
+            .overlay {
+                if rows.isEmpty {
+                    ContentUnavailableView("No Admin Rights", systemImage: "person.badge.key",
+                                           description: Text("Nothing was granted administrator rights in this range. Try System or All."))
+                }
+            }
+        }
+        .searchable(text: $search, prompt: "App, path or right")
+        .focusedSceneValue(\.exportAction, ExportAction(run: export))
+        .task(id: ReloadKey(revision: model.revision, range: range, search: search, scope: scope)) {
+            reload()
+        }
+    }
+
+    private struct ReloadKey: Equatable {
+        let revision: Int
+        let range: TimeRange
+        let search: String
+        let scope: AppScope
+    }
+
+    /// authd logs paths, not bundle IDs: `/usr/libexec/mdmclient` -> `mdmclient`,
+    /// `/System/.../SoftwareUpdateNotificationManager.app` -> `SoftwareUpdateNotificationManager`.
+    private static func name(_ path: String) -> String {
+        let name = (path as NSString).lastPathComponent
+        return name.hasSuffix(".app") ? String(name.dropLast(4)) : name
+    }
+
+    private func query(limit: Int) -> AdminRightQuery {
+        AdminRightQuery(apps: model.adminRightApps(in: scope), appContains: search, since: range.since, limit: limit)
+    }
+
+    private func reload() {
+        rows = (try? model.store?.adminRights(query(limit: 2_000))) ?? []
+    }
+
+    /// The same filters as the table, without its row limit.
+    private func export() {
+        CSVSaver.save(suggestedName: String(localized: "AppAlibi Admin Rights")) {
+            let rows = (try? model.store?.adminRights(query(limit: .max))) ?? []
+            return CSVExport.adminRights(rows) { path in AppInfo.info(for: Self.name(path), binaryPath: path).name }
         }
     }
 }

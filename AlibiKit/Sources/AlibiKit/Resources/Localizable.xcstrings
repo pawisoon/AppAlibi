@@ -11,6 +11,36 @@
         }
       }
     },
+    "Add to Photos" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodawanie do Zdjęć"
+          }
+        }
+      }
+    },
+    "Admin Files" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pliki administratora"
+          }
+        }
+      }
+    },
+    "Administrator access" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dostęp administratora"
+          }
+        }
+      }
+    },
     "Allowed" : {
       "localizations" : {
         "pl" : {
@@ -81,12 +111,62 @@
         }
       }
     },
+    "Change Software Update settings" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zmiana ustawień uaktualnień oprogramowania"
+          }
+        }
+      }
+    },
+    "Change background services" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zmiana usług działających w tle"
+          }
+        }
+      }
+    },
+    "Change network settings" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zmiana ustawień sieci"
+          }
+        }
+      }
+    },
+    "Change system settings" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zmiana ustawień systemowych"
+          }
+        }
+      }
+    },
     "Contacts" : {
       "localizations" : {
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kontakty"
+          }
+        }
+      }
+    },
+    "Debug other apps" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debugowanie innych aplikacji"
           }
         }
       }
@@ -141,6 +221,46 @@
         }
       }
     },
+    "Endpoint Security" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Endpoint Security"
+          }
+        }
+      }
+    },
+    "File Provider" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dostawca plików"
+          }
+        }
+      }
+    },
+    "File Provider Presence" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obecność dostawcy plików"
+          }
+        }
+      }
+    },
+    "Focus" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skupienie"
+          }
+        }
+      }
+    },
     "Full Disk Access" : {
       "localizations" : {
         "pl" : {
@@ -151,12 +271,72 @@
         }
       }
     },
+    "Home" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dom"
+          }
+        }
+      }
+    },
     "Input Monitoring" : {
       "localizations" : {
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monitorowanie wprowadzania"
+          }
+        }
+      }
+    },
+    "Install Apple software" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalowanie oprogramowania Apple"
+          }
+        }
+      }
+    },
+    "Install Apple software (standard user)" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalowanie oprogramowania Apple (użytkownik standardowy)"
+          }
+        }
+      }
+    },
+    "Install privileged helper" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalowanie narzędzia pomocniczego z uprawnieniami"
+          }
+        }
+      }
+    },
+    "Install software" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalowanie oprogramowania"
+          }
+        }
+      }
+    },
+    "Install software from MDM" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalowanie oprogramowania z MDM"
           }
         }
       }
@@ -221,6 +401,26 @@
         }
       }
     },
+    "Passkeys for Web Browsers" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klucze dostępu dla przeglądarek"
+          }
+        }
+      }
+    },
+    "Personal Voice" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Własny głos"
+          }
+        }
+      }
+    },
     "Photos" : {
       "localizations" : {
         "pl" : {
@@ -237,6 +437,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Przypomnienia"
+          }
+        }
+      }
+    },
+    "Remote Desktop" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zdalny pulpit"
           }
         }
       }
@@ -261,6 +471,16 @@
         }
       }
     },
+    "Siri" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siri"
+          }
+        }
+      }
+    },
     "Speech Recognition" : {
       "localizations" : {
         "pl" : {
@@ -281,6 +501,16 @@
         }
       }
     },
+    "Tracking" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Śledzenie"
+          }
+        }
+      }
+    },
     "Unknown" : {
       "localizations" : {
         "pl" : {
@@ -297,6 +527,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wartość %lld"
+          }
+        }
+      }
+    },
+    "iCloud Drive" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud Drive"
           }
         }
       }

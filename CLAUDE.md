@@ -2,7 +2,7 @@
 
 macOS menu bar app that keeps a history of which app used the camera, microphone,
 screen recording and TCC-protected resources. Data comes from the unified log
-(Control Center `sensor-indicators` and `tccd`). Ships outside the Mac App Store.
+(Control Center `sensor-indicators`, `tccd`, `loginwindow` and `authd`). Ships outside the Mac App Store.
 
 - Research, log formats, competitors, naming and trademark findings: docs/RESEARCH.md
 - Architecture, decisions, milestones, open questions: docs/PLAN.md
@@ -10,7 +10,7 @@ screen recording and TCC-protected resources. Data comes from the unified log
 ## Layout
 
 - `AlibiKit/` Swift package with all logic. Apple's private log formats are only
-  known by `LogPredicates.swift`, `ControlCenterParser.swift`, `TCC.swift` and `ScreenLock.swift`.
+  known by `LogPredicates.swift`, `ControlCenterParser.swift`, `TCC.swift`, `ScreenLock.swift` and `AdminRights.swift`.
 - `AlibiKit/Sources/alibi-probe/` CLI that replays recent log history through the pipeline.
 - `AppAlibi/` SwiftUI app (thin UI over AlibiKit). Shows in the menu bar or the Dock (user choice).
 - `AppAlibi/MacUI/` window handling, menu bar or Dock presentation, onboarding tour and small
@@ -62,3 +62,7 @@ were checked visually before the last three items; their UI (Settings "Keep hist
 Sensors lock icon, filter and Export) was not. Notification delivery was not checked either
 (it needs the permission prompt answered). English and Polish localization in; the Polish UI was
 not checked visually.
+2026-10-10: admin rights (authd grants) source, Admin tab, alert and CSV export, plus names for
+more TCC services. Tested with `swift test` and `alibi-probe`. The Admin tab (English, dark) and its Settings toggle
+were checked visually. The admin alert was checked end to end with a test binary (delivery seen in
+the usernoted log, the banner itself not looked at). The Admin tab and Settings were checked in Polish too.

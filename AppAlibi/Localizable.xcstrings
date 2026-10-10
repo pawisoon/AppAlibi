@@ -46,6 +46,16 @@
         }
       }
     },
+    "%@ got administrator rights" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ dostaje uprawnienia administratora"
+          }
+        }
+      }
+    },
     "%@ is using your %@" : {
       "localizations" : {
         "en" : {
@@ -100,6 +110,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ – odmowa dostępu: %@"
+          }
+        }
+      }
+    },
+    "%@, %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$@."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$@."
           }
         }
       }
@@ -297,6 +323,26 @@
         }
       }
     },
+    "Admin" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Administrator"
+          }
+        }
+      }
+    },
+    "Administrator rights" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uprawnienia administratora"
+          }
+        }
+      }
+    },
     "All" : {
       "localizations" : {
         "pl" : {
@@ -347,8 +393,28 @@
         }
       }
     },
+    "App, path or right" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacja, ścieżka, uprawnienie"
+          }
+        }
+      }
+    },
     "AppAlibi" : {
       "shouldTranslate" : false
+    },
+    "AppAlibi Admin Rights" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AppAlibi – uprawnienia administratora"
+          }
+        }
+      }
     },
     "AppAlibi History" : {
       "localizations" : {
@@ -746,6 +812,16 @@
         }
       }
     },
+    "Every time an app is allowed to install software or make other changes that need an admin password." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Za każdym razem, gdy aplikacja dostaje zgodę na instalację oprogramowania lub inne zmiany wymagające hasła administratora."
+          }
+        }
+      }
+    },
     "Everything stays on this Mac and there is no account. AppAlibi reads the macOS log and never sends it anywhere." : {
       "localizations" : {
         "pl" : {
@@ -801,7 +877,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gdy aplikacja użyje ich pierwszy raz"
+            "value" : "Za pierwszym razem"
           }
         }
       }
@@ -1002,6 +1078,16 @@
         }
       }
     },
+    "No Admin Rights" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak uprawnień administratora"
+          }
+        }
+      }
+    },
     "No Permission Checks" : {
       "localizations" : {
         "pl" : {
@@ -1112,6 +1198,16 @@
         }
       }
     },
+    "Nothing was granted administrator rights in this range. Try System or All." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W tym zakresie nikomu nie przyznano uprawnień administratora. Spróbuj „System” lub „Wszystkie”."
+          }
+        }
+      }
+    },
     "Notifications" : {
       "localizations" : {
         "pl" : {
@@ -1162,12 +1258,12 @@
         }
       }
     },
-    "Older sessions and permission checks are deleted from this Mac." : {
+    "Older history is deleted from this Mac." : {
       "localizations" : {
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Starsze sesje i sprawdzenia uprawnień są usuwane z tego Maca."
+            "value" : "Starsza historia jest usuwana z tego Maca."
           }
         }
       }
@@ -1372,6 +1468,16 @@
         }
       }
     },
+    "Right" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uprawnienie"
+          }
+        }
+      }
+    },
     "Send Today’s Summary Now" : {
       "localizations" : {
         "pl" : {
@@ -1392,12 +1498,12 @@
         }
       }
     },
-    "Sensor sessions and permission checks are removed from this Mac. This cannot be undone." : {
+    "Sensor sessions, permission checks, admin rights and screen locks are removed from this Mac. This cannot be undone." : {
       "localizations" : {
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sesje czujników i sprawdzenia uprawnień zostaną usunięte z tego Maca. Tego nie można cofnąć."
+            "value" : "Sesje czujników, sprawdzenia uprawnień, uprawnienia administratora i blokady ekranu zostaną usunięte z tego Maca. Tego nie można cofnąć."
           }
         }
       }
