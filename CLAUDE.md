@@ -65,4 +65,4 @@ not checked visually.
 2026-10-10: admin rights (authd grants) source, Admin tab, alert and CSV export, plus names for
 more TCC services. Tested with `swift test` and `alibi-probe`. The Admin tab (English, dark) and its Settings toggle
 were checked visually. The admin alert was checked end to end with a test binary (delivery seen in
-the usernoted log, the banner itself not looked at).
+the usernoted log, the banner itself not looked at). The Admin tab and Settings were checked in Polish too.

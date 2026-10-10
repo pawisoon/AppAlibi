@@ -332,11 +332,13 @@ struct AdminHistoryView: View {
                     AppCell(identifier: Self.name(row.app), binaryPath: row.app,
                             detail: row.client == row.app ? nil : String(localized: "via \(Self.name(row.client))"))
                 }
-                .width(min: 200, ideal: 280)
+                .width(min: 200, ideal: 250)
                 TableColumn("Right") { row in
-                    Text(row.rightName).help(row.right)
+                    Text(row.rightName)
+                        .lineLimit(2)
+                        .help(row.rightName + "\n" + row.right)
                 }
-                .width(min: 150, ideal: 200)
+                .width(min: 180, ideal: 320)
                 TableColumn("Count") { row in
                     Text("\(row.count)").monospacedDigit()
                 }

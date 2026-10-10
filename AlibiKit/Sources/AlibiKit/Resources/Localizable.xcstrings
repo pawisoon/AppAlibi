@@ -26,7 +26,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pliki administracyjne"
+            "value" : "Pliki administratora"
           }
         }
       }
@@ -406,7 +406,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Klucze dostępu w przeglądarkach"
+            "value" : "Klucze dostępu dla przeglądarek"
           }
         }
       }

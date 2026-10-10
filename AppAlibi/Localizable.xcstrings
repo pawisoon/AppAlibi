@@ -398,7 +398,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aplikacja, ścieżka lub uprawnienie"
+            "value" : "Aplikacja, ścieżka, uprawnienie"
           }
         }
       }
@@ -877,7 +877,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gdy aplikacja użyje ich pierwszy raz"
+            "value" : "Za pierwszym razem"
           }
         }
       }
