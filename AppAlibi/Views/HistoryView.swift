@@ -70,28 +70,95 @@ enum TimeRange: String, CaseIterable, Identifiable {
     }
 }
 
+// MARK: - Tab state
+
+/// Loads a tab's rows off the main thread and remembers what they were loaded
+/// for, so a tab that comes back with nothing changed shows its rows at once.
+@MainActor
+@Observable
+final class TabLoader {
+    private(set) var isLoading = false
+    @ObservationIgnored private var loaded: AnyHashable?
+    @ObservationIgnored private var loads = 0
+
+    /// Runs `fetch` unless the rows are already for `key`, and hands the result
+    /// to `apply` unless a newer load started meanwhile. The old rows stay on
+    /// screen until then.
+    func load<Key: Hashable, T: Sendable>(_ key: Key, model: AppModel,
+                                          fetch: @escaping @Sendable (EventStore) throws -> T,
+                                          apply: (T) -> Void) async {
+        guard loaded != AnyHashable(key) else { return }
+        loads += 1
+        let load = loads
+        isLoading = true
+        let result = await model.read(fetch)
+        guard load == loads else { return }
+        isLoading = false
+        loaded = key
+        if let result { apply(result) }
+    }
+}
+
+@MainActor
+@Observable
+final class SensorsTabState {
+    var scope: AppScope = .apps
+    var sensor: Sensor?
+    var range: TimeRange = .week
+    var search = ""
+    var sessions: [SensorSession] = []
+    var locks = ScreenLockSpans([])
+    let loader = TabLoader()
+}
+
+@MainActor
+@Observable
+final class PermissionsTabState {
+    var scope: AppScope = .apps
+    var range: TimeRange = .week
+    var search = ""
+    var includePreflight = false
+    var filesOnly = false
+    var rows: [TCCAggregate] = []
+    let loader = TabLoader()
+}
+
+@MainActor
+@Observable
+final class AdminTabState {
+    var scope: AppScope = .apps
+    var range: TimeRange = .month
+    var search = ""
+    var rows: [AdminRightAggregate] = []
+    let loader = TabLoader()
+}
+
+/// How much of the session ran while the screen was locked.
+private func lockedTime(of session: SensorSession, in locks: ScreenLockSpans, now: Date = Date()) -> TimeInterval {
+    locks.overlap(with: DateInterval(start: session.startedAt, end: max(session.endedAt ?? now, session.startedAt)))
+}
+
 // MARK: - Sensors
 
 struct SensorHistoryView: View {
     let model: AppModel
+    @Bindable private var state: SensorsTabState
 
-    @State private var scope: AppScope = .apps
-    @State private var sensor: Sensor?
-    @State private var range: TimeRange = .week
-    @State private var search = ""
-    @State private var sessions: [SensorSession] = []
-    @State private var locks = ScreenLockSpans([])
+    init(model: AppModel) {
+        self.model = model
+        state = model.sensorsTab
+    }
 
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                ScopePicker(scope: $scope)
-                Picker("Sensor", selection: $sensor) {
+                ScopePicker(scope: $state.scope)
+                Picker("Sensor", selection: $state.sensor) {
                     Text("All").tag(Sensor?.none)
                     ForEach(Sensor.known, id: \.self) { Label($0.displayName, systemImage: $0.symbolName).tag(Sensor?.some($0)) }
                 }
                 .frame(width: 220)
-                Picker("Range", selection: $range) {
+                Picker("Range", selection: $state.range) {
                     ForEach(TimeRange.allCases) { Text($0.title).tag($0) }
                 }
                 .frame(width: 180)
@@ -99,13 +166,14 @@ struct SensorHistoryView: View {
                     .toggleStyle(.checkbox)
                     .help("Only use while the screen was locked.")
                 Spacer()
-                Text("Sessions: \(sessions.count)").foregroundStyle(.secondary)
+                LoadingIndicator(loader: state.loader)
+                Text("Sessions: \(state.sessions.count)").foregroundStyle(.secondary)
                 Button("Export\u{2026}", action: export)
-                    .disabled(sessions.isEmpty)
+                    .disabled(state.sessions.isEmpty)
             }
             .padding(10)
 
-            Table(sessions) {
+            Table(state.sessions) {
                 TableColumn("App") { session in
                     AppCell(identifier: session.app)
                 }
@@ -122,7 +190,7 @@ struct SensorHistoryView: View {
                     HStack(spacing: 4) {
                         Text(session.isActive ? String(localized: "Active") : Formatting.duration(session.duration()))
                             .foregroundStyle(session.isActive ? Color.orange : Color.primary)
-                        let locked = lockedTime(session)
+                        let locked = lockedTime(of: session, in: state.locks)
                         if locked >= ScreenLockSpans.minimumOverlap {
                             Image(systemName: "lock.fill")
                                 .foregroundStyle(.secondary)
@@ -134,22 +202,20 @@ struct SensorHistoryView: View {
                 .width(min: 90, ideal: 110)
             }
             .overlay {
-                if sessions.isEmpty {
+                if state.sessions.isEmpty && !state.loader.isLoading {
                     ContentUnavailableView("No Sessions", systemImage: "eye.slash",
                                            description: Text("Nothing matched in this range."))
                 }
             }
         }
-        .searchable(text: $search, prompt: "Bundle ID")
+        .searchable(text: $state.search, prompt: "Bundle ID")
         .focusedSceneValue(\.exportAction, ExportAction(run: export))
-        .task(id: ReloadKey(revision: model.revision, scope: scope, sensor: sensor, range: range, search: search,
-                            lockedOnly: model.sensorsLockedOnly)) {
-            reload()
-        }
+        .task(id: reloadKey) { await reload(reloadKey) }
     }
 
-    private struct ReloadKey: Equatable {
-        let revision: Int
+    private struct ReloadKey: Hashable {
+        let sessions: Int
+        let locks: Int
         let scope: AppScope
         let sensor: Sensor?
         let range: TimeRange
@@ -157,42 +223,49 @@ struct SensorHistoryView: View {
         let lockedOnly: Bool
     }
 
+    private var reloadKey: ReloadKey {
+        ReloadKey(sessions: model.sessionsRevision, locks: model.screenLocksRevision, scope: state.scope,
+                  sensor: state.sensor, range: state.range, search: state.search, lockedOnly: model.sensorsLockedOnly)
+    }
+
     private var lockedOnly: Binding<Bool> {
         Binding(get: { model.sensorsLockedOnly }, set: { model.sensorsLockedOnly = $0 })
     }
 
-    private func lockedTime(_ session: SensorSession) -> TimeInterval {
-        let end = max(session.endedAt ?? Date(), session.startedAt)
-        return locks.overlap(with: DateInterval(start: session.startedAt, end: end))
-    }
-
     private func query(limit: Int) -> SessionQuery {
         SessionQuery(
-            sensors: sensor.map { [$0] },
-            apps: model.sessionApps(in: scope),
-            appContains: search,
-            since: range.since,
+            sensors: state.sensor.map { [$0] },
+            apps: model.sessionApps(in: state.scope),
+            appContains: state.search,
+            since: state.range.since,
             limit: limit
         )
     }
 
-    private func reload() {
-        locks = model.screenLocks(since: range.since)
-        let found = (try? model.store?.sessions(query(limit: 2_000))) ?? []
-        sessions = model.sensorsLockedOnly ? found.filter { lockedTime($0) >= ScreenLockSpans.minimumOverlap } : found
+    private func reload(_ key: ReloadKey) async {
+        let rowsQuery = query(limit: 2_000)
+        let since = state.range.since
+        let lockedOnly = key.lockedOnly
+        await state.loader.load(key, model: model, fetch: { (store: EventStore) -> (sessions: [SensorSession], locks: ScreenLockSpans) in
+            let locks = AppModel.screenLocks(store, since: since)
+            let found = try store.sessions(rowsQuery)
+            let sessions = lockedOnly ? found.filter { lockedTime(of: $0, in: locks) >= ScreenLockSpans.minimumOverlap } : found
+            return (sessions: sessions, locks: locks)
+        }, apply: { result in
+            state.sessions = result.sessions
+            state.locks = result.locks
+        })
     }
 
     /// The same filters as the table, without its row limit.
     private func export() {
         CSVSaver.save(suggestedName: String(localized: "AppAlibi Sensors")) {
+            guard let store = model.store else { return "" }
             let now = Date()
-            let locks = model.screenLocks(since: nil)
-            var rows = (try? model.store?.sessions(query(limit: .max))) ?? []
+            let locks = AppModel.screenLocks(store, since: nil)
+            var rows = (try? store.sessions(query(limit: .max))) ?? []
             if model.sensorsLockedOnly {
-                rows = rows.filter {
-                    locks.overlap(with: DateInterval(start: $0.startedAt, end: max($0.endedAt ?? now, $0.startedAt)))
-                        >= ScreenLockSpans.minimumOverlap
-                }
+                rows = rows.filter { lockedTime(of: $0, in: locks, now: now) >= ScreenLockSpans.minimumOverlap }
             }
             return CSVExport.sessions(rows, locks: locks, now: now) { AppInfo.info(for: $0).name }
         }
@@ -203,33 +276,33 @@ struct SensorHistoryView: View {
 
 struct PermissionHistoryView: View {
     let model: AppModel
+    @Bindable private var state: PermissionsTabState
 
-    @State private var scope: AppScope = .apps
-    @State private var range: TimeRange = .week
-    @State private var search = ""
-    @State private var includePreflight = false
-    @State private var filesOnly = false
-    @State private var rows: [TCCAggregate] = []
+    init(model: AppModel) {
+        self.model = model
+        state = model.permissionsTab
+    }
 
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 16) {
-                ScopePicker(scope: $scope)
-                Picker("Range", selection: $range) {
+                ScopePicker(scope: $state.scope)
+                Picker("Range", selection: $state.range) {
                     ForEach(TimeRange.allCases) { Text($0.title).tag($0) }
                 }
                 .frame(width: 180)
-                Toggle("Files & folders only", isOn: $filesOnly)
-                Toggle("Preflight checks", isOn: $includePreflight)
+                Toggle("Files & folders only", isOn: $state.filesOnly)
+                Toggle("Preflight checks", isOn: $state.includePreflight)
                     .help("Preflight checks ask whether access is allowed without accessing anything.")
                 Spacer()
+                LoadingIndicator(loader: state.loader)
                 Button("Export\u{2026}", action: export)
-                    .disabled(rows.isEmpty)
+                    .disabled(state.rows.isEmpty)
             }
             .toggleStyle(.checkbox)
             .padding(10)
 
-            Table(rows) {
+            Table(state.rows) {
                 TableColumn("App") { row in
                     AppCell(identifier: row.app, binaryPath: row.binaryPath, detail: row.accessor.isEmpty || row.accessor == row.app ? nil : String(localized: "via \(row.accessor)"))
                 }
@@ -253,22 +326,19 @@ struct PermissionHistoryView: View {
                 .width(min: 130, ideal: 160)
             }
             .overlay {
-                if rows.isEmpty {
+                if state.rows.isEmpty && !state.loader.isLoading {
                     ContentUnavailableView("No Permission Checks", systemImage: "lock.shield",
                                            description: Text("Try including preflight checks or another scope."))
                 }
             }
         }
-        .searchable(text: $search, prompt: "App or path")
+        .searchable(text: $state.search, prompt: "App or path")
         .focusedSceneValue(\.exportAction, ExportAction(run: export))
-        .task(id: ReloadKey(revision: model.revision, range: range, search: search,
-                            preflight: includePreflight, scope: scope, files: filesOnly)) {
-            reload()
-        }
+        .task(id: reloadKey) { await reload(reloadKey) }
     }
 
-    private struct ReloadKey: Equatable {
-        let revision: Int
+    private struct ReloadKey: Hashable {
+        let permissions: Int
         let range: TimeRange
         let search: String
         let preflight: Bool
@@ -276,20 +346,28 @@ struct PermissionHistoryView: View {
         let files: Bool
     }
 
+    private var reloadKey: ReloadKey {
+        ReloadKey(permissions: model.permissionsRevision, range: state.range, search: state.search,
+                  preflight: state.includePreflight, scope: state.scope, files: state.filesOnly)
+    }
+
     private func query(limit: Int) -> TCCQuery {
         TCCQuery(
-            apps: model.tccApps(in: scope),
-            includePreflight: includePreflight,
+            apps: model.tccApps(in: state.scope),
+            includePreflight: state.includePreflight,
             includeApple: true,
-            fileAccessOnly: filesOnly,
-            appContains: search,
-            since: range.since,
+            fileAccessOnly: state.filesOnly,
+            appContains: state.search,
+            since: state.range.since,
             limit: limit
         )
     }
 
-    private func reload() {
-        rows = (try? model.store?.tccAggregates(query(limit: 2_000))) ?? []
+    private func reload(_ key: ReloadKey) async {
+        let rowsQuery = query(limit: 2_000)
+        await state.loader.load(key, model: model, fetch: { store in
+            try store.tccAggregates(rowsQuery)
+        }, apply: { state.rows = $0 })
     }
 
     /// The same filters as the table, without its row limit.
@@ -307,27 +385,29 @@ struct PermissionHistoryView: View {
 
 struct AdminHistoryView: View {
     let model: AppModel
+    @Bindable private var state: AdminTabState
 
-    @State private var scope: AppScope = .apps
-    @State private var range: TimeRange = .month
-    @State private var search = ""
-    @State private var rows: [AdminRightAggregate] = []
+    init(model: AppModel) {
+        self.model = model
+        state = model.adminTab
+    }
 
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 16) {
-                ScopePicker(scope: $scope)
-                Picker("Range", selection: $range) {
+                ScopePicker(scope: $state.scope)
+                Picker("Range", selection: $state.range) {
                     ForEach(TimeRange.allCases) { Text($0.title).tag($0) }
                 }
                 .frame(width: 180)
                 Spacer()
+                LoadingIndicator(loader: state.loader)
                 Button("Export\u{2026}", action: export)
-                    .disabled(rows.isEmpty)
+                    .disabled(state.rows.isEmpty)
             }
             .padding(10)
 
-            Table(rows) {
+            Table(state.rows) {
                 TableColumn("App") { row in
                     AppCell(identifier: Self.name(row.app), binaryPath: row.app,
                             detail: row.client == row.app ? nil : String(localized: "via \(Self.name(row.client))"))
@@ -349,24 +429,26 @@ struct AdminHistoryView: View {
                 .width(min: 130, ideal: 160)
             }
             .overlay {
-                if rows.isEmpty {
+                if state.rows.isEmpty && !state.loader.isLoading {
                     ContentUnavailableView("No Admin Rights", systemImage: "person.badge.key",
                                            description: Text("Nothing was granted administrator rights in this range. Try System or All."))
                 }
             }
         }
-        .searchable(text: $search, prompt: "App, path or right")
+        .searchable(text: $state.search, prompt: "App, path or right")
         .focusedSceneValue(\.exportAction, ExportAction(run: export))
-        .task(id: ReloadKey(revision: model.revision, range: range, search: search, scope: scope)) {
-            reload()
-        }
+        .task(id: reloadKey) { await reload(reloadKey) }
     }
 
-    private struct ReloadKey: Equatable {
-        let revision: Int
+    private struct ReloadKey: Hashable {
+        let adminRights: Int
         let range: TimeRange
         let search: String
         let scope: AppScope
+    }
+
+    private var reloadKey: ReloadKey {
+        ReloadKey(adminRights: model.adminRightsRevision, range: state.range, search: state.search, scope: state.scope)
     }
 
     /// authd logs paths, not bundle IDs: `/usr/libexec/mdmclient` -> `mdmclient`,
@@ -377,11 +459,14 @@ struct AdminHistoryView: View {
     }
 
     private func query(limit: Int) -> AdminRightQuery {
-        AdminRightQuery(apps: model.adminRightApps(in: scope), appContains: search, since: range.since, limit: limit)
+        AdminRightQuery(apps: model.adminRightApps(in: state.scope), appContains: state.search, since: state.range.since, limit: limit)
     }
 
-    private func reload() {
-        rows = (try? model.store?.adminRights(query(limit: 2_000))) ?? []
+    private func reload(_ key: ReloadKey) async {
+        let rowsQuery = query(limit: 2_000)
+        await state.loader.load(key, model: model, fetch: { store in
+            try store.adminRights(rowsQuery)
+        }, apply: { state.rows = $0 })
     }
 
     /// The same filters as the table, without its row limit.
@@ -390,6 +475,18 @@ struct AdminHistoryView: View {
             let rows = (try? model.store?.adminRights(query(limit: .max))) ?? []
             return CSVExport.adminRights(rows) { path in AppInfo.info(for: Self.name(path), binaryPath: path).name }
         }
+    }
+}
+
+/// A small spinner while a tab loads. The old rows stay visible meanwhile.
+struct LoadingIndicator: View {
+    let loader: TabLoader
+
+    var body: some View {
+        ProgressView()
+            .controlSize(.small)
+            .opacity(loader.isLoading ? 1 : 0)
+            .accessibilityHidden(!loader.isLoading)
     }
 }
 

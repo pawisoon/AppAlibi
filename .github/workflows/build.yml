@@ -1,0 +1,28 @@
+# Unit tests and an unsigned build of the app, so a pull request shows whether it compiles.
+# Xcode Cloud does the signed builds; it does not report on pull requests.
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Xcode version
+        run: xcodebuild -version
+      - name: AlibiKit unit tests
+        run: swift test --package-path AlibiKit
+      - name: Build the app
+        run: >
+          xcodebuild -project AppAlibi.xcodeproj -scheme AppAlibi
+          -destination 'platform=macOS' -derivedDataPath build/DerivedData
+          CODE_SIGNING_ALLOWED=NO build

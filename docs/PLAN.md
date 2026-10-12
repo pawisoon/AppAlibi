@@ -237,6 +237,7 @@ Shortening it asks first. The checkpoint stays, so nothing is imported again.
    (done 2026-10-09). Not checked on a real lock yet: the unlock notification, and
    how a remote Screen Sharing session is attributed in `scr`.
 3b. **M2.5 Speed:** tab switching off the main thread and kept warm (see "Speed" below).
+   Built 2026-10-12, not timed yet.
 3c. **M2.6 AI clients:** AI tab, Full Disk Access holders seen, mouse and keyboard control from
    the log (see "AI clients" and "Full Disk Access" below). Input watcher later, opt-in.
 4. **M3 Ship:** Developer ID signing, notarization, Sparkle updates, website on appalibi.com.
@@ -472,6 +473,13 @@ Fix plan (M2.5, before the AI tab, which adds a fifth tab and more rows):
 
 Done when switching between any two tabs takes less than 100ms with a 3-month
 database on the dev Mac, while the catch-up is running.
+
+Built 2026-10-12: steps 2 to 6. `EventStore` reads through a second, query-only connection.
+`TabLoader` (HistoryView.swift) loads off the main actor, and each tab's state lives in `AppModel`.
+There are per-source revisions (`sessionsRevision` and so on), and the app kinds are cached and
+grow with each batch. Not done yet: the signposts and `--bench` (step 1), and the row limit
+check (step 7). The code was written without a compiler. The GitHub Actions build
+(`.github/workflows/build.yml`) is the first check, and the result has not been timed on a Mac.
 
 ## Open questions
 

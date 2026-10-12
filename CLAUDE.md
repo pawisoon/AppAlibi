@@ -66,5 +66,7 @@ not checked visually.
 more TCC services. Tested with `swift test` and `alibi-probe`. The Admin tab (English, dark) and its Settings toggle
 were checked visually. The admin alert was checked end to end with a test binary (delivery seen in
 the usernoted log, the banner itself not looked at). The Admin tab and Settings were checked in Polish too.
-2026-10-12: planned, not built: M2.5 speed (tab switching, found by reading the code, not timed) and
+2026-10-12: M2.5 speed built (store reads on their own connection, tabs load off the main thread
+and keep their rows and filters), not timed on a Mac and not checked visually. Planned, not built:
 M2.6 AI clients tab, Full Disk Access holders seen in the log, mouse and keyboard control. See docs/PLAN.md.
+`.github/workflows/build.yml` runs `swift test` and an unsigned `xcodebuild` on pull requests.

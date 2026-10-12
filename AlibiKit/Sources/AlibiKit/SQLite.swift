@@ -13,7 +13,8 @@ private let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.sel
 final class SQLiteDatabase {
     private(set) var handle: OpaquePointer?
 
-    init(path: String) throws {
+    /// - Parameter queryOnly: Refuses writes. Used for the store's read connection.
+    init(path: String, queryOnly: Bool = false) throws {
         let flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX
         let code = sqlite3_open_v2(path, &handle, flags, nil)
         guard code == SQLITE_OK else {
@@ -22,6 +23,7 @@ final class SQLiteDatabase {
             throw SQLiteError(code: code, message: message)
         }
         sqlite3_busy_timeout(handle, 2_000)
+        if queryOnly { try execute("PRAGMA query_only = ON") }
     }
 
     deinit { sqlite3_close(handle) }
