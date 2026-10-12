@@ -236,6 +236,9 @@ Shortening it asks first. The checkpoint stays, so nothing is imported again.
    Alert for use while the screen is locked, CSV export, data retention setting
    (done 2026-10-09). Not checked on a real lock yet: the unlock notification, and
    how a remote Screen Sharing session is attributed in `scr`.
+3b. **M2.5 Speed:** tab switching off the main thread and kept warm (see "Speed" below).
+3c. **M2.6 AI clients:** AI tab, Full Disk Access holders seen, mouse and keyboard control from
+   the log (see "AI clients" and "Full Disk Access" below). Input watcher later, opt-in.
 4. **M3 Ship:** Developer ID signing, notarization, Sparkle updates, website on appalibi.com.
 5. **Later:** Endpoint Security extension for real file access history.
 
@@ -265,9 +268,221 @@ Not possible from the log: clipboard reads by app (only Biome noise), ongoing ke
 monitoring or Accessibility use (only the tccd check), keychain reads (too noisy).
 Each new source slows the `log show` catch-up, so measure with `alibi-probe`.
 
+## Full Disk Access (reviewed 2026-10-12)
+
+What the app does today:
+
+- tccd checks for `kTCCServiceSystemPolicyAllFiles` are recorded like any other service and
+  shown as "Full Disk Access" in Permissions, in the Summary's protected data and in the CSV.
+  "Files & folders only" includes them (`SystemPolicy` prefix).
+- They are real log lines: a public Claude Code issue shows `AUTHREQ_ATTRIBUTION` for
+  `SystemPolicyAllFiles`, with `com.apple.sandboxd` as the requester and the agent as the
+  responsible process (docs/RESEARCH.md, section 4).
+
+What it does not do:
+
+- **List which apps hold Full Disk Access.** The grants live in the system TCC.db, which
+  needs Full Disk Access to read. Apple DTS says even that does not work on macOS 27
+  and there is no API. So AppAlibi cannot show the list from System Settings.
+- **Log every file read.** tccd is asked once per process (sandboxd caches the answer),
+  not once per file. "Which file" stays out of reach without Endpoint Security (Later).
+
+Plan (M2.6):
+
+1. An app counts as **seen holding Full Disk Access** once tccd logs an allowed
+   `SystemPolicyAllFiles` result for it. Show that as a badge in Permissions and the AI tab,
+   with first and last seen. The label is "seen allowed", not "has", because a grant
+   that was never used does not show up.
+2. Alert option: "An app is seen with Full Disk Access for the first time". It goes
+   with the first-permission alert, but is worth a setting of its own, since Apple
+   itself is tightening FDA because of AI agents.
+3. The same observed inventory for Accessibility, Screen Recording, Input Monitoring
+   and Automation: per app, the last result seen for each service.
+
+## AI clients (planned 2026-10-12)
+
+AI assistants and coding agents can drive the Mac: computer use clicks and types, agents
+run shell commands, and some ask for Full Disk Access. The goal is a tab that shows
+what each client did, where and when, built mostly from data the app already collects.
+
+### Matching clients
+
+`AIClients.swift` in AlibiKit: a catalog of known clients, matched against every
+process tccd names (responsible, accessing and requesting), Control Center bundle IDs
+and authd paths. A row belongs to a client if any of those match.
+
+| Client | Match on |
+|---|---|
+| Claude (desktop) | `com.anthropic.claudefordesktop*` |
+| Claude Code | `com.anthropic.claude-code`, paths `~/.local/share/claude/versions/`, `/Claude/claude-code/` |
+| ChatGPT and Codex | `com.openai.codex` (new ChatGPT app), `com.openai.chat*` (Classic), `com.openai.sky.CUAService`, a `codex` binary, `@openai/codex` |
+| GitHub Copilot | `com.github.CopilotForXcode*`, `@github/copilot`, `copilot` binary |
+| Kimi | `com.moonshot.kimichat`, a `kimi` binary |
+| Gemini | `@google/gemini-cli`, the desktop app (bundle ID still to find) |
+| Cursor | `com.todesktop.230313mzl4w4u92` |
+| Perplexity | `ai.perplexity.macv3`, `ai.perplexity.comet`, `perplexityd` |
+| Others, later | Windsurf, Raycast, Zed, Warp, Ollama, LM Studio |
+
+- Bundle IDs and paths come from Homebrew casks and vendor issues, not from a
+  capture yet. Check each against a real log line before shipping (Open questions).
+- Settings gets "Also treat as AI: …" so users can add an app (a file picker, like
+  Login Items), because the list will always be behind.
+- **The terminal problem.** A CLI agent started in Terminal or iTerm usually inherits
+  the terminal as responsible process, so tccd blames iTerm. It works out for:
+  - Claude Code's native install: it is signed as `com.anthropic.claude-code` and shows up
+    as responsible.
+  - Codex and Kimi: their binaries are named in `binary_path`.
+
+  It does not work for Node CLIs (Gemini, Copilot CLI, npm installs). tccd only logs
+  `node`, and the script path is not in the line. The fix is to read the live process:
+  tccd logs the pid, so while streaming the app can read `KERN_PROCARGS2` (argv) and walk the
+  parent chain with `proc_pidinfo` before a short-lived process exits. This works only
+  in the live stream, not in the catch-up, and only for the user's own processes. That is
+  phase 2.
+
+### Storage
+
+- New table `ai_events`: id, time, client, kind (`sensor`, `tcc`, `admin`, `input`),
+  detail (service, sensor or right), app, accessor, binary_path, auth_value,
+  preflight, pid, parent (for the terminal case).
+- It holds raw rows, not daily aggregates, because "when" needs the exact time. Volume is low:
+  a few hundred rows a day, mostly preflight checks. Preflight rows can be folded into
+  the hour if that turns out to be too many.
+- Written in `EventStore.record` in the same transaction as the aggregates. `TCCAccessEvent`
+  already carries all three processes, but the store drops two of them today.
+- Sensor sessions are not copied. The tab queries `sessions` by the client's bundle IDs.
+- The first launch of this version backfills from the existing aggregates
+  (`tcc_access`, `admin_rights`). Those rows only have first and last seen per day, so they are
+  marked approximate.
+
+### AI tab (fifth tab, after Admin)
+
+- **Client strip** at the top: one card per client seen in the range, with icon, last
+  activity and badges (Screen, Microphone, Control, Full Disk Access, Admin). Clicking a card
+  filters the timeline.
+- **Timeline table:** Time, Client, What, Where, Result, Via.
+  - *What:* in plain words, e.g. "Recorded the screen 4m", "Asked to control the Mac",
+    "Opened Documents", "Full Disk Access check", "Got admin rights".
+  - *Where:* the resource (folder, service, right) and the app it targeted when known.
+  - *Via:* the process chain, e.g. "claude 2.1.216 in iTerm" or "sandboxd for claude".
+  - A lock icon marks rows while the screen was locked. Denied results are red.
+  - "First time" marks a client's first allowed use of a service.
+- Filters: client, range, kind, "Real access only" (hides preflight). Export uses the
+  same filters, like the other tabs.
+- Summary gets an "AI clients" section: time on screen, mic or camera per client, and
+  new access this period.
+- Alerts (off by default, switched on as a group in the welcome tour's notification page):
+  - an AI client got a service for the first time: Accessibility, Input Monitoring,
+    Screen Recording, Full Disk Access or Automation;
+  - an AI client used camera, mic, screen or input while the screen was locked;
+  - an AI client was granted an admin right.
+
+### Mouse and keyboard ("used the mouse")
+
+- **What macOS gates.** Synthetic mouse and keyboard (`CGEventPost`) is gated by
+  `kTCCServicePostEvent`. Reading and pressing other apps' UI (AXUIElement) is gated by
+  `kTCCServiceAccessibility`. Watching input (event taps) is gated by `kTCCServiceListenEvent`.
+  System Settings shows PostEvent under Accessibility.
+- **Our label is wrong.** We label PostEvent "Keyboard Control". It also covers the
+  mouse, so rename it "Mouse & Keyboard Control" in AlibiKit's catalog (English and Polish).
+- **Nothing per click is logged.** No unified log line is known per synthetic event, and
+  macOS shows no indicator for it. Computer use does show in Control Center as `scr`
+  (the agent takes screenshots), and the dev Mac already logged `scr` for Claude.
+
+Plan in three steps, cheapest first:
+
+1. **Log only (in M2.6).** For an AI client, an Accessibility or PostEvent check becomes
+   "Can control mouse and keyboard". Screen recording sessions from the same
+   client are marked "probably computer use" when they come with such a check.
+2. **Probe.** Run `log stream` with no predicate while Claude computer use and ChatGPT agent
+   drive the Mac. Look for WindowServer, AXRuntime or universalaccessd lines that name
+   the posting process. If one exists, it becomes a source in `LogPredicates.swift`.
+3. **Input watcher (opt-in, later).** A listen-only `CGEventTap` in AppAlibi. For each
+   mouse event it reads `kCGEventSourceUnixProcessID`, the process that posted it. Hardware
+   input has no posting app, so any other pid is synthetic input from that app. Bursts
+   become "input sessions" with the same start and stop model as sensors.
+   - It never stores coordinates or keys. Keyboard events are counted, never read.
+   - It needs Input Monitoring for AppAlibi itself. That is a hard ask for a privacy
+     app, so the setting has to say exactly why.
+   - Live only. Mouse-move events are sampled, not all handled.
+   - It cannot see AX actions (`AXPress`), which create no events. Step 1 covers those.
+   - To verify: that a tap sees the poster's pid for events from another process.
+
+### Agent transcripts (idea, not planned)
+
+Claude Code (`~/.claude/projects/*/*.jsonl`) and Codex (`~/.codex/sessions/`) keep their
+own logs of every command and file edit. Reading only tool names, paths and commands
+would answer "what" far better than TCC can. Against it:
+
+- the formats are private and change often;
+- the files hold code and secrets;
+- it is a different kind of source from the system log.
+
+Revisit after the AI tab ships.
+
+## Speed: slow tab switching (QA 2026-10-12)
+
+Reported: changing tabs (Summary, Sensors, Permissions, Admin) is very slow. Found
+by reading the code, since there is no Mac in this session, so nothing here has been timed yet.
+In order of likely cost:
+
+1. **Every query runs on the main thread.** Each tab's `.task(id:)` calls `reload()`
+   synchronously, so SQLite, scope filtering and building up to 2,000 rows all block the UI.
+   `AppModel.refresh()` (menu) does the same on every revision.
+2. **Reads wait behind writes.** `EventStore` has one connection behind one `NSLock`. The
+   collector holds it for each batch's transaction. That takes long during the catch-up
+   (3 days of tccd on first launch) and is frequent while watching (about 17,000 checks a day).
+   So a tab switch can wait for a write to finish. WAL mode is on but unused for
+   concurrency, because there is only one connection.
+3. **Scope filters scan everything.** `tccApps(in:)` runs `SELECT DISTINCT app, binary_path
+   FROM tcc_access` over all history on every reload. It then classifies each pair through
+   `AppInfo`, which on a cache miss asks LaunchServices for the bundle *and loads the icon*,
+   although only the kind is needed. `sessionApps` and `adminRightApps` do the same. The
+   result can be hundreds of IDs in an `IN (...)` clause.
+4. **Tabs are rebuilt on every switch.** `HistoryView` swaps views in a `switch`, so each
+   switch throws away the tab's `@State` (rows, filters), reloads from scratch and
+   rebuilds the table and the `.searchable` toolbar. Filters also reset, which is a bug of its own.
+5. **Every stored batch reloads.** `revision` bumps on any batch, at most every 400ms, and
+   the visible tab and the menu reload even when the batch cannot change them (a tccd
+   batch reloads Sensors and Admin).
+6. Smaller costs: `TCCAggregate.id` and `AdminRightAggregate.id` build a string on every access
+   during table diffing. `PermissionGroup.make` runs in `body`. The Summary has no
+   `(preflight, last_seen)` index for its tcc query.
+
+Fix plan (M2.5, before the AI tab, which adds a fifth tab and more rows):
+
+1. Measure first: `os_signpost` around each reload and query, and an
+   `alibi-probe --bench` that times each history query against the real database.
+2. A read-only second connection for queries (`SQLITE_OPEN_READONLY`, WAL readers do not
+   block on the writer), with its own lock. Writes keep the current one.
+3. Load off the main actor: queries run in a detached task and the result is assigned
+   on the main actor. The old rows stay on screen while loading, and a small spinner
+   shows in the toolbar.
+4. Keep each tab's state in the model (`@Observable` per tab, owned by `AppModel`), so
+   switching back shows the cached rows at once and reloads only if its source changed.
+   Filters survive switching.
+5. Per-source revisions (`sessionsRevision`, `tccRevision`, `adminRevision`, `locksRevision`),
+   bumped from the batch's event kinds. A tab reloads only for its sources, and the
+   menu only for sessions.
+6. Scope sets cached in `AppModel`, built once in the background and extended only with
+   new identifiers from each batch. `AppInfo.kind` stops loading icons, and icons load lazily
+   in `AppCell`.
+7. Then check whether 2,000 rows per table still costs much. If it does, show 500
+   and add a "Show more" button.
+
+Done when switching between any two tabs takes less than 100ms with a 3-month
+database on the dev Mac, while the catch-up is running.
+
 ## Open questions
 
 - Can a standard (non-admin) account run `log show` and `log stream`? If not,
   the app needs a privileged helper.
 - Do older macOS versions (14, 15) log the same Control Center messages?
 - Trademark clearance for AppAlibi against the live ALIBI mark.
+- Do the AI client IDs and paths in "AI clients" match real tccd and Control Center lines?
+  Capture each client once (Claude desktop computer use, Claude Code in iTerm, ChatGPT agent,
+  Codex CLI, Copilot CLI, Kimi) with `log stream` and add the lines as parser tests.
+- Does tccd on macOS 27 still name the client in `AUTHREQ_ATTRIBUTION`? One EDR project
+  reports it redacted on some versions.
+- Does ChatGPT's "Locked Use" authorization plug-in show up in authd or loginwindow lines?
+- Does a listen-only event tap see `kCGEventSourceUnixProcessID` for events another process posted?
