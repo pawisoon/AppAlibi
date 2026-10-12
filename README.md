@@ -1,5 +1,8 @@
 # AppAlibi
 
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/pawisoon)
+[![Suppi](https://img.shields.io/badge/Support%20on-Suppi-FF5A5F?style=for-the-badge)](https://suppi.pl/pawels)
+
 Every app needs an alibi.
 
 AppAlibi is a macOS menu bar app that records a history of which app used your
