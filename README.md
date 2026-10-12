@@ -25,8 +25,3 @@ Run the `AppAlibi` scheme. The app lives in the menu bar (eye icon) and has no D
 AppAlibi follows the macOS unified log with `/usr/bin/log`. It reads the same
 Control Center events that drive the privacy dots, plus tccd permission checks.
 Everything stays on your Mac in a local SQLite database. See [docs/](docs/).
-
-## Status
-
-Milestone 1: working menu bar app with history. Milestone 2 in progress: app icon,
-access notifications, and daily or weekly summaries with a Screen Time style Summary tab. See [docs/PLAN.md](docs/PLAN.md).
