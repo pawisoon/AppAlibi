@@ -105,9 +105,15 @@ public struct TCCQuery: Sendable {
 }
 
 /// SQLite-backed history. All methods are thread-safe.
+///
+/// Two connections: the collector writes through one, the history views read
+/// through the other. In WAL mode a reader does not wait for a write
+/// transaction, so a view never stalls behind a big catch-up batch.
 public final class EventStore: @unchecked Sendable {
     private let database: SQLiteDatabase
     private let lock = NSLock()
+    private let reader: SQLiteDatabase
+    private let readLock = NSLock()
     public let path: String
     /// Control Center briefly drops and re-adds a sensor during calls. A restart
     /// within this many seconds continues the previous session instead of opening a new one.
@@ -130,6 +136,7 @@ public final class EventStore: @unchecked Sendable {
         try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
         path = url.path
         database = try SQLiteDatabase(path: url.path)
+        reader = try SQLiteDatabase(path: url.path, queryOnly: true)
         try migrate()
     }
 
@@ -184,6 +191,13 @@ public final class EventStore: @unchecked Sendable {
         lock.lock()
         defer { lock.unlock() }
         return try body()
+    }
+
+    /// Queries for the UI and alerts. They see every committed batch.
+    private func reading<T>(_ body: (SQLiteDatabase) throws -> T) rethrows -> T {
+        readLock.lock()
+        defer { readLock.unlock() }
+        return try body(reader)
     }
 
     // MARK: Writing
@@ -364,7 +378,7 @@ public final class EventStore: @unchecked Sendable {
             sql += " WHERE locked_at < ? AND (unlocked_at IS NULL OR unlocked_at > ?)"
             values = [.double(interval.end.timeIntervalSince1970), .double(interval.start.timeIntervalSince1970)]
         }
-        let spans = try locked {
+        let spans = try reading { database in
             try database.prepare(sql + " ORDER BY locked_at").query(values) { row -> DateInterval in
                 let start = Date(timeIntervalSince1970: row.double(0))
                 let end = row.isNull(1) ? max(now, start) : Date(timeIntervalSince1970: row.double(1))
@@ -376,7 +390,7 @@ public final class EventStore: @unchecked Sendable {
 
     /// The lock that the unlock at `date` ended.
     public func screenLock(endingAt date: Date) throws -> DateInterval? {
-        try locked {
+        try reading { database in
             try database.prepare("""
                 SELECT locked_at, unlocked_at FROM screen_locks WHERE unlocked_at = ? LIMIT 1
                 """).query([.double(date.timeIntervalSince1970)]) {
@@ -418,7 +432,7 @@ public final class EventStore: @unchecked Sendable {
         let whereClause = clauses.isEmpty ? "" : "WHERE " + clauses.joined(separator: " AND ")
         values.append(.int(Int64(query.limit)))
 
-        return try locked {
+        return try reading { database in
             try database.prepare("""
                 SELECT id, sensor, app, started_at, ended_at FROM sessions
                 \(whereClause) ORDER BY started_at DESC LIMIT ?
@@ -436,21 +450,21 @@ public final class EventStore: @unchecked Sendable {
 
     /// Every app identifier that has sensor sessions.
     public func sessionApps() throws -> [String] {
-        try locked {
+        try reading { database in
             try database.prepare("SELECT DISTINCT app FROM sessions").query { $0.text(0) }
         }
     }
 
     /// Every app identifier with permission checks, with the binary paths logged for it.
     public func tccApps() throws -> [(app: String, binaryPath: String)] {
-        try locked {
+        try reading { database in
             try database.prepare("SELECT DISTINCT app, binary_path FROM tcc_access").query { ($0.text(0), $0.text(1)) }
         }
     }
 
     /// How many times the app made a real (not preflight) check for the service, on any day.
     public func tccAccessCount(app: String, service: String) throws -> Int {
-        try locked {
+        try reading { database in
             let counts = try database.prepare("""
                 SELECT COALESCE(SUM(count), 0) FROM tcc_access WHERE app = ? AND service = ? AND preflight = 0
                 """).query([.text(app), .text(service)]) { Int($0.int(0)) }
@@ -460,7 +474,7 @@ public final class EventStore: @unchecked Sendable {
 
     /// Every app path with granted admin rights.
     public func adminRightApps() throws -> [String] {
-        try locked {
+        try reading { database in
             try database.prepare("SELECT DISTINCT app FROM admin_rights").query { $0.text(0) }
         }
     }
@@ -484,7 +498,7 @@ public final class EventStore: @unchecked Sendable {
         let whereClause = clauses.isEmpty ? "" : "WHERE " + clauses.joined(separator: " AND ")
         values.append(.int(Int64(query.limit)))
 
-        return try locked {
+        return try reading { database in
             try database.prepare("""
                 SELECT day, right_name, app, client, count, first_seen, last_seen
                 FROM admin_rights \(whereClause) ORDER BY last_seen DESC LIMIT ?
@@ -525,7 +539,7 @@ public final class EventStore: @unchecked Sendable {
         let whereClause = clauses.isEmpty ? "" : "WHERE " + clauses.joined(separator: " AND ")
         values.append(.int(Int64(query.limit)))
 
-        return try locked {
+        return try reading { database in
             try database.prepare("""
                 SELECT day, service, app, accessor, binary_path, auth_value, preflight, count, first_seen, last_seen
                 FROM tcc_access \(whereClause) ORDER BY last_seen DESC LIMIT ?

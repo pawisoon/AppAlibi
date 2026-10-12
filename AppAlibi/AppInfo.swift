@@ -12,23 +12,36 @@ enum AppInfo {
     }
 
     private static var cache: [String: Info] = [:]
+    /// Kinds on their own: the scope filters classify every identifier in the
+    /// database and need no name or icon, and loading icons is the slow part.
+    private static var kinds: [String: AppKind] = [:]
 
     static func info(for identifier: String, binaryPath: String? = nil) -> Info {
         let key = identifier + "|" + (binaryPath ?? "")
         if let cached = cache[key] { return cached }
         let info = lookup(identifier, binaryPath: binaryPath)
         cache[key] = info
+        kinds[key] = info.kind
         return info
     }
 
     static func kind(for identifier: String, binaryPath: String? = nil) -> AppKind {
-        info(for: identifier, binaryPath: binaryPath).kind
+        let key = identifier + "|" + (binaryPath ?? "")
+        if let kind = kinds[key] { return kind }
+        let path = binaryPath?.isEmpty == false ? binaryPath : nil
+        let bundleURL = bundleURL(for: identifier, binaryPath: path)
+        let kind = AppClassifier.kind(identifier: identifier, bundlePath: bundleURL?.path, binaryPath: path)
+        kinds[key] = kind
+        return kind
+    }
+
+    private static func bundleURL(for identifier: String, binaryPath path: String?) -> URL? {
+        NSWorkspace.shared.urlForApplication(withBundleIdentifier: identifier) ?? path.flatMap(enclosingAppBundle(of:))
     }
 
     private static func lookup(_ identifier: String, binaryPath: String?) -> Info {
         let path = binaryPath?.isEmpty == false ? binaryPath : nil
-        let bundleURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: identifier)
-            ?? path.flatMap(enclosingAppBundle(of:))
+        let bundleURL = bundleURL(for: identifier, binaryPath: path)
         let kind = AppClassifier.kind(identifier: identifier, bundlePath: bundleURL?.path, binaryPath: path)
 
         if let bundleURL {

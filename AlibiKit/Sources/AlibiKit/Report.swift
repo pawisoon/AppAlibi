@@ -74,6 +74,8 @@ public struct ActivityReport: Sendable, Equatable {
     ///   - includeLocation: Location is left out by default, like the menu, because
     ///     System Services checks it every few minutes.
     ///   - isApp: Keeps apps and drops system services. Pass `{ _, _ in true }` for everything.
+    ///     The path is nil for sensor sessions (Control Center logs none) and the
+    ///     logged binary path, which can be empty, for permission rows.
     public static func build(
         store: EventStore,
         interval: DateInterval,
@@ -128,7 +130,7 @@ public struct ActivityReport: Sendable, Equatable {
         let rows = try store.tccAggregates(TCCQuery(includePreflight: false, includeApple: true,
                                                     since: interval.start, limit: 100_000))
         for row in rows where row.firstSeen < end {
-            guard isApp(row.app, row.binaryPath.isEmpty ? nil : row.binaryPath) else { continue }
+            guard isApp(row.app, row.binaryPath) else { continue }
             let key = "\(row.app)|\(row.service)"
             let old = permissionTotals[key]
             permissionTotals[key] = PermissionUsage(

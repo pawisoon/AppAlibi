@@ -2,13 +2,26 @@ import AlibiKit
 import Charts
 import SwiftUI
 
+@MainActor
+@Observable
+final class SummaryTabState {
+    var scope: AppScope = .apps
+    var report: ActivityReport?
+    let loader = TabLoader()
+}
+
 /// A day or a week at a glance, laid out like Screen Time in System Settings:
 /// the total, a bar per hour or day, then the apps behind it.
 struct SummaryView: View {
     let model: AppModel
+    @Bindable private var state: SummaryTabState
 
-    @State private var scope: AppScope = .apps
-    @State private var report: ActivityReport?
+    init(model: AppModel) {
+        self.model = model
+        state = model.summaryTab
+    }
+
+    private var scope: AppScope { state.scope }
 
     private var period: ReportPeriod { model.summaryPeriod }
     private var interval: DateInterval { period.interval(containing: model.summaryDate) }
@@ -17,7 +30,7 @@ struct SummaryView: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                ScopePicker(scope: $scope)
+                ScopePicker(scope: $state.scope)
                 Picker("Period", selection: Binding(get: { model.summaryPeriod }, set: { model.summaryPeriod = $0 })) {
                     Text("Day").tag(ReportPeriod.day)
                     Text("Week").tag(ReportPeriod.week)
@@ -26,12 +39,13 @@ struct SummaryView: View {
                 .labelsHidden()
                 .fixedSize()
                 Spacer()
+                LoadingIndicator(loader: state.loader)
                 navigator
             }
             .padding(10)
 
             Form {
-                if let report {
+                if let report = state.report {
                     overview(report)
                     appsSection(report)
                     permissionsSection(report)
@@ -40,16 +54,25 @@ struct SummaryView: View {
             .formStyle(.grouped)
             .tint(.orange)
         }
-        .task(id: ReloadKey(revision: model.revision, period: period, start: interval.start, scope: scope)) {
-            report = model.report(interval, bucket: period.bucket, scope: scope)
+        .task(id: reloadKey) {
+            let key = reloadKey
+            await state.loader.load(key, model: model,
+                                    fetch: model.reportFetch(interval, bucket: period.bucket, scope: scope),
+                                    apply: { state.report = $0 })
         }
     }
 
-    private struct ReloadKey: Equatable {
-        let revision: Int
+    private struct ReloadKey: Hashable {
+        let sessions: Int
+        let permissions: Int
         let period: ReportPeriod
         let start: Date
         let scope: AppScope
+    }
+
+    private var reloadKey: ReloadKey {
+        ReloadKey(sessions: model.sessionsRevision, permissions: model.permissionsRevision,
+                  period: period, start: interval.start, scope: scope)
     }
 
     // MARK: Date navigation

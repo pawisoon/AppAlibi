@@ -168,3 +168,115 @@ clearance opinion before spending on the brand or filing a trademark.
 - https://tsdr.uspto.gov/statusview/sn87357143 (MYALIBI, cancelled)
 - https://tsdr.uspto.gov/statusview/sn85447834 (REDHANDED, cancelled)
 - https://ised-isde.canada.ca/cipo/trademark-search/pdf/1572182?lang=eng (REDHANDED Canada, live)
+
+## 4. AI clients (2026-10-12)
+
+Web research only. Nothing here has been captured on the dev Mac yet. Several vendor
+pages could not be fetched from the research machine, so items marked (S) come from
+search result summaries and need checking.
+
+### Identifiers and what they ask for
+
+| Client | Bundle ID and paths | Permissions (feature) | Acts on the Mac by |
+|---|---|---|---|
+| Claude desktop | `com.anthropic.claudefordesktop`, helper `.helper`; `Contents/Helpers/disclaimer` | Accessibility and Screen Recording (computer use) | Computer use with per-app tiers, Claude in Chrome (native host in `Contents/Helpers/chrome-native-host`), MCP servers |
+| Claude Code | `com.anthropic.claude-code` (team Q6L2SF6YDW); `~/.local/bin/claude` -> `~/.local/share/claude/versions/<ver>`; inside the desktop app `~/Library/Application Support/Claude/claude-code/<ver>/claude.app` | Accessibility and Screen Recording for its computer-use MCP; otherwise whatever the terminal has | Shell, file edits, MCP, Chrome, computer use (shows a "Claude is using your computer" notification) |
+| ChatGPT (2026 app) | `com.openai.codex`, computer use service `com.openai.sky.CUAService`, `/Library/Application Support/CodexComputerUseAuthorizationPlugin`, `~/.codex` | Accessibility and Screen Recording (computer use). "Locked Use" installs an authorization plug-in (S) | Agent, Codex, computer use with per-app approval |
+| ChatGPT Classic | `com.openai.chat`, launch agent `com.openai.chat-helper` | Accessibility (Work with Apps), Microphone and Screen & System Audio Recording (Record) | Reads other apps' text, edits code in Xcode and VS Code |
+| Codex CLI | `codex` binary (cask or npm `@openai/codex`), `~/.codex/sessions/` | The terminal's | Shell commands inside `sandbox-exec` |
+| Copilot for Xcode | `com.github.CopilotForXcode` | Accessibility, background item, Source Editor extension | Agent mode, MCP (S) |
+| Copilot CLI | npm `@github/copilot` (Node), `brew install copilot-cli` | The terminal's | Shell, file edits |
+| Kimi | `com.moonshot.kimichat` (inside `Kimi Installer.app/Contents/Helpers/Kimi.app`), `~/.kimi-work`; CLI `kimi` via `uv tool install kimi-cli` (S) | Not found | Browser actions and local files (S), CLI shell mode |
+| Cursor | `com.todesktop.230313mzl4w4u92`, `~/.cursor` | Its terminal children use Cursor's grants | Agent, MCP |
+| Perplexity | `ai.perplexity.macv3`, daemon `perplexityd`; Comet `ai.perplexity.comet` | "Personal Computer" asks for Accessibility, Screen & System Audio Recording and Full Disk Access (S) | AppleScript and Accessibility |
+| Gemini | CLI npm `@google/gemini-cli`; desktop app bundle ID not found | Desktop: screen sharing, Accessibility (S) | CLI: shell in `sandbox-exec` |
+| Local models | Ollama `com.electron.ollama` + `com.ollama.ollama`, LM Studio `ai.elementlabs.lmstudio` | | Serve models to other agents |
+
+Not verified: Windsurf (`com.exafunction.windsurf`?), Dia (`company.thebrowser.dia`?),
+Microsoft Copilot (Mac App Store).
+
+### How tccd blames a CLI agent
+
+- A child process inherits its parent's responsible process, so a CLI started in iTerm
+  is normally attributed to iTerm. `responsibility_spawnattrs_setdisclaim` (private,
+  used by LLDB, Chromium and Electron) lets a child become responsible for itself.
+- A real Claude Code line (from a public issue) names it directly:
+  `responsible={identifier=com.anthropic.claude-code, responsible_path=~/.local/share/claude/versions/2.1.216, ...}, accessing={identifier=com.anthropic.claude-code, ...}, requesting={identifier=com.apple.sandboxd, binary_path=/usr/libexec/sandboxd}`.
+  It was logged for SystemPolicyAllFiles, Documents, Desktop, Downloads, MediaLibrary and FileProviderDomain.
+- Node CLIs log only `node` as the binary. The script path (`@google/gemini-cli`,
+  `@github/copilot`) is not in the line, so the pid has to be resolved while the process lives.
+- One EDR project reports tccd redacting the client in `AUTHREQ_CTX` and `AUTHREQ_RESULT`
+  on some version. Check with `alibi-probe`.
+
+### Full Disk Access
+
+- `kTCCServiceSystemPolicyAllFiles` checks appear in tccd lines, requested by sandboxd.
+- Not every file read is logged: the Claude Code issue shows one burst of checks per
+  process, not one per file (caching not documented).
+- There is no API to list apps that hold Full Disk Access. The system TCC.db needs FDA,
+  and Apple DTS says reading it fails on macOS 27 even with FDA. The answer is to probe
+  protected paths, which tells an app only about itself.
+- Apple said on 2026-10-02 it will make Full Disk Access harder to grant because of AI
+  agents, with no version or date given (S).
+
+### Mouse and keyboard control
+
+| TCC service | Gates | Shown in System Settings as |
+|---|---|---|
+| `kTCCServicePostEvent` | `CGEventPost`, synthetic mouse and keyboard | Accessibility |
+| `kTCCServiceAccessibility` | AXUIElement reading and actions, global `NSEvent` monitors | Accessibility |
+| `kTCCServiceListenEvent` | `CGEventTap` | Input Monitoring |
+
+- WindowServer checks PostEvent and ListenEvent for a running app (Apple DTS).
+- No unified log line per synthetic event or event tap is documented, and macOS shows
+  no indicator for synthetic control. Computer use takes screenshots, so it shows as
+  `scr` in Control Center.
+- The process holding Secure Input is in `ioreg` (`kCGSSessionSecureInputPID`, undocumented).
+
+### Incidents
+
+- Claude Code ran `rm -rf ... ~/` and wiped a home directory (December 2025, Docker blog).
+- The Nx "s1ngularity" npm malware ran `claude --dangerously-skip-permissions`,
+  `gemini --yolo` and `q --trust-all-tools` to search for wallets, SSH keys and `.env`
+  files (August 2025, Snyk and Semgrep).
+- Codex deleting most of a home directory (July 2026) and a ChatGPT Mac app code
+  injection flaw found by Objective-See (fixed September 2026) were found in summaries only (S).
+
+### Competitors for AI monitoring
+
+Bitdefender AI Guardian (beta, policy for Claude Code), Safety (getsafety.com, via MDM),
+sentinel-mac (FSEvents and lsof), AgentPeek and similar (agent status only), osquery
+(Endpoint Security process events). Objective-See has LuLu and BlockBlock but nothing for
+AI. None of them keeps a history from the TCC and Control Center log, which is what AppAlibi does.
+
+### Sources
+
+- Homebrew casks: https://github.com/Homebrew/homebrew-cask/blob/main/Casks/c/claude.rb,
+  https://raw.githubusercontent.com/Homebrew/homebrew-cask/main/Casks/c/claude-code.rb,
+  https://github.com/Homebrew/homebrew-cask/blob/main/Casks/c/chatgpt.rb,
+  https://raw.githubusercontent.com/Homebrew/homebrew-cask/main/Casks/c/chatgpt-classic.rb,
+  https://github.com/Homebrew/homebrew-cask/blob/main/Casks/c/codex.rb,
+  https://raw.githubusercontent.com/Homebrew/homebrew-cask/main/Casks/k/kimi.rb,
+  https://github.com/Homebrew/homebrew-cask/blob/main/Casks/c/cursor.rb,
+  https://github.com/Homebrew/homebrew-cask/blob/main/Casks/p/perplexity.rb,
+  https://github.com/Homebrew/homebrew-cask/blob/main/Casks/c/comet.rb
+- Claude: https://code.claude.com/docs/en/desktop, https://code.claude.com/docs/en/computer-use,
+  https://code.claude.com/docs/en/sessions, https://github.com/anthropics/claude-code/issues/61233,
+  https://github.com/anthropics/claude-code/issues/66216, https://github.com/anthropics/claude-code/issues/82543
+- OpenAI: https://developers.openai.com/codex/app/computer-use,
+  https://help.openai.com/en/articles/10119604-work-with-apps-on-macos, https://heise.de/-11306153
+- GitHub: https://github.com/github/CopilotForXcode,
+  https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/install-copilot-cli
+- Kimi: https://www.kimi.com/it/help/kimi-work/overview
+- Gemini CLI sandbox: https://www.geminicli.com/docs/cli/sandbox
+- Responsible process: https://www.qt.io/blog/the-curious-case-of-the-responsible-process
+- tccd redaction report: https://github.com/synthaea-lab/edr-new/issues/354
+- TCC.db on macOS 27: https://developer.apple.com/forums/thread/841091
+- Input services: https://developer.apple.com/forums/thread/820594, https://developer.apple.com/forums/thread/844416
+- Secure Input: https://fnordig.de/til/macOS/secure-input.html
+- Incidents: https://www.docker.com/blog/coding-agent-horror-stories-the-rm-rf-incident/,
+  https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials,
+  https://incidentdatabase.ai/cite/1671/
+- Apple on FDA: https://www.computing.co.uk/news/2026/ai/apple-tightens-permission-controls-to-lower-agentic-risk
+- Competitors: https://www.scworld.com/brief/bitdefender-releases-ai-guardian-to-secure-autonomous-software-agents,
+  https://pypi.org/project/sentinel-mac, https://objective-see.org/tools.html

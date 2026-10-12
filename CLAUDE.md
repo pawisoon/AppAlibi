@@ -66,3 +66,8 @@ not checked visually.
 more TCC services. Tested with `swift test` and `alibi-probe`. The Admin tab (English, dark) and its Settings toggle
 were checked visually. The admin alert was checked end to end with a test binary (delivery seen in
 the usernoted log, the banner itself not looked at). The Admin tab and Settings were checked in Polish too.
+2026-10-12: M2.5 speed built (store reads on their own connection, tabs load off the main thread
+and keep their rows and filters), not timed on a Mac and not checked visually. Planned, not built:
+M2.6 AI clients tab, Full Disk Access holders seen in the log, mouse and keyboard control. See docs/PLAN.md.
+`.github/workflows/build.yml` builds the app and runs AlibiKitTests with `xcodebuild test` on pull requests
+(not `swift test`: on the CI runner the command line copies the string catalog uncompiled, so the Polish test fails).

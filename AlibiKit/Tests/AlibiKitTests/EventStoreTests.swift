@@ -101,6 +101,14 @@ final class EventStoreTests: XCTestCase {
         XCTAssertEqual(try reopened.openAttributions(), [cam])
     }
 
+    func testReadsSeeEachCommittedBatch() throws {
+        // Reads go through their own connection; each batch must be visible as soon as it is stored.
+        XCTAssertEqual(try store.sessions().count, 0)
+        try store.record([.sensor(SensorEvent(kind: .started, attribution: cam, date: Date()))], lastProcessed: Date())
+        XCTAssertEqual(try store.sessions().count, 1)
+        XCTAssertEqual(try store.sessionApps(), [cam.app])
+    }
+
     func testDeleteAll() throws {
         try store.record([.sensor(SensorEvent(kind: .started, attribution: cam, date: Date()))], lastProcessed: Date())
         try store.deleteAll()
