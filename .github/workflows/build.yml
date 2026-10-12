@@ -1,4 +1,4 @@
-# Unit tests and an unsigned build of the app, so a pull request shows whether it compiles.
+# Builds the app and runs the AlibiKit unit tests, so a pull request shows whether it compiles.
 # Xcode Cloud does the signed builds; it does not report on pull requests.
 name: Build
 
@@ -19,10 +19,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Xcode version
         run: xcodebuild -version
-      - name: AlibiKit unit tests
-        run: swift test --package-path AlibiKit
-      - name: Build the app
+      # Through xcodebuild, not `swift test`: the command line copies the AlibiKit string
+      # catalog without compiling it, so the Polish strings test fails there. The scheme's
+      # test action runs AlibiKitTests and its build action builds the app.
+      - name: Build the app and run the unit tests
         run: >
           xcodebuild -project AppAlibi.xcodeproj -scheme AppAlibi
           -destination 'platform=macOS' -derivedDataPath build/DerivedData
-          CODE_SIGNING_ALLOWED=NO build
+          CODE_SIGNING_ALLOWED=NO test

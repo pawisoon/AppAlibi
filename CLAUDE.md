@@ -69,4 +69,5 @@ the usernoted log, the banner itself not looked at). The Admin tab and Settings 
 2026-10-12: M2.5 speed built (store reads on their own connection, tabs load off the main thread
 and keep their rows and filters), not timed on a Mac and not checked visually. Planned, not built:
 M2.6 AI clients tab, Full Disk Access holders seen in the log, mouse and keyboard control. See docs/PLAN.md.
-`.github/workflows/build.yml` runs `swift test` and an unsigned `xcodebuild` on pull requests.
+`.github/workflows/build.yml` builds the app and runs AlibiKitTests with `xcodebuild test` on pull requests
+(not `swift test`: on the CI runner the command line copies the string catalog uncompiled, so the Polish test fails).
