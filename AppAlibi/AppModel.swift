@@ -17,6 +17,11 @@ final class AppModel {
     private(set) var permissionsRevision = 0
     private(set) var adminRightsRevision = 0
     private(set) var screenLocksRevision = 0
+    /// Bumped when the user's own AI clients change, which changes what the AI tab shows.
+    private(set) var aiClientsRevision = 0
+    /// Known AI clients plus the ones the user added.
+    private(set) var aiCatalog: AIClientCatalog
+    private(set) var customAIClients: [CustomAIClient]
     private(set) var storeError: String?
     private(set) var showLocation: Bool
     private(set) var showSystemInMenu: Bool
@@ -34,6 +39,7 @@ final class AppModel {
     let sensorsTab = SensorsTabState()
     let permissionsTab = PermissionsTabState()
     let adminTab = AdminTabState()
+    let aiTab = AITabState()
     let summaryTab = SummaryTabState()
 
     let store: EventStore?
@@ -53,6 +59,9 @@ final class AppModel {
         showLocation = defaults.bool(forKey: Keys.showLocation)
         showSystemInMenu = defaults.bool(forKey: Keys.showSystemInMenu)
         retention = HistoryRetention(rawValue: defaults.integer(forKey: Keys.retention)) ?? .forever
+        let custom = CustomAIClient.load()
+        customAIClients = custom
+        aiCatalog = AIClientCatalog.builtIn.adding(custom.map(\.client))
         do {
             store = try EventStore()
         } catch {
@@ -71,6 +80,12 @@ final class AppModel {
 
     func start() {
         guard collector == nil, let store else { return }
+        // Before the collector writes, so its first batch is already copied to the AI history.
+        do {
+            try store.setAIClients(aiCatalog)
+        } catch {
+            storeError = String(localized: "Could not set up AI client history: \(String(describing: error))")
+        }
         let collector = Collector(store: store) { state, events in
             Task { @MainActor in AppModel.shared.handle(state: state, events: events) }
         }
@@ -265,6 +280,46 @@ final class AppModel {
                 // Sessions come without a path, permission rows with one.
                 let apps = binaryPath == nil ? sessionScope : tccScope
                 return apps?.contains(identifier) ?? true
+            }
+        }
+    }
+
+    /// The Summary tab's AI section. Off the main thread like the report.
+    func aiReportFetch(_ interval: DateInterval) -> @Sendable (EventStore) throws -> AIReport {
+        let catalog = aiCatalog
+        return { store in try AIReport.build(store: store, catalog: catalog, interval: interval) }
+    }
+
+    func aiClient(id: String) -> AIClient? {
+        aiCatalog.client(id: id)
+    }
+
+    // MARK: AI clients
+
+    func addCustomAIClient(_ client: CustomAIClient) {
+        guard !customAIClients.contains(where: { $0.id == client.id }) else { return }
+        setCustomAIClients(customAIClients + [client])
+    }
+
+    func removeCustomAIClient(_ client: CustomAIClient) {
+        setCustomAIClients(customAIClients.filter { $0.id != client.id })
+    }
+
+    /// An added client gets the history already recorded for it, so the store
+    /// copies rows. That runs off the main thread.
+    private func setCustomAIClients(_ clients: [CustomAIClient]) {
+        customAIClients = clients
+        CustomAIClient.save(clients)
+        let catalog = AIClientCatalog.builtIn.adding(clients.map(\.client))
+        aiCatalog = catalog
+        guard let store else { return }
+        Task.detached(priority: .userInitiated) {
+            let error: String? = (try? store.setAIClients(catalog)) == nil
+                ? String(localized: "Could not update the AI clients.") : nil
+            await MainActor.run {
+                let model = AppModel.shared
+                if let error { model.storeError = error }
+                model.aiClientsRevision += 1
             }
         }
     }

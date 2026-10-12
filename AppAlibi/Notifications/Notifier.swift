@@ -17,6 +17,8 @@ final class Notifier: NSObject {
         case lockedUse
         case permissions
         case admin
+        /// The AI tab, filtered to one client if given.
+        case ai(String?)
         case summary(ReportPeriod)
     }
 
@@ -99,6 +101,29 @@ final class Notifier: NSObject {
             content.body = String(localized: "\(list), \(Formatting.time(date)).")
             content.threadIdentifier = "admin"
             content.userInfo = ["open": "admin"]
+        case let .aiFirstAccess(client, _, _, service, date):
+            let name = Self.clientName(client)
+            content.title = String(localized: "\(name) got \(TCCService.displayName(for: service))")
+            content.body = String(localized: "The first time AppAlibi has seen this AI client allowed that. \(Formatting.time(date)).")
+            content.threadIdentifier = "ai"
+            content.userInfo = ["open": "ai", "client": client]
+        case let .aiAdminRights(client, _, rights, date):
+            content.title = String(localized: "\(Self.clientName(client)) got administrator rights")
+            let list = ListFormatter.localizedString(byJoining: rights.map(AdminRight.displayName(for:)))
+            content.body = String(localized: "\(list), \(Formatting.time(date)).")
+            content.threadIdentifier = "ai"
+            content.userInfo = ["open": "ai", "client": client]
+        case let .aiLockedUse(lock, clients):
+            content.title = String(localized: "AI clients were active while your Mac was locked")
+            content.body = Self.aiLockedUseText(lock: lock, clients: clients)
+            content.threadIdentifier = "ai"
+            content.userInfo = clients.count == 1 ? ["open": "ai", "client": clients[0].client] : ["open": "ai"]
+        case let .fullDiskAccess(app, binaryPath, date):
+            let name = AppInfo.info(for: app, binaryPath: binaryPath.isEmpty ? nil : binaryPath).name
+            content.title = String(localized: "\(name) has Full Disk Access")
+            content.body = String(localized: "The first time AppAlibi has seen macOS allow it. It can read all your files. \(Formatting.time(date)).")
+            content.threadIdentifier = "permissions"
+            content.userInfo = ["open": "permissions"]
         }
         content.sound = .default
         deliver(content)
@@ -135,6 +160,21 @@ final class Notifier: NSObject {
         return lines.joined(separator: "\n")
     }
 
+    private static func clientName(_ id: String) -> String {
+        AppModel.shared.aiClient(id: id)?.name ?? id
+    }
+
+    /// One line per client, then when the screen was locked.
+    static func aiLockedUseText(lock: DateInterval, clients: [AILockedUse]) -> String {
+        var lines = clients.prefix(3).map { use in
+            let what = use.sensors.map { $0.displayName.lowercased() } + use.services.map { TCCService.displayName(for: $0) }
+            return "\(clientName(use.client)): \(ListFormatter.localizedString(byJoining: what))"
+        }
+        if clients.count > 3 { lines.append(String(localized: "+\(clients.count - 3) more")) }
+        lines.append(String(localized: "Locked \(Formatting.time(lock.start)) to \(Formatting.time(lock.end))."))
+        return lines.joined(separator: "\n")
+    }
+
     /// One line per app, longest first, then when the screen was locked.
     static func lockedUseText(lock: DateInterval, apps: [ActivityReport.AppUsage]) -> String {
         var lines = apps.prefix(3).map { usage in
@@ -168,6 +208,7 @@ extension Notifier: UNUserNotificationCenterDelegate {
         case "permissions": .permissions
         case "locked": .lockedUse
         case "admin": .admin
+        case "ai": .ai(info["client"] as? String)
         case "summary": .summary((info["period"] as? String).flatMap(ReportPeriod.init(rawValue:)) ?? .day)
         default: .sensors
         }

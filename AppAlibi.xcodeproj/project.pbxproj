@@ -10,9 +10,11 @@
 		09250B2AB08C09EC7B90947D /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D8BC0CB48EB45EA873D82E /* AppModel.swift */; };
 		0D61ABA9F1383668741FF5F9 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC660CA0B895C7E71A5D487C /* SummaryView.swift */; };
 		1806C3DA3CE91DD8B5E2D100 /* MacComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FD9DD0A0C209F48890C8A9 /* MacComponents.swift */; };
+		26018FE930647CEBA16724A6 /* AIClientInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D18530B3BA54EFB5061355B /* AIClientInfo.swift */; };
 		327A88B8166CD68D68C19772 /* MacFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E911C016E050719DA75591A5 /* MacFoundation.swift */; };
 		5417F2866181CD8DFE287B1F /* HistoryRetention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D594EBA0065A8EB681406A30 /* HistoryRetention.swift */; };
 		6889135C8946D68DC83B9B93 /* Notifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D37DC5BF8EA3BF8C531BB64 /* Notifier.swift */; };
+		77C1F9A3A9F88A87536AE86B /* AIHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55111B5DB898ECE2C29EDFF3 /* AIHistoryView.swift */; };
 		88FCAC2DC0CB3D4C604E5BF9 /* AlibiKit in Frameworks */ = {isa = PBXBuildFile; productRef = 83EA70C61FEBD972F1C8C7C8 /* AlibiKit */; };
 		960AE2EC382A5C17826E5B4F /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557C1E92D1D0049A660E7BCB /* HistoryView.swift */; };
 		97FFB7E630474748799A01F5 /* MenuContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DBB3104133D9256C919E8 /* MenuContentView.swift */; };
@@ -35,7 +37,9 @@
 		3785523D3BBA81F811A1B819 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		44FD9DD0A0C209F48890C8A9 /* MacComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacComponents.swift; sourceTree = "<group>"; };
 		4712AF1284A0D67DF08B4B49 /* AlibiKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AlibiKit; path = AlibiKit; sourceTree = SOURCE_ROOT; };
+		4D18530B3BA54EFB5061355B /* AIClientInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIClientInfo.swift; sourceTree = "<group>"; };
 		50E3083B657C6DD6D324ED0E /* ReportScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportScheduler.swift; sourceTree = "<group>"; };
+		55111B5DB898ECE2C29EDFF3 /* AIHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIHistoryView.swift; sourceTree = "<group>"; };
 		557C1E92D1D0049A660E7BCB /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		8BA7CBC5DDE9842DF742FF94 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		8ED844739C7B126C760EDFB9 /* MacOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOnboardingView.swift; sourceTree = "<group>"; };
@@ -73,6 +77,7 @@
 				3785523D3BBA81F811A1B819 /* Assets.xcassets */,
 				B7BCCAC9118C12B576B016BC /* Info.plist */,
 				FD4DE9DB4341BC28D41E692D /* Localizable.xcstrings */,
+				8A065E0C773180CBEE6D8925 /* AIClients */,
 				39C0CABE82A3CE8B2335BEF2 /* MacUI */,
 				6EE6A4879181540EAEAA180B /* Notifications */,
 				F3A90ADFF97FD3AFAF5E3411 /* Views */,
@@ -117,6 +122,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		8A065E0C773180CBEE6D8925 /* AIClients */ = {
+			isa = PBXGroup;
+			children = (
+				4D18530B3BA54EFB5061355B /* AIClientInfo.swift */,
+			);
+			path = AIClients;
+			sourceTree = "<group>";
+		};
 		B615BD4DCAA3173179541CA0 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
@@ -128,6 +141,7 @@
 		F3A90ADFF97FD3AFAF5E3411 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				55111B5DB898ECE2C29EDFF3 /* AIHistoryView.swift */,
 				0B670826B5D829B5EABE7368 /* Export.swift */,
 				E7553550D720D6551E6C6FC9 /* Formatting.swift */,
 				D594EBA0065A8EB681406A30 /* HistoryRetention.swift */,
@@ -217,6 +231,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26018FE930647CEBA16724A6 /* AIClientInfo.swift in Sources */,
+				77C1F9A3A9F88A87536AE86B /* AIHistoryView.swift in Sources */,
 				D04B543956D66120853E0A74 /* AlertPreferences.swift in Sources */,
 				DEC161602472EC5ADEF879EC /* AppAlibiApp.swift in Sources */,
 				A8190E4F0F46B543AC4BDAD2 /* AppInfo.swift in Sources */,

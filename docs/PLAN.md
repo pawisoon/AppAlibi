@@ -239,7 +239,9 @@ Shortening it asks first. The checkpoint stays, so nothing is imported again.
 3b. **M2.5 Speed:** tab switching off the main thread and kept warm (see "Speed" below).
    Built 2026-10-12, not timed yet.
 3c. **M2.6 AI clients:** AI tab, Full Disk Access holders seen, mouse and keyboard control from
-   the log (see "AI clients" and "Full Disk Access" below). Input watcher later, opt-in.
+   the log (see "AI clients" and "Full Disk Access" below). Built 2026-10-12 (see "As built"),
+   checked on the dev Mac in English and Polish. Input watcher (step 3) later, opt-in.
+   Settings split into tabs the same day (General, Alerts, Summaries, AI Clients, History).
 4. **M3 Ship:** Developer ID signing, notarization, Sparkle updates, website on appalibi.com.
 5. **Later:** Endpoint Security extension for real file access history.
 
@@ -301,6 +303,38 @@ Plan (M2.6):
    and Automation: per app, the last result seen for each service.
 
 ## AI clients (planned 2026-10-12)
+
+### As built (2026-10-12)
+
+- **IDs from a real capture** (7 days of tccd and Control Center on the dev Mac, plus the
+  app's database): Claude Code is `com.anthropic.claude-code`, also when the desktop app
+  bundles it under `~/Library/Application Support/Claude/claude-code/<version>/`. It is the
+  responsible process for everything it runs (git, esbuild, xcodebuild), so those checks
+  count for it. Claude is `com.anthropic.claudefordesktop` plus `.helper` and
+  `com.anthropic.claude.ios-sim`. Kimi is `com.moonshot.kimichat`. Perplexity is
+  `ai.perplexity.mac` (not `macv3`) and Comet `ai.perplexity.comet`. Codex, Copilot and
+  Gemini CLIs made no checks in the window, so their IDs are still unchecked.
+- **Path trap:** apps built in a `.claude/worktrees/` folder must not count as Claude, so
+  paths match exact fragments only (test with a real line).
+- **Volume:** Claude Code alone makes about 3,000 checks a day, not a few hundred. So
+  `ai_access` is folded per hour (key: hour, client, kind, detail, app, accessor, result,
+  preflight) with count and first and last seen, not one row per check.
+- **Copying history:** `EventStore.setAIClients` copies the daily tables for any client it
+  has not seen before (marked approximate) under the write lock, then switches the catalog
+  that `record` uses, so nothing is counted twice. A client taken out loses its rows. The
+  same runs when the user adds or removes an app in Settings.
+- **AI tab columns:** Time, Client, What, Result, Via. "Where" is folded into "What"
+  ("Opened: Documents Folder"), which reads better than two columns. Via is the
+  executable's own name (git, esbuild). Not built: the parent-process chain (phase 2).
+- **Full Disk Access and the other control services** are shown as badges: in the
+  Permissions tab per app, and on the AI tab's client cards. The labels say "seen allowed".
+- **Alerts:** "AI clients" (one switch for first control grant, admin grant, and use while
+  locked; the welcome tour switches it on) and "Full Disk Access" (any app, first time).
+  An AI client's admin grant or Full Disk Access is told once, as the AI alert.
+- **Computer use:** a screen recording by a client with an allowed Accessibility or PostEvent
+  check within an hour is marked "Probably computer use". PostEvent is now
+  "Mouse & Keyboard Control".
+- `alibi-probe` prints what each client did in the window.
 
 AI assistants and coding agents can drive the Mac: computer use clicks and types, agents
 run shell commands, and some ask for Full Disk Access. The goal is a tab that shows
@@ -488,8 +522,8 @@ check (step 7). The code was written without a compiler. The GitHub Actions buil
 - Do older macOS versions (14, 15) log the same Control Center messages?
 - Trademark clearance for AppAlibi against the live ALIBI mark.
 - Do the AI client IDs and paths in "AI clients" match real tccd and Control Center lines?
-  Capture each client once (Claude desktop computer use, Claude Code in iTerm, ChatGPT agent,
-  Codex CLI, Copilot CLI, Kimi) with `log stream` and add the lines as parser tests.
+  Claude, Claude Code, Kimi and Perplexity are checked (2026-10-12). Still to capture:
+  ChatGPT agent, Codex CLI, Copilot CLI, Gemini CLI and desktop, Cursor, Windsurf.
 - Does tccd on macOS 27 still name the client in `AUTHREQ_ATTRIBUTION`? One EDR project
   reports it redacted on some versions.
 - Does ChatGPT's "Locked Use" authorization plug-in show up in authd or loginwindow lines?

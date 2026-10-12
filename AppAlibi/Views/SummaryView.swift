@@ -7,6 +7,7 @@ import SwiftUI
 final class SummaryTabState {
     var scope: AppScope = .apps
     var report: ActivityReport?
+    var aiReport: AIReport?
     let loader = TabLoader()
 }
 
@@ -50,21 +51,31 @@ struct SummaryView: View {
                     appsSection(report)
                     permissionsSection(report)
                 }
+                if scope != .system, let aiReport = state.aiReport {
+                    aiSection(aiReport)
+                }
             }
             .formStyle(.grouped)
             .tint(.orange)
         }
         .task(id: reloadKey) {
             let key = reloadKey
+            let report = model.reportFetch(interval, bucket: period.bucket, scope: scope)
+            let aiReport = model.aiReportFetch(interval)
             await state.loader.load(key, model: model,
-                                    fetch: model.reportFetch(interval, bucket: period.bucket, scope: scope),
-                                    apply: { state.report = $0 })
+                                    fetch: { store in (report: try report(store), ai: try aiReport(store)) },
+                                    apply: { result in
+                                        state.report = result.report
+                                        state.aiReport = result.ai
+                                    })
         }
     }
 
     private struct ReloadKey: Hashable {
         let sessions: Int
         let permissions: Int
+        let admin: Int
+        let clients: Int
         let period: ReportPeriod
         let start: Date
         let scope: AppScope
@@ -72,6 +83,7 @@ struct SummaryView: View {
 
     private var reloadKey: ReloadKey {
         ReloadKey(sessions: model.sessionsRevision, permissions: model.permissionsRevision,
+                  admin: model.adminRightsRevision, clients: model.aiClientsRevision,
                   period: period, start: interval.start, scope: scope)
     }
 
@@ -234,6 +246,27 @@ struct SummaryView: View {
         }
     }
 
+    private func aiSection(_ report: AIReport) -> some View {
+        Section {
+            if report.clients.isEmpty {
+                Text("No AI client was active.")
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(report.clients) { usage in
+                    if let client = model.aiClient(id: usage.client) {
+                        AIClientUsageRow(client: client, usage: usage)
+                    }
+                }
+            }
+        } header: {
+            Text("AI Clients")
+        } footer: {
+            Text("Real access checks only. Details in the AI tab.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+
     // MARK: Formatting
 
     static func long(_ interval: TimeInterval) -> String {
@@ -339,6 +372,50 @@ private struct PermissionGroupRow: View {
                 }
                 if group.denied > 0 {
                     Text("Denied: \(group.denied)").monospacedDigit().foregroundStyle(.red)
+                }
+            }
+            .font(.callout)
+        }
+        .padding(.vertical, 2)
+        .accessibilityElement(children: .combine)
+    }
+}
+
+private struct AIClientUsageRow: View {
+    let client: AIClient
+    let usage: AIReport.ClientUsage
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(nsImage: AIClientInfo.icon(for: client))
+                .resizable()
+                .frame(width: 24, height: 24)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(client.name).lineLimit(1)
+                if !usage.newAccess.isEmpty {
+                    Text("New: \(ListFormatter.localizedString(byJoining: usage.newAccess.map(TCCService.displayName(for:))))")
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                        .lineLimit(2)
+                }
+            }
+            Spacer()
+            VStack(alignment: .trailing, spacing: 2) {
+                HStack(spacing: 8) {
+                    ForEach(usage.sensors, id: \.sensor) { item in
+                        Label {
+                            Text(SummaryView.long(item.duration)).monospacedDigit()
+                        } icon: {
+                            Image(systemName: item.sensor.symbolName)
+                        }
+                        .help(item.sensor.displayName)
+                    }
+                }
+                if usage.checks > 0 {
+                    Text("Checks: \(usage.checks)").monospacedDigit().foregroundStyle(.secondary)
+                }
+                if usage.adminGrants > 0 {
+                    Text("Admin rights: \(usage.adminGrants)").monospacedDigit().foregroundStyle(.secondary)
                 }
             }
             .font(.callout)

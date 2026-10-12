@@ -8,6 +8,8 @@ enum AlertPreferences {
     static let firstPermissionKey = "appalibi.alerts.firstPermission"
     static let lockedUseKey = "appalibi.alerts.lockedUse"
     static let adminRightsKey = "appalibi.alerts.adminRights"
+    static let aiClientsKey = "appalibi.alerts.aiClients"
+    static let fullDiskAccessKey = "appalibi.alerts.fullDiskAccess"
     static let dailyKey = "appalibi.reports.daily"
     static let weeklyKey = "appalibi.reports.weekly"
     static let minuteKey = "appalibi.reports.minuteOfDay"
@@ -25,7 +27,9 @@ enum AlertPreferences {
             sensors: defaults.string(forKey: sensorsKey).flatMap(SensorAlertMode.init(rawValue:)) ?? .off,
             firstPermissionUse: defaults.bool(forKey: firstPermissionKey),
             lockedUse: defaults.bool(forKey: lockedUseKey),
-            adminRights: defaults.bool(forKey: adminRightsKey)
+            adminRights: defaults.bool(forKey: adminRightsKey),
+            aiClients: defaults.bool(forKey: aiClientsKey),
+            fullDiskAccess: defaults.bool(forKey: fullDiskAccessKey)
         )
     }
 
@@ -57,6 +61,7 @@ enum AlertPreferences {
     static func enableDefaults() {
         defaults.set(SensorAlertMode.firstUse.rawValue, forKey: sensorsKey)
         defaults.set(true, forKey: lockedUseKey)
+        defaults.set(true, forKey: aiClientsKey)
         defaults.set(true, forKey: dailyKey)
         setLastDelivered(Date(), for: .day)
     }
@@ -67,6 +72,8 @@ enum AlertPreferences {
         defaults.set(false, forKey: firstPermissionKey)
         defaults.set(false, forKey: lockedUseKey)
         defaults.set(false, forKey: adminRightsKey)
+        defaults.set(false, forKey: aiClientsKey)
+        defaults.set(false, forKey: fullDiskAccessKey)
         defaults.set(false, forKey: dailyKey)
         defaults.set(false, forKey: weeklyKey)
     }

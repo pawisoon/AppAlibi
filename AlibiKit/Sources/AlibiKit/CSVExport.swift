@@ -113,4 +113,44 @@ public enum CSVExport {
             header: ["day", "app", "app_path", "client_path", "admin_right", "right", "count", "first_seen", "last_seen"],
             rows: lines)
     }
+
+    /// - Parameters:
+    ///   - client: the display name for an `AIClient` ID.
+    ///   - name: the display name for an identifier or path and the binary logged for it.
+    public static func aiActivity(
+        _ activities: [AIActivity],
+        now: Date = Date(),
+        timeZone: TimeZone = .current,
+        client: (String) -> String,
+        name: (_ identifier: String, _ binaryPath: String) -> String
+    ) -> String {
+        let timestamp = timestamps(in: timeZone)
+        let rows = activities.map { activity -> [String] in
+            [
+                timestamp(activity.start),
+                activity.end.map { timestamp($0) } ?? "",
+                client(activity.client),
+                activity.kind.rawValue,
+                activity.what,
+                activity.detail,
+                name(activity.app, activity.binaryPath),
+                activity.app,
+                activity.accessor,
+                activity.binaryPath,
+                activity.resultName ?? "",
+                activity.preflight ? "yes" : "no",
+                String(activity.count),
+                activity.kind == .sensor ? seconds(activity.duration(now: now)) : "",
+                activity.whileLocked ? "yes" : "no",
+                activity.isFirstTime ? "yes" : "no",
+                activity.isProbablyComputerUse ? "yes" : "no",
+                activity.approximate ? "yes" : "no",
+            ]
+        }
+        return CSV.document(
+            header: ["start", "end", "client", "kind", "what", "detail", "app", "identifier", "accessor", "binary_path",
+                     "result", "preflight", "count", "duration_s", "while_locked", "first_time", "probably_computer_use",
+                     "approximate"],
+            rows: rows)
+    }
 }

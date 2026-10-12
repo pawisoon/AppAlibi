@@ -9,6 +9,7 @@ struct HistoryView: View {
         case sensors = "Sensors"
         case permissions = "Permissions"
         case admin = "Admin"
+        case ai = "AI"
         var id: Self { self }
 
         var title: LocalizedStringResource {
@@ -17,6 +18,7 @@ struct HistoryView: View {
             case .sensors: "Sensors"
             case .permissions: "Permissions"
             case .admin: "Admin"
+            case .ai: "AI"
             }
         }
     }
@@ -28,6 +30,7 @@ struct HistoryView: View {
             case .sensors: SensorHistoryView(model: model)
             case .permissions: PermissionHistoryView(model: model)
             case .admin: AdminHistoryView(model: model)
+            case .ai: AIHistoryView(model: model)
             }
         }
         .toolbar {
@@ -120,6 +123,8 @@ final class PermissionsTabState {
     var includePreflight = false
     var filesOnly = false
     var rows: [TCCAggregate] = []
+    /// Per app, the last result seen for each control service.
+    var grants: [String: [ObservedGrant]] = [:]
     let loader = TabLoader()
 }
 
@@ -304,9 +309,13 @@ struct PermissionHistoryView: View {
 
             Table(state.rows) {
                 TableColumn("App") { row in
-                    AppCell(identifier: row.app, binaryPath: row.binaryPath, detail: row.accessor.isEmpty || row.accessor == row.app ? nil : String(localized: "via \(row.accessor)"))
+                    HStack {
+                        AppCell(identifier: row.app, binaryPath: row.binaryPath, detail: row.accessor.isEmpty || row.accessor == row.app ? nil : String(localized: "via \(row.accessor)"))
+                        Spacer(minLength: 4)
+                        GrantBadges(grants: state.grants[row.app] ?? [])
+                    }
                 }
-                .width(min: 200, ideal: 280)
+                .width(min: 200, ideal: 300)
                 TableColumn("Permission") { row in
                     Text(row.serviceName)
                 }
@@ -366,8 +375,11 @@ struct PermissionHistoryView: View {
     private func reload(_ key: ReloadKey) async {
         let rowsQuery = query(limit: 2_000)
         await state.loader.load(key, model: model, fetch: { store in
-            try store.tccAggregates(rowsQuery)
-        }, apply: { state.rows = $0 })
+            (rows: try store.tccAggregates(rowsQuery), grants: try store.observedGrants())
+        }, apply: { result in
+            state.rows = result.rows
+            state.grants = result.grants
+        })
     }
 
     /// The same filters as the table, without its row limit.
