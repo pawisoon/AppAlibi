@@ -166,6 +166,9 @@ final class MacAppDelegate: NSObject, NSApplicationDelegate {
                 model.historyTab = .sensors
             case .permissions: model.historyTab = .permissions
             case .admin: model.historyTab = .admin
+            case .ai(let client):
+                model.aiTab.client = client
+                model.historyTab = .ai
             case .summary(let period): model.showSummary(period)
             }
             showMainWindow()

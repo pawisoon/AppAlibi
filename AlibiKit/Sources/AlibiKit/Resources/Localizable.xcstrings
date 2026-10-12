@@ -1,6 +1,26 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@ (check)" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (sprawdzenie)"
+          }
+        }
+      }
+    },
+    "Accessed: %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dostęp: %@"
+          }
+        }
+      }
+    },
     "Accessibility" : {
       "localizations" : {
         "pl" : {
@@ -71,6 +91,46 @@
         }
       }
     },
+    "Asked to control other apps" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prośba o sterowanie innymi aplikacjami"
+          }
+        }
+      }
+    },
+    "Asked to control the Mac" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prośba o sterowanie Makiem"
+          }
+        }
+      }
+    },
+    "Asked to record the screen" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prośba o nagrywanie ekranu"
+          }
+        }
+      }
+    },
+    "Asked to watch keyboard and mouse" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prośba o śledzenie klawiatury i myszy"
+          }
+        }
+      }
+    },
     "Automation" : {
       "localizations" : {
         "pl" : {
@@ -107,6 +167,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kamera"
+          }
+        }
+      }
+    },
+    "Can control mouse and keyboard" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Może sterować myszą i klawiaturą"
+          }
+        }
+      }
+    },
+    "Can control other apps" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Może sterować innymi aplikacjami"
+          }
+        }
+      }
+    },
+    "Can record the screen" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Może nagrywać ekran"
+          }
+        }
+      }
+    },
+    "Can watch keyboard and mouse" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Może śledzić klawiaturę i mysz"
           }
         }
       }
@@ -151,6 +251,16 @@
         }
       }
     },
+    "Checked access: %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprawdzono dostęp: %@"
+          }
+        }
+      }
+    },
     "Contacts" : {
       "localizations" : {
         "pl" : {
@@ -177,6 +287,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Odrzucone"
+          }
+        }
+      }
+    },
+    "Denied: %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odmowa: %@"
           }
         }
       }
@@ -271,6 +391,26 @@
         }
       }
     },
+    "Full Disk Access check" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprawdzenie pełnego dostępu do dysku"
+          }
+        }
+      }
+    },
+    "Got admin rights: %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uprawnienia administratora: %@"
+          }
+        }
+      }
+    },
     "Home" : {
       "localizations" : {
         "pl" : {
@@ -342,6 +482,7 @@
       }
     },
     "Keyboard Control" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pl" : {
           "stringUnit" : {
@@ -391,12 +532,32 @@
         }
       }
     },
+    "Mouse & Keyboard Control" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sterowanie myszą i klawiaturą"
+          }
+        }
+      }
+    },
     "Network Volumes" : {
       "localizations" : {
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Woluminy sieciowe"
+          }
+        }
+      }
+    },
+    "Opened: %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwarto: %@"
           }
         }
       }
@@ -427,6 +588,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zdjęcia"
+          }
+        }
+      }
+    },
+    "Recorded the screen" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagrywanie ekranu"
           }
         }
       }
@@ -517,6 +688,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nieznane"
+          }
+        }
+      }
+    },
+    "Used %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użycie: %@"
+          }
+        }
+      }
+    },
+    "Used the camera" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użycie kamery"
+          }
+        }
+      }
+    },
+    "Used the microphone" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użycie mikrofonu"
+          }
+        }
+      }
+    },
+    "Used your location" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użycie lokalizacji"
           }
         }
       }

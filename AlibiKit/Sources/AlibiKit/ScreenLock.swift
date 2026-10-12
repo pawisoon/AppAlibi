@@ -54,6 +54,11 @@ public struct ScreenLockSpans: Sendable, Equatable {
             total + (span.intersection(with: interval)?.duration ?? 0)
         }
     }
+
+    /// Whether the moment fell inside a lock.
+    public func contains(_ date: Date) -> Bool {
+        spans.contains { $0.start < date && date < $0.end }
+    }
 }
 
 public enum SystemClock {

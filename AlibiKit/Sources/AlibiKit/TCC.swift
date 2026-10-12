@@ -62,7 +62,7 @@ public enum TCCService {
         "Photos": String(localized: "Photos", bundle: .module),
         "Accessibility": String(localized: "Accessibility", bundle: .module),
         "ListenEvent": String(localized: "Input Monitoring", bundle: .module),
-        "PostEvent": String(localized: "Keyboard Control", bundle: .module),
+        "PostEvent": String(localized: "Mouse & Keyboard Control", bundle: .module),
         "AppleEvents": String(localized: "Automation", bundle: .module),
         "BluetoothAlways": String(localized: "Bluetooth", bundle: .module),
         "DeveloperTool": String(localized: "Developer Tools", bundle: .module),

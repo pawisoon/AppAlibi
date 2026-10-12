@@ -17,6 +17,8 @@ screen recording and TCC-protected resources. Data comes from the unified log
   components, ported from ZuckOff's macOS target (`zuckoff` repo, `Mac/ZuckoffMacApp.swift` and
   `Packages/ZuckoffCore/Sources/ZuckoffCore/MacUI/`, on the Mac branches). Keep them in step when one changes.
 - `AppAlibi/Notifications/` notification posting, alert and summary preferences, summary scheduler.
+- `AppAlibi/AIClients/` the user's own AI clients, client icons, access badges. The catalog of
+  known AI clients is `AIClients.swift` in AlibiKit.
 - `design/AppIcon.svg` app icon source. `design/render-icon.sh` renders it into the asset catalog.
 - `AppAlibi/Localizable.xcstrings` and `AlibiKit/Sources/AlibiKit/Resources/Localizable.xcstrings`
   string catalogs: English source, Polish translations.
@@ -69,5 +71,9 @@ the usernoted log, the banner itself not looked at). The Admin tab and Settings 
 2026-10-12: M2.5 speed built (store reads on their own connection, tabs load off the main thread
 and keep their rows and filters), not timed on a Mac and not checked visually. Planned, not built:
 M2.6 AI clients tab, Full Disk Access holders seen in the log, mouse and keyboard control. See docs/PLAN.md.
+2026-10-12 later: M2.6 built (AI tab, `ai_access` table, AI and Full Disk Access alerts, access
+badges, Summary section, custom AI clients) and Settings split into tabs. Checked visually in
+English and Polish on the dev Mac with real data. Not checked: the new notifications'
+delivery, the add and remove buttons for custom clients, IDs for Codex, Copilot, Gemini and Cursor.
 `.github/workflows/build.yml` builds the app and runs AlibiKitTests with `xcodebuild test` on pull requests
 (not `swift test`: on the CI runner the command line copies the string catalog uncompiled, so the Polish test fails).

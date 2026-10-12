@@ -110,16 +110,18 @@ public struct TCCQuery: Sendable {
 /// through the other. In WAL mode a reader does not wait for a write
 /// transaction, so a view never stalls behind a big catch-up batch.
 public final class EventStore: @unchecked Sendable {
-    private let database: SQLiteDatabase
+    let database: SQLiteDatabase
     private let lock = NSLock()
-    private let reader: SQLiteDatabase
+    let reader: SQLiteDatabase
     private let readLock = NSLock()
+    /// AI clients whose access is copied into `ai_access`. Set with `setAIClients`, guarded by the write lock.
+    var aiCatalog = AIClientCatalog([])
     public let path: String
     /// Control Center briefly drops and re-adds a sensor during calls. A restart
     /// within this many seconds continues the previous session instead of opening a new one.
     public let mergeGap: TimeInterval
 
-    private static let dayFormatter: DateFormatter = {
+    static let dayFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyy-MM-dd"
@@ -184,17 +186,35 @@ public final class EventStore: @unchecked Sendable {
             PRIMARY KEY (day, right_name, app, client)
         );
         CREATE INDEX IF NOT EXISTS admin_rights_last_seen ON admin_rights(last_seen DESC);
+        CREATE TABLE IF NOT EXISTS ai_access (
+            hour REAL NOT NULL,
+            client TEXT NOT NULL,
+            kind TEXT NOT NULL,
+            detail TEXT NOT NULL,
+            app TEXT NOT NULL,
+            accessor TEXT NOT NULL,
+            binary_path TEXT NOT NULL,
+            auth_value INTEGER NOT NULL,
+            preflight INTEGER NOT NULL,
+            approximate INTEGER NOT NULL,
+            count INTEGER NOT NULL,
+            first_seen REAL NOT NULL,
+            last_seen REAL NOT NULL,
+            PRIMARY KEY (hour, client, kind, detail, app, accessor, auth_value, preflight, approximate)
+        );
+        CREATE INDEX IF NOT EXISTS ai_access_last_seen ON ai_access(last_seen DESC);
+        CREATE INDEX IF NOT EXISTS ai_access_client ON ai_access(client, detail);
         """)
     }
 
-    private func locked<T>(_ body: () throws -> T) rethrows -> T {
+    func locked<T>(_ body: () throws -> T) rethrows -> T {
         lock.lock()
         defer { lock.unlock() }
         return try body()
     }
 
     /// Queries for the UI and alerts. They see every committed batch.
-    private func reading<T>(_ body: (SQLiteDatabase) throws -> T) rethrows -> T {
+    func reading<T>(_ body: (SQLiteDatabase) throws -> T) rethrows -> T {
         readLock.lock()
         defer { readLock.unlock() }
         return try body(reader)
@@ -240,6 +260,7 @@ public final class EventStore: @unchecked Sendable {
                 // An unlock with no lock before it (the first import started mid-lock) is dropped.
                 let unlockScreen = try database.prepare(
                     "UPDATE screen_locks SET unlocked_at = ? WHERE unlocked_at IS NULL")
+                let upsertAI = try database.prepare(Self.upsertAIAccessSQL)
 
                 for event in events {
                     switch event {
@@ -263,6 +284,13 @@ public final class EventStore: @unchecked Sendable {
                             .int(Int64(tcc.authValue)), .int(tcc.preflight ? 1 : 0),
                             .double(time), .double(time),
                         ])
+                        if let client = aiCatalog.client(for: tcc) {
+                            try upsertAI.run(Self.aiAccessValues(
+                                hour: Self.hourStart(tcc.date), client: client.id, kind: .permission, detail: tcc.service,
+                                app: tcc.app, accessor: tcc.accessor, binaryPath: tcc.binaryPath,
+                                authValue: tcc.authValue, preflight: tcc.preflight, approximate: false,
+                                count: 1, firstSeen: tcc.date, lastSeen: tcc.date))
+                        }
                     case .screenLock(let lock):
                         let time = lock.date.timeIntervalSince1970
                         try (lock.locked ? lockScreen : unlockScreen).run([.double(time)])
@@ -273,6 +301,13 @@ public final class EventStore: @unchecked Sendable {
                             .text(right.right), .text(right.app), .text(right.client),
                             .double(time), .double(time),
                         ])
+                        if let client = aiCatalog.client(for: right) {
+                            try upsertAI.run(Self.aiAccessValues(
+                                hour: Self.hourStart(right.date), client: client.id, kind: .admin, detail: right.right,
+                                app: right.app, accessor: right.client, binaryPath: right.app,
+                                authValue: 2, preflight: false, approximate: false,
+                                count: 1, firstSeen: right.date, lastSeen: right.date))
+                        }
                     }
                 }
 
@@ -288,7 +323,7 @@ public final class EventStore: @unchecked Sendable {
     /// re-import the deleted past from the unified log on its next restart.
     public func deleteAll() throws {
         try locked {
-            try database.execute("DELETE FROM sessions; DELETE FROM tcc_access; DELETE FROM screen_locks; DELETE FROM admin_rights; VACUUM;")
+            try database.execute("DELETE FROM sessions; DELETE FROM tcc_access; DELETE FROM screen_locks; DELETE FROM admin_rights; DELETE FROM ai_access; VACUUM;")
         }
     }
 
@@ -308,6 +343,10 @@ public final class EventStore: @unchecked Sendable {
                 try database.prepare("DELETE FROM tcc_access WHERE day < ?").run([.text(day)])
                 deleted += Int(database.changes)
                 try database.prepare("DELETE FROM admin_rights WHERE day < ?").run([.text(day)])
+                deleted += Int(database.changes)
+                // By the day, like the tables it is copied from.
+                let dayStart = Self.dayFormatter.date(from: day)?.timeIntervalSince1970 ?? time
+                try database.prepare("DELETE FROM ai_access WHERE hour < ?").run([.double(dayStart)])
                 deleted += Int(database.changes)
                 try database.prepare("DELETE FROM screen_locks WHERE unlocked_at IS NOT NULL AND unlocked_at < ?").run([.double(time)])
                 deleted += Int(database.changes)
@@ -513,7 +552,7 @@ public final class EventStore: @unchecked Sendable {
         }
     }
 
-    private static func inClause(_ column: String, count: Int) -> String {
+    static func inClause(_ column: String, count: Int) -> String {
         "\(column) IN (\(Array(repeating: "?", count: count).joined(separator: ",")))"
     }
 

@@ -46,12 +46,38 @@
         }
       }
     },
+    "%@ got %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ got %2$@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ dostaje: %2$@"
+          }
+        }
+      }
+    },
     "%@ got administrator rights" : {
       "localizations" : {
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ dostaje uprawnienia administratora"
+          }
+        }
+      }
+    },
+    "%@ has Full Disk Access" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ma pełny dostęp do dysku"
           }
         }
       }
@@ -126,6 +152,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@, %2$@."
+          }
+        }
+      }
+    },
+    "%@, first %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, first %2$@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, pierwszy raz %2$@"
           }
         }
       }
@@ -303,6 +345,66 @@
         }
       }
     },
+    "A screen recording that came with a check for control of the mouse and keyboard." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagrywanie ekranu, któremu towarzyszy sprawdzenie dostępu do sterowania myszą i klawiaturą."
+          }
+        }
+      }
+    },
+    "AI" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI"
+          }
+        }
+      }
+    },
+    "AI Clients" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Narzędzia AI"
+          }
+        }
+      }
+    },
+    "AI clients" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Narzędzia AI"
+          }
+        }
+      }
+    },
+    "AI clients were active while your Mac was locked" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktywność narzędzi AI, gdy Mac był zablokowany"
+          }
+        }
+      }
+    },
+    "Access" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dostęp"
+          }
+        }
+      }
+    },
     "Active" : {
       "localizations" : {
         "pl" : {
@@ -323,6 +425,47 @@
         }
       }
     },
+    "Add" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodaj"
+          }
+        }
+      }
+    },
+    "Add an app or command-line tool" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodaj aplikację lub narzędzie wiersza poleceń"
+          }
+        }
+      }
+    },
+    "Add an app or command-line tool AppAlibi does not know. Its earlier history is included." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodaj aplikację lub narzędzie wiersza poleceń, którego AppAlibi nie zna. Jego wcześniejsza historia też zostanie uwzględniona."
+          }
+        }
+      }
+    },
+    "Add…" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodaj…"
+          }
+        }
+      }
+    },
     "Admin" : {
       "localizations" : {
         "pl" : {
@@ -333,12 +476,42 @@
         }
       }
     },
+    "Admin rights" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uprawnienia administratora"
+          }
+        }
+      }
+    },
+    "Admin rights: %lld" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uprawnienia administratora: %lld"
+          }
+        }
+      }
+    },
     "Administrator rights" : {
       "localizations" : {
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Uprawnienia administratora"
+          }
+        }
+      }
+    },
+    "Alerts" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alerty"
           }
         }
       }
@@ -359,6 +532,27 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dozwolone: %lld"
+          }
+        }
+      }
+    },
+    "Also Treat as AI" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Traktuj też jako AI"
+          }
+        }
+      }
+    },
+    "Also treat as AI" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Traktuj też jako AI"
           }
         }
       }
@@ -406,6 +600,16 @@
     "AppAlibi" : {
       "shouldTranslate" : false
     },
+    "AppAlibi AI Clients" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AppAlibi – narzędzia AI"
+          }
+        }
+      }
+    },
     "AppAlibi Admin Rights" : {
       "localizations" : {
         "pl" : {
@@ -447,11 +651,33 @@
       }
     },
     "AppAlibi can tell you when an app turns on your camera, microphone or screen for the first time, what used them while your Mac was locked, and sum up each day at %@. Change any of these, or add a weekly summary, in Settings." : {
+      "extractionState" : "stale",
       "localizations" : {
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "AppAlibi może dać ci znać, gdy aplikacja po raz pierwszy włączy kamerę, mikrofon lub ekran, pokazać, co z nich korzystało, gdy Mac był zablokowany, i podsumować każdy dzień o %@. Każdą z tych opcji możesz zmienić, a podsumowanie tygodniowe dodać, w Ustawieniach."
+          }
+        }
+      }
+    },
+    "AppAlibi can tell you when an app turns on your camera, microphone or screen for the first time, what used them while your Mac was locked, when an AI assistant gets control of your Mac, and sum up each day at %@. Change any of these, or add a weekly summary, in Settings." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AppAlibi może dać ci znać, gdy aplikacja po raz pierwszy włączy kamerę, mikrofon lub ekran, pokazać, co z nich korzystało, gdy Mac był zablokowany, powiedzieć, gdy asystent AI dostanie kontrolę nad Makiem, i podsumować każdy dzień o %@. Każdą z tych opcji możesz zmienić, a podsumowanie tygodniowe dodać, w Ustawieniach."
+          }
+        }
+      }
+    },
+    "AppAlibi knows Claude, Claude Code, ChatGPT, Codex, Copilot, Gemini, Kimi, Cursor, Perplexity and a few more. Add an app or command-line tool it does not know." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AppAlibi zna Claude, Claude Code, ChatGPT, Codex, Copilot, Gemini, Kimi, Cursor, Perplexity i kilka innych. Dodaj aplikację lub narzędzie wiersza poleceń, którego nie zna."
           }
         }
       }
@@ -632,6 +858,36 @@
         }
       }
     },
+    "Checks: %lld" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprawdzenia: %lld"
+          }
+        }
+      }
+    },
+    "Choose an app or command-line tool to treat as an AI client." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz aplikację lub narzędzie wiersza poleceń, które ma być traktowane jako narzędzie AI."
+          }
+        }
+      }
+    },
+    "Client" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Narzędzie"
+          }
+        }
+      }
+    },
     "Could not delete history: %@" : {
       "localizations" : {
         "pl" : {
@@ -658,6 +914,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nie udało się otworzyć bazy danych historii: %@"
+          }
+        }
+      }
+    },
+    "Could not set up AI client history: %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się przygotować historii narzędzi AI: %@"
+          }
+        }
+      }
+    },
+    "Could not update the AI clients." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się zaktualizować narzędzi AI."
           }
         }
       }
@@ -872,6 +1148,26 @@
         }
       }
     },
+    "First control of the mouse, keyboard, screen or files, admin rights, and use while locked." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pierwsza kontrola nad myszą, klawiaturą, ekranem lub plikami, uprawnienia administratora i użycie przy zablokowanym ekranie."
+          }
+        }
+      }
+    },
+    "First time" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pierwszy raz"
+          }
+        }
+      }
+    },
     "First time an app uses one" : {
       "localizations" : {
         "pl" : {
@@ -892,12 +1188,62 @@
         }
       }
     },
+    "Full Disk Access" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pełny dostęp do dysku"
+          }
+        }
+      }
+    },
+    "General" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ogólne"
+          }
+        }
+      }
+    },
+    "Got administrator rights, last %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uprawnienia administratora, ostatnio %@"
+          }
+        }
+      }
+    },
+    "Granted" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przyznane"
+          }
+        }
+      }
+    },
     "Hear about it as it happens" : {
       "localizations" : {
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dowiaduj się na bieżąco"
+          }
+        }
+      }
+    },
+    "Hides preflight checks, where an app asks whether it may without accessing anything." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ukrywa sprawdzenia wstępne, w których aplikacja pyta, czy może, niczego nie otwierając."
           }
         }
       }
@@ -972,6 +1318,16 @@
         }
       }
     },
+    "Kind" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rodzaj"
+          }
+        }
+      }
+    },
     "Last 7 Days" : {
       "localizations" : {
         "pl" : {
@@ -1018,6 +1374,16 @@
         }
       }
     },
+    "Matched by bundle ID or by where the app or tool is installed." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rozpoznawane po identyfikatorze pakietu lub po miejscu instalacji aplikacji albo narzędzia."
+          }
+        }
+      }
+    },
     "Menu" : {
       "localizations" : {
         "pl" : {
@@ -1048,6 +1414,16 @@
         }
       }
     },
+    "New: %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nowe: %@"
+          }
+        }
+      }
+    },
     "Next" : {
       "localizations" : {
         "pl" : {
@@ -1074,6 +1450,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Następny tydzień"
+          }
+        }
+      }
+    },
+    "No AI Activity" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak aktywności AI"
+          }
+        }
+      }
+    },
+    "No AI client used the camera, microphone or screen, or asked for access, in this range. Add your own in Settings." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W tym zakresie żadne narzędzie AI nie korzystało z kamery, mikrofonu ani ekranu i nie prosiło o dostęp. Własne możesz dodać w Ustawieniach."
+          }
+        }
+      }
+    },
+    "No AI client was active." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żadne narzędzie AI nie było aktywne."
           }
         }
       }
@@ -1158,6 +1564,16 @@
         }
       }
     },
+    "None yet" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na razie brak"
+          }
+        }
+      }
+    },
     "Not a guarantee. AppAlibi can only record what macOS logs, and a macOS update can change those entries." : {
       "localizations" : {
         "pl" : {
@@ -1209,6 +1625,7 @@
       }
     },
     "Notifications" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pl" : {
           "stringUnit" : {
@@ -1398,6 +1815,16 @@
         }
       }
     },
+    "Probably computer use" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prawdopodobnie sterowanie komputerem"
+          }
+        }
+      }
+    },
     "Protected Data" : {
       "localizations" : {
         "pl" : {
@@ -1428,12 +1855,32 @@
         }
       }
     },
+    "Real access checks only. Details in the AI tab." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tylko rzeczywiste próby dostępu. Szczegóły na karcie AI."
+          }
+        }
+      }
+    },
     "Real access checks only. Preflight checks, where an app asks whether it may without accessing anything, are left out." : {
       "localizations" : {
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tylko rzeczywiste próby dostępu. Sprawdzenia wstępne, w których aplikacja pyta, czy może, niczego nie otwierając, są pominięte."
+          }
+        }
+      }
+    },
+    "Real access only" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tylko rzeczywisty dostęp"
           }
         }
       }
@@ -1448,12 +1895,43 @@
         }
       }
     },
+    "Recognized Automatically" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rozpoznawane automatycznie"
+          }
+        }
+      }
+    },
     "Recommended" : {
       "localizations" : {
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zalecane"
+          }
+        }
+      }
+    },
+    "Remove" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usuń"
+          }
+        }
+      }
+    },
+    "Remove the selected one" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usuń zaznaczone"
           }
         }
       }
@@ -1474,6 +1952,56 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Uprawnienie"
+          }
+        }
+      }
+    },
+    "Seen allowed Full Disk Access" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zauważono zgodę na pełny dostęp do dysku"
+          }
+        }
+      }
+    },
+    "Seen allowed Input Monitoring" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zauważono zgodę na monitorowanie wprowadzania"
+          }
+        }
+      }
+    },
+    "Seen allowed Screen Recording" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zauważono zgodę na nagrywanie ekranu"
+          }
+        }
+      }
+    },
+    "Seen allowed to control mouse and keyboard" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zauważono zgodę na sterowanie myszą i klawiaturą"
+          }
+        }
+      }
+    },
+    "Seen allowed to control other apps" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zauważono zgodę na sterowanie innymi aplikacjami"
           }
         }
       }
@@ -1499,11 +2027,22 @@
       }
     },
     "Sensor sessions, permission checks, admin rights and screen locks are removed from this Mac. This cannot be undone." : {
+      "extractionState" : "stale",
       "localizations" : {
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sesje czujników, sprawdzenia uprawnień, uprawnienia administratora i blokady ekranu zostaną usunięte z tego Maca. Tego nie można cofnąć."
+          }
+        }
+      }
+    },
+    "Sensor sessions, permission checks, admin rights, AI client history and screen locks are removed from this Mac. This cannot be undone." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sesje czujników, sprawdzenia uprawnień, uprawnienia administratora, historia narzędzi AI i blokady ekranu zostaną usunięte z tego Maca. Tego nie można cofnąć."
           }
         }
       }
@@ -1568,6 +2107,16 @@
         }
       }
     },
+    "Show every client" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokaż wszystkie narzędzia"
+          }
+        }
+      }
+    },
     "Show in Finder" : {
       "localizations" : {
         "pl" : {
@@ -1584,6 +2133,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pokazuj lokalizację"
+          }
+        }
+      }
+    },
+    "Show only %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokaż tylko %@"
           }
         }
       }
@@ -1658,6 +2217,16 @@
         }
       }
     },
+    "Summaries" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podsumowania"
+          }
+        }
+      }
+    },
     "Summary" : {
       "localizations" : {
         "pl" : {
@@ -1688,6 +2257,26 @@
         }
       }
     },
+    "The first time AppAlibi has seen macOS allow it. It can read all your files. %@." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AppAlibi widzi tę zgodę macOS po raz pierwszy. Aplikacja może czytać wszystkie twoje pliki. %@."
+          }
+        }
+      }
+    },
+    "The first time AppAlibi has seen this AI client allowed that. %@." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AppAlibi widzi tę zgodę u tego narzędzia AI po raz pierwszy. %@."
+          }
+        }
+      }
+    },
     "The first time AppAlibi has seen this app do that." : {
       "localizations" : {
         "pl" : {
@@ -1704,6 +2293,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "AppAlibi widzi to u tej aplikacji po raz pierwszy. Początek: %@."
+          }
+        }
+      }
+    },
+    "The first time macOS lets an app read all your files." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gdy macOS po raz pierwszy pozwoli aplikacji czytać wszystkie twoje pliki."
           }
         }
       }
@@ -1748,12 +2347,32 @@
         }
       }
     },
+    "Times: %lld" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liczba: %lld"
+          }
+        }
+      }
+    },
     "Today" : {
       "localizations" : {
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dzisiaj"
+          }
+        }
+      }
+    },
+    "Told when you unlock, system services included." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Informacja po odblokowaniu, łącznie z usługami systemowymi."
           }
         }
       }
@@ -1804,6 +2423,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Użycie, gdy Mac był zablokowany"
+          }
+        }
+      }
+    },
+    "Via" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przez"
           }
         }
       }
@@ -1868,12 +2497,33 @@
         }
       }
     },
+    "What" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Co"
+          }
+        }
+      }
+    },
     "What it keeps" : {
       "localizations" : {
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Co zapisuje"
+          }
+        }
+      }
+    },
+    "When an AI assistant or coding agent first gets control of the mouse and keyboard, the screen, input or all your files, gets admin rights, or works while the screen is locked." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gdy asystent AI lub agent programistyczny po raz pierwszy dostanie kontrolę nad myszą i klawiaturą, ekranem, wprowadzaniem lub wszystkimi plikami, dostanie uprawnienia administratora albo będzie działać przy zablokowanym ekranie."
           }
         }
       }
@@ -1899,6 +2549,7 @@
       }
     },
     "When you unlock: anything that used the camera, microphone or screen while you were away, system services included." : {
+      "extractionState" : "stale",
       "localizations" : {
         "pl" : {
           "stringUnit" : {
@@ -1934,6 +2585,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Przy blokadzie ekranu"
+          }
+        }
+      }
+    },
+    "While the screen was locked" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przy zablokowanym ekranie"
           }
         }
       }
@@ -1974,6 +2635,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Twój tydzień w AppAlibi"
+          }
+        }
+      }
+    },
+    "approximate, from daily totals" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "w przybliżeniu, z sum dziennych"
           }
         }
       }

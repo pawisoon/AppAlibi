@@ -12,6 +12,7 @@ let url = FileManager.default.temporaryDirectory
     .appendingPathComponent("alibi-probe-\(UUID().uuidString)")
     .appendingPathComponent("alibi.sqlite")
 let store = try EventStore(url: url)
+try store.setAIClients(.builtIn)
 let since = Date().addingTimeInterval(-hours * 3600)
 
 print("Replaying the last \(hours)h of the unified log…")
@@ -71,6 +72,20 @@ if rights.isEmpty { print("  none in this window") }
 for row in rights {
     let via = row.client == row.app ? "" : "  via \(row.client)"
     print("  \(row.rightName.padding(toLength: 32, withPad: " ", startingAt: 0)) x\(row.count)  \(row.app)\(via)")
+}
+
+print("\nAI clients (from AIClients.swift):")
+let catalog = AIClientCatalog.builtIn
+let activities = try AITimeline.build(store: store, catalog: catalog, query: AITimelineQuery(includePreflight: true, limit: 100_000))
+if activities.isEmpty { print("  none in this window") }
+for (client, items) in Dictionary(grouping: activities, by: \.client).sorted(by: { $0.key < $1.key }) {
+    let name = catalog.client(id: client)?.name ?? client
+    let sessions = items.filter { $0.kind == .sensor }.count
+    let checks = items.filter { $0.kind == .permission }.reduce(0) { $0 + $1.count }
+    let grants = items.filter { $0.kind == .admin }.reduce(0) { $0 + $1.count }
+    let computerUse = items.contains(where: \.isProbablyComputerUse) ? ", probably computer use" : ""
+    let identifiers = Set(items.map(\.app)).sorted().prefix(4).joined(separator: ", ")
+    print("  \(name.padding(toLength: 18, withPad: " ", startingAt: 0)) \(sessions) sessions, \(checks) checks, \(grants) admin\(computerUse)  [\(identifiers)]")
 }
 
 try? FileManager.default.removeItem(at: url.deletingLastPathComponent())
