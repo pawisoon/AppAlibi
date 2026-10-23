@@ -52,13 +52,10 @@ enum AIClientInfo {
         let exact = client.bundleIDs.filter { !$0.hasSuffix("*") }
         let prefixes = client.bundleIDs.filter { $0.hasSuffix("*") }.map { String($0.dropLast()) }
         let candidates = exact + prefixes.map { $0.hasSuffix(".") ? String($0.dropLast()) : $0 }
-        var icon: NSImage?
-        for id in candidates {
-            if let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: id) {
-                icon = NSWorkspace.shared.icon(forFile: url.path)
-                break
-            }
-        }
+        // The client's own app, then an app that stands in for it, so every view shows the same icon.
+        let app = installedApp(bundleIDs: candidates) ?? installedApp(named: client.appBundleNames)
+            ?? installedApp(bundleIDs: client.iconStandIns)
+        var icon = app.map { NSWorkspace.shared.icon(forFile: $0.path) }
         if icon == nil, client.isCustom, let path = client.pathFragments.first, FileManager.default.fileExists(atPath: path) {
             icon = NSWorkspace.shared.icon(forFile: path)
         }
@@ -72,6 +69,27 @@ enum AIClientInfo {
         }
         icons[client.id] = icon
         return icon
+    }
+
+    /// Skips copies outside Applications folders, such as the `claude.app` helper the Claude app
+    /// keeps in Application Support for Claude Code, which has no icon of its own.
+    private static func installedApp(bundleIDs: [String]) -> URL? {
+        bundleIDs.lazy.compactMap { id in
+            NSWorkspace.shared.urlsForApplications(withBundleIdentifier: id)
+                .first { AppClassifier.isInApplicationsFolder($0.path) }
+        }.first
+    }
+
+    /// An app with one of these bundle names in /Applications or ~/Applications.
+    private static func installedApp(named names: [String]) -> URL? {
+        let folders = FileManager.default.urls(for: .applicationDirectory, in: [.localDomainMask, .userDomainMask])
+        for name in names {
+            for folder in folders {
+                let url = folder.appendingPathComponent(name)
+                if FileManager.default.fileExists(atPath: url.path) { return url }
+            }
+        }
+        return nil
     }
 }
 

@@ -27,7 +27,7 @@ public enum AppClassifier {
         return .app
     }
 
-    static func isInApplicationsFolder(_ path: String) -> Bool {
+    public static func isInApplicationsFolder(_ path: String) -> Bool {
         path.contains("/Applications/")
     }
 

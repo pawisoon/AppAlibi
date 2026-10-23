@@ -61,6 +61,23 @@ final class AIClientTests: XCTestCase {
         XCTAssertNil(catalog.client(identifier: "com.openaitools.thing"), "a prefix ends at the dot")
     }
 
+    /// Kimi's bundle ID is only known as `com.moonshot.*`, so its icon is found by app name.
+    func testAppBundleNamesComeFromPathFragments() {
+        XCTAssertEqual(catalog.client(id: "kimi")?.appBundleNames, ["Kimi.app"])
+        XCTAssertEqual(catalog.client(id: "openai")?.appBundleNames, ["ChatGPT.app", "Codex.app"])
+        XCTAssertEqual(catalog.client(id: "lmstudio")?.appBundleNames, ["LM Studio.app"])
+        XCTAssertEqual(catalog.client(id: "claude-code")?.appBundleNames, [])
+    }
+
+    /// Command-line agents have no app of their own; Claude Code borrows the Claude app's icon first.
+    func testCommandLineAgentsHaveIconStandIns() {
+        XCTAssertEqual(catalog.client(id: "claude-code")?.iconStandIns, ["com.anthropic.claudefordesktop", "com.apple.Terminal"])
+        for id in ["openai", "copilot", "kimi", "gemini"] {
+            XCTAssertEqual(catalog.client(id: id)?.iconStandIns.last, "com.apple.Terminal", id)
+        }
+        XCTAssertEqual(catalog.client(id: "claude")?.iconStandIns, [], "an app's own icon needs no stand-in")
+    }
+
     func testCustomClientComesFirst() {
         let custom = AIClient.custom(name: "Raycast", bundleID: "com.raycast.macos", path: "/Applications/Raycast.app")
         let mine = catalog.adding([custom])

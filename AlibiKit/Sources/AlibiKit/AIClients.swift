@@ -11,16 +11,20 @@ public struct AIClient: Hashable, Sendable, Identifiable {
     public let pathFragments: [String]
     /// Executable names (the last path component), for CLIs installed anywhere.
     public let binaryNames: [String]
+    /// Bundle IDs of apps whose icon stands for the client when it has no app of its own:
+    /// Claude for Claude Code, Terminal for command-line agents. Only used for icons.
+    public let iconStandIns: [String]
     /// Added by the user in Settings.
     public let isCustom: Bool
 
     public init(id: String, name: String, bundleIDs: [String] = [], pathFragments: [String] = [],
-                binaryNames: [String] = [], isCustom: Bool = false) {
+                binaryNames: [String] = [], iconStandIns: [String] = [], isCustom: Bool = false) {
         self.id = id
         self.name = name
         self.bundleIDs = bundleIDs
         self.pathFragments = pathFragments
         self.binaryNames = binaryNames
+        self.iconStandIns = iconStandIns
         self.isCustom = isCustom
     }
 
@@ -48,6 +52,12 @@ public struct AIClient: Hashable, Sendable, Identifiable {
     public func matches(identifier: String, path: String?) -> Bool {
         matches(identifier: identifier) || path.map(matches(path:)) == true
     }
+
+    /// App bundles named in the path fragments, such as `Kimi.app` from `/Kimi.app/`.
+    /// They find the installed app when its bundle ID is only known by a prefix.
+    public var appBundleNames: [String] {
+        pathFragments.flatMap { $0.split(separator: "/") }.map(String.init).filter { $0.hasSuffix(".app") }
+    }
 }
 
 /// The known AI clients, plus the user's own. The first client that matches wins.
@@ -67,26 +77,31 @@ public struct AIClientCatalog: Hashable, Sendable {
         AIClient(id: "claude-code", name: "Claude Code",
                  bundleIDs: ["com.anthropic.claude-code"],
                  pathFragments: ["/.local/share/claude/versions/", "/Application Support/Claude/claude-code/",
-                                 "/node_modules/@anthropic-ai/claude-code/"]),
+                                 "/node_modules/@anthropic-ai/claude-code/"],
+                 iconStandIns: ["com.anthropic.claudefordesktop", "com.apple.Terminal"]),
         AIClient(id: "claude", name: "Claude",
                  bundleIDs: ["com.anthropic.claudefordesktop*", "com.anthropic.claude.*"],
                  pathFragments: ["/Claude.app/", "/Application Support/Claude/scratch-workspaces/"]),
         AIClient(id: "openai", name: "ChatGPT & Codex",
                  bundleIDs: ["com.openai.*"],
                  pathFragments: ["/ChatGPT.app/", "/Codex.app/", "/node_modules/@openai/codex/", "/Cellar/codex/"],
-                 binaryNames: ["codex"]),
+                 binaryNames: ["codex"],
+                 iconStandIns: ["com.apple.Terminal"]),
         AIClient(id: "copilot", name: "GitHub Copilot",
                  bundleIDs: ["com.github.CopilotForXcode*"],
                  pathFragments: ["/node_modules/@github/copilot/"],
-                 binaryNames: ["copilot"]),
+                 binaryNames: ["copilot"],
+                 iconStandIns: ["com.apple.Terminal"]),
         AIClient(id: "kimi", name: "Kimi",
                  bundleIDs: ["com.moonshot.*"],
                  pathFragments: ["/.kimi-code/", "/Kimi.app/"],
-                 binaryNames: ["kimi"]),
+                 binaryNames: ["kimi"],
+                 iconStandIns: ["com.apple.Terminal"]),
         AIClient(id: "gemini", name: "Gemini",
                  bundleIDs: ["com.google.GeminiMacOS*"],
                  pathFragments: ["/node_modules/@google/gemini-cli/", "/Cellar/gemini-cli/"],
-                 binaryNames: ["gemini"]),
+                 binaryNames: ["gemini"],
+                 iconStandIns: ["com.apple.Terminal"]),
         AIClient(id: "cursor", name: "Cursor",
                  bundleIDs: ["com.todesktop.230313mzl4w4u92*"],
                  pathFragments: ["/Cursor.app/"]),
