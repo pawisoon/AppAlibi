@@ -2,21 +2,29 @@
 
 <img src=".github/readme/icon.png" alt="AppAlibi icon" width="128" align="right">
 
-AppAlibi is a Mac menu bar app that keeps a history of which apps used your camera, microphone and screen, and which ones asked for your files.
+AppAlibi is a Mac app that keeps a history of what AI agents and apps did on your Mac: who recorded the screen, took over the mouse and keyboard, opened your files, or used the camera and microphone.
+
+![AppAlibi's AI tab](site/screenshots/ai.webp)
 
 ## Why?
 
+### AI agents work fast, and quietly
+
+Coding agents and AI assistants read your folders, record your screen and drive your mouse, often in seconds and often while you're in another window. macOS asks once and then stays quiet. AppAlibi recognizes Claude, Claude Code, ChatGPT, Codex, GitHub Copilot, Gemini, Cursor, Perplexity, Kimi, Windsurf, Ollama and LM Studio (and any app or tool you add), and keeps a timeline for each one.
+
+### Computer use, spotted
+
+When an assistant records the screen and also controls the mouse and keyboard, AppAlibi marks it as probable computer use. Command-line agents that run inside Terminal are caught too, including when they use Terminal's Full Disk Access.
+
 ### macOS doesn't remember
 
-The green and orange dots tell you something is using the camera or microphone right now. Once they go away there's no record of what it was. AppAlibi keeps one.
+The green and orange dots tell you something is using the camera or microphone right now. Once they go away there's no record of what it was. AppAlibi keeps one, for every app, along with which apps asked for protected folders and Full Disk Access, and when an app was given administrator rights.
 
-### More than the dots
-
-Besides the camera, microphone, screen recording and location, AppAlibi records which apps asked for protected folders and Full Disk Access, when an app was given administrator rights, and what AI assistants and coding agents were allowed to do.
+<img src="site/screenshots/sensors.webp" alt="Camera, microphone and screen recording sessions" width="49%"> <img src="site/screenshots/permissions.webp" alt="Permission checks by app" width="49%">
 
 ### While you were away
 
-AppAlibi knows when the screen was locked. If something used the camera, microphone or screen while you were away, it tells you when you come back.
+AppAlibi knows when the screen was locked. If an app or agent used the camera, microphone, screen or input while you were away, it tells you when you come back.
 
 ### Summaries
 
