@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AppAlibi</title>
-  <meta name="description" content="A Mac menu bar app that keeps a history of which apps used your camera, microphone and screen.">
+  <meta name="description" content="A Mac app that keeps a history of what AI agents and apps did on your Mac: screen recording, mouse and keyboard control, your files, camera and microphone.">
   <meta property="og:title" content="AppAlibi">
-  <meta property="og:description" content="Every app needs an alibi. A history of which apps used your camera, microphone and screen.">
-  <meta property="og:image" content="icon.png">
+  <meta property="og:description" content="Every app needs an alibi. A history of what AI agents and apps did on your Mac.">
+  <meta property="og:image" content="screenshots/ai.webp">
   <link rel="icon" type="image/png" href="favicon.png">
   <style>
     :root {
@@ -16,8 +16,10 @@
       --text: #2b2b33;
       --muted: #6e6e78;
       --rule: #e6e6ec;
+      --chip: #f0f0f4;
       --accent: #f0861e;
       --accent-text: #ffffff;
+      --shot-shadow: rgba(20, 16, 40, 0.28);
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -26,6 +28,8 @@
         --text: #ececf1;
         --muted: #9d9aab;
         --rule: #2d2a3b;
+        --chip: #25222f;
+        --shot-shadow: rgba(0, 0, 0, 0.6);
       }
     }
     * { box-sizing: border-box; }
@@ -40,10 +44,11 @@
     a { color: inherit; }
     section { padding: 88px 24px; border-bottom: 1px solid var(--rule); }
     .wrap { max-width: 1000px; margin: 0 auto; }
-    .hero { background: var(--hero); padding: 72px 24px 64px; }
-    .hero img { width: 128px; height: 128px; }
+    .hero { background: var(--hero); padding: 72px 24px 0; border-bottom: 0; }
+    .hero .icon { width: 128px; height: 128px; }
     .hero h1 { font-size: 64px; font-weight: 800; letter-spacing: -0.02em; margin: 8px 0 0; }
-    .hero .tagline { font-size: 17px; color: var(--muted); margin: 4px 0 28px; }
+    .hero .tagline { font-size: 20px; font-weight: 600; margin: 4px 0 8px; }
+    .hero .lede { font-size: 16px; color: var(--muted); max-width: 560px; margin: 0 auto 28px; }
     .button {
       display: inline-block;
       padding: 12px 34px;
@@ -61,13 +66,24 @@
     .hero .links a { text-decoration: none; }
     .hero .links a:hover { text-decoration: underline; }
     .hero .note { margin-top: 18px; font-size: 12px; color: var(--muted); }
+    .shot { display: block; width: 100%; height: auto; filter: drop-shadow(0 18px 40px var(--shot-shadow)); }
+    .hero .shot { margin: 48px auto -96px; position: relative; }
+    .after-hero { padding-top: 168px; }
     .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px 48px; }
-    h2 { font-size: 32px; margin: 0 0 40px; }
+    h2 { font-size: 36px; letter-spacing: -0.01em; margin: 0 0 16px; }
+    .intro { font-size: 17px; color: var(--muted); max-width: 640px; margin: 0 auto 56px; }
     h3 { font-size: 22px; margin: 0 0 10px; }
-    .big h3 { font-size: 34px; line-height: 1.1; }
+    .big h3 { font-size: 30px; line-height: 1.15; }
     p { margin: 0; }
-    .col p { max-width: 280px; margin: 0 auto; }
-    .features .big { margin-bottom: 56px; }
+    .col p { max-width: 290px; margin: 0 auto; }
+    figure { margin: 64px 0 0; }
+    figcaption { margin-top: 20px; font-size: 13px; color: var(--muted); }
+    .clients { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 56px; }
+    .clients span { background: var(--chip); border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; }
+    .clients .own { background: transparent; box-shadow: inset 0 0 0 1.5px var(--rule); color: var(--muted); }
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 56px; }
+    .pair figure { margin: 0; }
+    .features { margin-top: 72px; }
     .support p { max-width: 520px; margin: 0 auto 28px; }
     .support .buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
     .button.secondary { background: transparent; color: var(--text); box-shadow: inset 0 0 0 1.5px var(--rule); }
@@ -76,71 +92,107 @@
     footer a:hover { text-decoration: underline; }
     @media (max-width: 760px) {
       section { padding: 56px 16px; }
-      .hero { padding: 56px 16px 48px; }
+      .hero { padding: 56px 16px 0; }
       .hero h1 { font-size: 48px; }
-      .grid { grid-template-columns: 1fr; gap: 32px; }
-      .big h3 { font-size: 28px; }
+      .hero .shot { margin: 36px auto -40px; }
+      .after-hero { padding-top: 96px; }
+      h2 { font-size: 30px; }
+      .grid, .pair { grid-template-columns: 1fr; gap: 32px; }
+      .big h3 { font-size: 26px; }
     }
   </style>
 </head>
 <body>
   <section class="hero">
     <div class="wrap">
-      <img src="icon.png" alt="">
+      <img class="icon" src="icon.png" alt="">
       <h1>AppAlibi</h1>
-      <p class="tagline">Every app needs an alibi.</p>
+      <p class="tagline">Every app needs an alibi. So does every AI agent.</p>
+      <p class="lede">AI agents read your files, record your screen and move your mouse, in seconds and often while you're looking elsewhere. AppAlibi keeps a record of what they did, and what every other app on your Mac did too.</p>
       <a class="button" href="https://github.com/pawisoon/AppAlibi/releases/latest">Download</a>
       <div class="links"><a href="https://github.com/pawisoon/AppAlibi">View on GitHub</a></div>
       <p class="note">Free and open source. macOS 15 or later.</p>
+      <img class="shot" src="screenshots/ai.webp" width="1600" height="1058"
+           alt="AppAlibi's AI tab: Claude Code opening the Documents folder, Claude recording the screen while the Mac was locked, marked as probable computer use">
+    </div>
+  </section>
+
+  <section class="after-hero">
+    <div class="wrap grid">
+      <div class="col">
+        <h3>What is AppAlibi?</h3>
+        <p>A Mac app that keeps a history of which apps and AI agents used your camera, microphone and screen, controlled your Mac, or opened your files.</p>
+      </div>
+      <div class="col">
+        <h3>Why Now?</h3>
+        <p>macOS asks you once, then stays quiet. An agent you allowed last week can take over the mouse today, and the only sign is a dot that's gone a second later.</p>
+      </div>
+      <div class="col">
+        <h3>Why Trust AppAlibi?</h3>
+        <p>It's fully open source, has no external dependencies, and makes no network requests. Your history never leaves your Mac.</p>
+      </div>
     </div>
   </section>
 
   <section>
-    <div class="wrap grid">
-      <div class="col">
-        <h3>What is AppAlibi?</h3>
-        <p>A Mac menu bar app that keeps a history of which apps used your camera, microphone and screen, and which ones asked for your files.</p>
+    <div class="wrap">
+      <h2>See What Your AI Agents Did</h2>
+      <p class="intro">AppAlibi recognizes AI assistants and coding agents, including the command-line tools that run inside Terminal, and keeps a timeline for each one.</p>
+      <div class="grid big">
+        <div class="col">
+          <h3>Computer<br>Use</h3>
+          <p>When an assistant records the screen and controls the mouse and keyboard, AppAlibi marks it as probable computer use.</p>
+        </div>
+        <div class="col">
+          <h3>Your<br>Files</h3>
+          <p>When an agent opens Documents, Desktop or Downloads, or uses the Full Disk Access it borrowed from Terminal.</p>
+        </div>
+        <div class="col">
+          <h3>While You<br>Were Away</h3>
+          <p>Anything an agent did while your screen was locked gets a lock icon. If it used the screen or the mouse, you hear about it when you come back.</p>
+        </div>
       </div>
-      <div class="col">
-        <h3>Why Bother?</h3>
-        <p>The green and orange dots show you what's happening right now. Once they go away, macOS keeps no record you can look back at. AppAlibi does.</p>
-      </div>
-      <div class="col">
-        <h3>Why Trust AppAlibi?</h3>
-        <p>It's fully open source, has no external dependencies, and makes no network requests. Your history stays on your Mac.</p>
+      <figure>
+        <img class="shot" src="screenshots/summary-ai.webp" width="1600" height="1058" loading="lazy"
+             alt="AppAlibi's daily summary with an AI Clients section: Claude with 15 minutes of screen recording, Claude Code newly granted Full Disk Access">
+        <figcaption>The daily summary flags permissions an agent used for the first time.</figcaption>
+      </figure>
+      <div class="clients" aria-label="Recognized AI clients">
+        <span>Claude</span><span>Claude Code</span><span>ChatGPT</span><span>Codex</span><span>GitHub Copilot</span>
+        <span>Gemini</span><span>Cursor</span><span>Perplexity</span><span>Kimi</span><span>Windsurf</span>
+        <span>Ollama</span><span>LM Studio</span><span class="own">+ your own</span>
       </div>
     </div>
   </section>
 
-  <section class="features">
+  <section>
     <div class="wrap">
-      <h2>What AppAlibi Keeps Track Of</h2>
-      <div class="grid big">
-        <div class="col">
-          <h3>Camera, Mic<br>and Screen</h3>
-          <p>Every session, with the app, when it started and how long it ran. Location too, if you want it.</p>
-        </div>
-        <div class="col">
-          <h3>Your<br>Files</h3>
-          <p>Apps that asked for Documents, Desktop, Downloads or Full Disk Access, and whether macOS let them in.</p>
-        </div>
-        <div class="col">
-          <h3>AI<br>Agents</h3>
-          <p>What Claude, ChatGPT, Codex, Copilot, Cursor and other AI clients were allowed to do, including mouse and keyboard control.</p>
-        </div>
+      <h2>And Every Other App</h2>
+      <p class="intro">The green and orange dots tell you what's happening right now. AppAlibi remembers what happened before, so you can look back at the day or the week.</p>
+      <div class="pair">
+        <figure>
+          <img class="shot" src="screenshots/sensors.webp" width="1600" height="1058" loading="lazy"
+               alt="Sensors tab: camera, microphone and screen recording sessions for Teams, FaceTime, Discord and Claude">
+          <figcaption>Camera, microphone and screen recording sessions.</figcaption>
+        </figure>
+        <figure>
+          <img class="shot" src="screenshots/permissions.webp" width="1600" height="1058" loading="lazy"
+               alt="Permissions tab: which apps asked for folders, Full Disk Access, the camera and the microphone, and whether macOS allowed them">
+          <figcaption>Which apps asked for what, and whether macOS let them.</figcaption>
+        </figure>
       </div>
-      <div class="grid">
-        <div class="col">
-          <h3>While You Were Away</h3>
-          <p>Get told when you unlock your Mac if something used the camera, mic or screen while it was locked.</p>
-        </div>
+      <div class="grid features">
         <div class="col">
           <h3>Admin Rights</h3>
-          <p>See when macOS gave an app administrator rights, and get a notification when it happens.</p>
+          <p>See when macOS gave an app administrator rights.</p>
         </div>
         <div class="col">
           <h3>Summaries</h3>
           <p>Daily and weekly summaries of which apps used what, and for how long.</p>
+        </div>
+        <div class="col">
+          <h3>Notifications</h3>
+          <p>Optional alerts for AI clients, first-time permissions, admin rights and use while locked.</p>
         </div>
         <div class="col">
           <h3>CSV Export</h3>
