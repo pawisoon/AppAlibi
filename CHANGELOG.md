@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.1 (2026-10-23)
+
+- AI clients show proper icons. Kimi had a placeholder and Claude Code a blank square. Claude Code now uses the Claude app's icon, and command-line agents such as Codex and Gemini use Terminal's.
+- The Summary and the AI tab show the same icon for each client, whichever you open first.
+
 ## 0.3.0 (2026-10-12)
 
 AppAlibi now keeps a separate record of what AI assistants and coding agents do on your Mac: Claude, Claude Code, ChatGPT, Codex, Copilot, Gemini, Kimi, Cursor, Perplexity and a few others.
