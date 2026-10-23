@@ -1,0 +1,9 @@
+// Serves site/ as a static Cloudflare Worker: `wrangler deploy`.
+// For a custom domain, add "routes": [{ "pattern": "example.com", "custom_domain": true }].
+{
+  "name": "appalibi",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./site"
+  }
+}

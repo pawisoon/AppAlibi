@@ -5,3 +5,10 @@ build/
 .build/
 .swiftpm/
 *.xcuserstate
+
+# Local notes and editor tooling
+.claude/
+CLAUDE.md
+.mcp.json
+docs/
+.wrangler/

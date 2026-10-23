@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AppAlibi</title>
+  <meta name="description" content="A Mac menu bar app that keeps a history of which apps used your camera, microphone and screen.">
+  <meta property="og:title" content="AppAlibi">
+  <meta property="og:description" content="Every app needs an alibi. A history of which apps used your camera, microphone and screen.">
+  <meta property="og:image" content="icon.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --hero: #f5f5f8;
+      --text: #2b2b33;
+      --muted: #6e6e78;
+      --rule: #e6e6ec;
+      --accent: #f0861e;
+      --accent-text: #ffffff;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #16141f;
+        --hero: #1f1c2b;
+        --text: #ececf1;
+        --muted: #9d9aab;
+        --rule: #2d2a3b;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-align: center;
+    }
+    a { color: inherit; }
+    section { padding: 88px 24px; border-bottom: 1px solid var(--rule); }
+    .wrap { max-width: 1000px; margin: 0 auto; }
+    .hero { background: var(--hero); padding: 72px 24px 64px; }
+    .hero img { width: 128px; height: 128px; }
+    .hero h1 { font-size: 64px; font-weight: 800; letter-spacing: -0.02em; margin: 8px 0 0; }
+    .hero .tagline { font-size: 17px; color: var(--muted); margin: 4px 0 28px; }
+    .button {
+      display: inline-block;
+      padding: 12px 34px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: var(--accent-text);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .button:hover { filter: brightness(1.08); }
+    .hero .links { margin-top: 12px; font-size: 13px; font-weight: 600; color: var(--muted); }
+    .hero .links a { text-decoration: none; }
+    .hero .links a:hover { text-decoration: underline; }
+    .hero .note { margin-top: 18px; font-size: 12px; color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px 48px; }
+    h2 { font-size: 32px; margin: 0 0 40px; }
+    h3 { font-size: 22px; margin: 0 0 10px; }
+    .big h3 { font-size: 34px; line-height: 1.1; }
+    p { margin: 0; }
+    .col p { max-width: 280px; margin: 0 auto; }
+    .features .big { margin-bottom: 56px; }
+    .support p { max-width: 520px; margin: 0 auto 28px; }
+    .support .buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .button.secondary { background: transparent; color: var(--text); box-shadow: inset 0 0 0 1.5px var(--rule); }
+    footer { padding: 32px 24px 48px; font-size: 12px; color: var(--muted); }
+    footer a { text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    @media (max-width: 760px) {
+      section { padding: 56px 16px; }
+      .hero { padding: 56px 16px 48px; }
+      .hero h1 { font-size: 48px; }
+      .grid { grid-template-columns: 1fr; gap: 32px; }
+      .big h3 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="wrap">
+      <img src="icon.png" alt="">
+      <h1>AppAlibi</h1>
+      <p class="tagline">Every app needs an alibi.</p>
+      <a class="button" href="https://github.com/pawisoon/AppAlibi/releases/latest">Download</a>
+      <div class="links"><a href="https://github.com/pawisoon/AppAlibi">View on GitHub</a></div>
+      <p class="note">Free and open source. macOS 15 or later.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap grid">
+      <div class="col">
+        <h3>What is AppAlibi?</h3>
+        <p>A Mac menu bar app that keeps a history of which apps used your camera, microphone and screen, and which ones asked for your files.</p>
+      </div>
+      <div class="col">
+        <h3>Why Bother?</h3>
+        <p>The green and orange dots show you what's happening right now. Once they go away, macOS keeps no record you can look back at. AppAlibi does.</p>
+      </div>
+      <div class="col">
+        <h3>Why Trust AppAlibi?</h3>
+        <p>It's fully open source, has no external dependencies, and makes no network requests. Your history stays on your Mac.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="wrap">
+      <h2>What AppAlibi Keeps Track Of</h2>
+      <div class="grid big">
+        <div class="col">
+          <h3>Camera, Mic<br>and Screen</h3>
+          <p>Every session, with the app, when it started and how long it ran. Location too, if you want it.</p>
+        </div>
+        <div class="col">
+          <h3>Your<br>Files</h3>
+          <p>Apps that asked for Documents, Desktop, Downloads or Full Disk Access, and whether macOS let them in.</p>
+        </div>
+        <div class="col">
+          <h3>AI<br>Agents</h3>
+          <p>What Claude, ChatGPT, Codex, Copilot, Cursor and other AI clients were allowed to do, including mouse and keyboard control.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col">
+          <h3>While You Were Away</h3>
+          <p>Get told when you unlock your Mac if something used the camera, mic or screen while it was locked.</p>
+        </div>
+        <div class="col">
+          <h3>Admin Rights</h3>
+          <p>See when macOS gave an app administrator rights, and get a notification when it happens.</p>
+        </div>
+        <div class="col">
+          <h3>Summaries</h3>
+          <p>Daily and weekly summaries of which apps used what, and for how long.</p>
+        </div>
+        <div class="col">
+          <h3>CSV Export</h3>
+          <p>Export any filtered history to a spreadsheet.</p>
+        </div>
+        <div class="col">
+          <h3>Menu Bar or Dock</h3>
+          <p>Keep it out of the way in the menu bar, or give it a Dock icon.</p>
+        </div>
+        <div class="col">
+          <h3>English and Polish</h3>
+          <p>Fully translated, with Apple's own Polish terms.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="support">
+    <div class="wrap">
+      <h2>Support AppAlibi</h2>
+      <p>AppAlibi is free, with no ads, trials or accounts. If it's useful to you, sponsoring helps keep it working through every macOS update.</p>
+      <div class="buttons">
+        <a class="button" href="https://github.com/sponsors/pawisoon">Sponsor on GitHub</a>
+        <a class="button secondary" href="https://buymeacoffee.com/pawisoon">Buy Me a Coffee</a>
+        <a class="button secondary" href="https://suppi.pl/pawels">Suppi</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <a href="https://github.com/pawisoon/AppAlibi">GitHub</a> ·
+    <a href="https://github.com/pawisoon/AppAlibi/blob/main/FAQ.md">FAQ</a> ·
+    <a href="https://github.com/pawisoon/AppAlibi/releases">Releases</a> ·
+    <a href="https://github.com/pawisoon/AppAlibi/blob/main/LICENSE">MIT License</a>
+  </footer>
+</body>
+</html>
