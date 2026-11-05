@@ -35,8 +35,23 @@ enum AppInfo {
         return kind
     }
 
-    private static func bundleURL(for identifier: String, binaryPath path: String?) -> URL? {
+    static func bundleURL(for identifier: String, binaryPath path: String?) -> URL? {
         NSWorkspace.shared.urlForApplication(withBundleIdentifier: identifier) ?? path.flatMap(enclosingAppBundle(of:))
+    }
+
+    /// Where an app lives on disk, for matching authd's paths: its bundle, and
+    /// the logged path itself.
+    static func paths(for identifier: String, binaryPath: String?) -> [String] {
+        let path = binaryPath?.isEmpty == false ? binaryPath : nil
+        var paths: [String] = []
+        if let bundle = bundleURL(for: identifier, binaryPath: path)?.path { paths.append(bundle) }
+        if let path, !paths.contains(where: { path == $0 || path.hasPrefix($0 + "/") }) { paths.append(path) }
+        return paths
+    }
+
+    /// The bundle ID of the outermost app bundle around `path`, if any.
+    static func bundleIdentifier(containing path: String) -> String? {
+        enclosingAppBundle(of: path).flatMap { Bundle(url: $0)?.bundleIdentifier }
     }
 
     private static func lookup(_ identifier: String, binaryPath: String?) -> Info {
