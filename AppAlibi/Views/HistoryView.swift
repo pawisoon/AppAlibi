@@ -148,6 +148,8 @@ private func lockedTime(of session: SensorSession, in locks: ScreenLockSpans, no
 struct SensorHistoryView: View {
     let model: AppModel
     @Bindable private var state: SensorsTabState
+    @State private var selection: Set<SensorSession.ID> = []
+    @Environment(\.openAppActivityAction) private var openAppActivity
 
     init(model: AppModel) {
         self.model = model
@@ -178,7 +180,7 @@ struct SensorHistoryView: View {
             }
             .padding(10)
 
-            Table(state.sessions) {
+            Table(state.sessions, selection: $selection) {
                 TableColumn("App") { session in
                     AppCell(identifier: session.app)
                 }
@@ -206,6 +208,9 @@ struct SensorHistoryView: View {
                 }
                 .width(min: 90, ideal: 110)
             }
+            .appActivityMenu(for: { ids in
+                state.sessions.filter { ids.contains($0.id) }.map { AppActivityTarget(identifier: $0.app) }
+            }, open: openAppActivity)
             .overlay {
                 if state.sessions.isEmpty && !state.loader.isLoading {
                     ContentUnavailableView("No Sessions", systemImage: "eye.slash",
@@ -282,6 +287,8 @@ struct SensorHistoryView: View {
 struct PermissionHistoryView: View {
     let model: AppModel
     @Bindable private var state: PermissionsTabState
+    @State private var selection: Set<TCCAggregate.ID> = []
+    @Environment(\.openAppActivityAction) private var openAppActivity
 
     init(model: AppModel) {
         self.model = model
@@ -307,7 +314,7 @@ struct PermissionHistoryView: View {
             .toggleStyle(.checkbox)
             .padding(10)
 
-            Table(state.rows) {
+            Table(state.rows, selection: $selection) {
                 TableColumn("App") { row in
                     HStack {
                         AppCell(identifier: row.app, binaryPath: row.binaryPath, detail: row.accessor.isEmpty || row.accessor == row.app ? nil : String(localized: "via \(row.accessor)"))
@@ -334,6 +341,9 @@ struct PermissionHistoryView: View {
                 }
                 .width(min: 130, ideal: 160)
             }
+            .appActivityMenu(for: { ids in
+                state.rows.filter { ids.contains($0.id) }.map { AppActivityTarget(identifier: $0.app, binaryPath: $0.binaryPath) }
+            }, open: openAppActivity)
             .overlay {
                 if state.rows.isEmpty && !state.loader.isLoading {
                     ContentUnavailableView("No Permission Checks", systemImage: "lock.shield",
@@ -398,6 +408,8 @@ struct PermissionHistoryView: View {
 struct AdminHistoryView: View {
     let model: AppModel
     @Bindable private var state: AdminTabState
+    @State private var selection: Set<AdminRightAggregate.ID> = []
+    @Environment(\.openAppActivityAction) private var openAppActivity
 
     init(model: AppModel) {
         self.model = model
@@ -419,7 +431,7 @@ struct AdminHistoryView: View {
             }
             .padding(10)
 
-            Table(state.rows) {
+            Table(state.rows, selection: $selection) {
                 TableColumn("App") { row in
                     AppCell(identifier: Self.name(row.app), binaryPath: row.app,
                             detail: row.client == row.app ? nil : String(localized: "via \(Self.name(row.client))"))
@@ -440,6 +452,9 @@ struct AdminHistoryView: View {
                 }
                 .width(min: 130, ideal: 160)
             }
+            .appActivityMenu(for: { ids in
+                state.rows.filter { ids.contains($0.id) }.map { AppActivityTarget(adminPath: $0.app) }
+            }, open: openAppActivity)
             .overlay {
                 if state.rows.isEmpty && !state.loader.isLoading {
                     ContentUnavailableView("No Admin Rights", systemImage: "person.badge.key",
@@ -536,5 +551,28 @@ struct AppCell: View {
             }
         }
         .help(binaryPath ?? identifier)
+    }
+}
+
+extension View {
+    /// Double-click a row, or pick it from the context menu, to open the activity
+    /// of the app in it. Several rows of one app open one window.
+    func appActivityMenu<ID: Hashable>(for targets: @escaping (Set<ID>) -> [AppActivityTarget],
+                                       open: ((AppActivityTarget) -> Void)?) -> some View {
+        contextMenu(forSelectionType: ID.self) { ids in
+            let apps = Self.unique(targets(ids))
+            if !apps.isEmpty {
+                Button(apps.count == 1 ? "Show App Activity" : "Show Activity of \(apps.count) Apps") {
+                    apps.forEach { open?($0) }
+                }
+            }
+        } primaryAction: { ids in
+            Self.unique(targets(ids)).prefix(5).forEach { open?($0) }
+        }
+    }
+
+    private static func unique(_ targets: [AppActivityTarget]) -> [AppActivityTarget] {
+        var seen = Set<String>()
+        return targets.filter { seen.insert($0.identifier).inserted }
     }
 }

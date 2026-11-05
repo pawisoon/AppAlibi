@@ -85,6 +85,9 @@ extension EnvironmentValues {
 
     /// Shows the onboarding window again.
     @Entry var showOnboardingAction: (() -> Void)?
+
+    /// Opens the activity window of one app.
+    @Entry var openAppActivityAction: ((AppActivityTarget) -> Void)?
 }
 
 /// Brings the app forward for something the user just asked for.

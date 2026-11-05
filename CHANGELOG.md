@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Each app has its own activity window: camera, microphone and screen use, permission checks and admin rights on one timeline, grouped by day. Double-click a row in the Sensors, Permissions or Admin tab (or right-click and choose Show App Activity), or click an app in the Summary or the menu bar.
+- The window lists the protected folders the app reached for (Documents, Desktop, Downloads, iCloud Drive, volumes) with how often access was allowed or denied. Click one to open it in Finder. macOS logs the folder, not the files inside it.
+
 ## 0.3.1 (2026-10-23)
 
 - AI clients show proper icons. Kimi had a placeholder and Claude Code a blank square. Claude Code now uses the Claude app's icon, and command-line agents such as Codex and Gemini use Terminal's.

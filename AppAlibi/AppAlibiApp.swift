@@ -6,6 +6,7 @@ import SwiftUI
 enum MacScene {
     static let main = "history"
     static let onboarding = "onboarding"
+    static let appActivity = "app-activity"
 }
 
 /// Window and presentation handling follow ZuckOff's macOS target
@@ -24,6 +25,16 @@ struct AppAlibiApp: App {
         .defaultSize(width: 920, height: 580)
         // Dock mode opens the window at launch; menu bar mode waits to be asked.
         .defaultLaunchBehavior(delegate.mainWindowOpensAtLaunch ? .presented : .suppressed)
+
+        // One window per app. Opening an app that already has one brings it forward.
+        WindowGroup("App Activity", id: MacScene.appActivity, for: AppActivityTarget.self) { $target in
+            if let target {
+                delegate.environment(AppActivityView(model: delegate.model, target: target))
+                    .background(WindowActionBridge(delegate: delegate))
+            }
+        }
+        .defaultSize(width: 720, height: 640)
+        .restorationBehavior(.disabled)
 
         // The title is never shown, the title bar is hidden, but it names the
         // window in Mission Control and the Window menu.
@@ -140,6 +151,7 @@ final class MacAppDelegate: NSObject, NSApplicationDelegate {
         content
             .environment(\.openMainWindowAction) { [weak self] in self?.showMainWindow() }
             .environment(\.showOnboardingAction) { [weak self] in self?.showOnboarding() }
+            .environment(\.openAppActivityAction) { [weak self] in self?.showAppActivity($0) }
     }
 
     func register(openWindow: OpenWindowAction, dismissWindow: DismissWindowAction) {
@@ -257,6 +269,22 @@ final class MacAppDelegate: NSObject, NSApplicationDelegate {
     func showMainWindow() { open(MacScene.main) }
 
     func showOnboarding() { open(MacScene.onboarding) }
+
+    /// Only reachable from a view, so a scene has already handed over its actions.
+    func showAppActivity(_ target: AppActivityTarget) {
+        guard let openWindow else { return }
+        activateForUserRequest()
+        openWindow(id: MacScene.appActivity, value: target)
+        // As in `open`: an app with no Dock icon can open the window behind
+        // another app. The window just opened or brought forward is the key one.
+        DispatchQueue.main.async {
+            let window = NSApp.keyWindow?.identifier?.rawValue.hasPrefix(MacScene.appActivity) == true
+                ? NSApp.keyWindow
+                : NSApp.windows.last { $0.identifier?.rawValue.hasPrefix(MacScene.appActivity) == true && $0.isVisible }
+            window?.makeKeyAndOrderFront(nil)
+            window?.orderFrontRegardless()
+        }
+    }
 
     func finishOnboarding() {
         MacPreferences.markOnboardingSeen()
