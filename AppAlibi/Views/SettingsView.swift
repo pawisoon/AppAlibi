@@ -347,6 +347,7 @@ private struct HistorySettings: View {
                     Text("Keep history")
                     Text("Older history is deleted from this Mac.")
                 }
+                LogRetentionToggle()
                 LabeledContent("Database") {
                     Button("Show in Finder") { model.revealDatabase() }
                 }

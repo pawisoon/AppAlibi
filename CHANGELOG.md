@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- New option in Settings > History: Keep the macOS log for two weeks. On a busy Mac, macOS can drop the log AppAlibi reads in under a day, so anything that happened while AppAlibi wasn't running was lost. With this option on, macOS keeps those lines for 14 days, and AppAlibi fills in the gap the next time it starts. It needs an administrator password and is off by default.
+
 ## 0.3.1 (2026-10-23)
 
 - AI clients show proper icons. Kimi had a placeholder and Claude Code a blank square. Claude Code now uses the Claude app's icon, and command-line agents such as Codex and Gemini use Terminal's.

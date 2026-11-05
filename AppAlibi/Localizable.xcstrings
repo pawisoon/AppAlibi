@@ -888,6 +888,16 @@
         }
       }
     },
+    "Could not change the macOS log settings" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się zmienić ustawień dziennika macOS"
+          }
+        }
+      }
+    },
     "Could not delete history: %@" : {
       "localizations" : {
         "pl" : {
@@ -1308,6 +1318,16 @@
         }
       }
     },
+    "Keep the macOS log for two weeks" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przechowuj dziennik macOS przez dwa tygodnie"
+          }
+        }
+      }
+    },
     "Keeps the record going from the moment you log in." : {
       "localizations" : {
         "pl" : {
@@ -1651,6 +1671,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Powiadomienia AppAlibi są wyłączone."
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         }
       }
@@ -2655,6 +2685,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "zawsze"
+          }
+        }
+      }
+    },
+    "macOS can drop the log AppAlibi reads within a day, so time when AppAlibi isn't running goes unrecorded. This asks macOS to keep the lines AppAlibi reads for two weeks, so it can fill in the gaps at its next launch. Needs an administrator password." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS potrafi usunąć dziennik, z którego czyta AppAlibi, w niecałą dobę, więc czas, gdy AppAlibi nie działa, przepada. Ta opcja prosi macOS o zachowanie potrzebnych AppAlibi wpisów przez dwa tygodnie, żeby przy następnym uruchomieniu mogło uzupełnić luki. Wymaga hasła administratora."
           }
         }
       }
