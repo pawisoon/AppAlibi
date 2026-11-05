@@ -222,7 +222,9 @@ struct SummaryView: View {
             } else {
                 let longest = report.apps.first?.duration ?? 1
                 ForEach(report.apps) { usage in
-                    AppUsageRow(usage: usage, fraction: longest > 0 ? usage.duration / longest : 0)
+                    AppActivityLink(target: AppActivityTarget(identifier: usage.app)) {
+                        AppUsageRow(usage: usage, fraction: longest > 0 ? usage.duration / longest : 0)
+                    }
                 }
             }
         }
@@ -235,7 +237,11 @@ struct SummaryView: View {
                 Text("Nothing reached for protected data.")
                     .foregroundStyle(.secondary)
             } else {
-                ForEach(groups) { PermissionGroupRow(group: $0) }
+                ForEach(groups) { group in
+                    AppActivityLink(target: AppActivityTarget(identifier: group.app, binaryPath: group.binaryPath)) {
+                        PermissionGroupRow(group: group)
+                    }
+                }
             }
         } header: {
             Text("Protected Data")

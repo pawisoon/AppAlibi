@@ -28,7 +28,9 @@ struct MenuContentView: View {
                         ? "Nothing is using your camera, microphone or screen."
                         : "No app is using your camera, microphone or screen.")
                 } else {
-                    ForEach(model.activeSessions) { SessionRow(session: $0) }
+                    ForEach(model.activeSessions) { session in
+                        AppActivityLink(target: AppActivityTarget(identifier: session.app), showsChevron: false) { SessionRow(session: session) }
+                    }
                 }
             }
 
@@ -38,7 +40,9 @@ struct MenuContentView: View {
                 if model.recentSessions.isEmpty {
                     placeholder("No activity recorded yet.")
                 } else {
-                    ForEach(model.recentSessions) { SessionRow(session: $0) }
+                    ForEach(model.recentSessions) { session in
+                        AppActivityLink(target: AppActivityTarget(identifier: session.app), showsChevron: false) { SessionRow(session: session) }
+                    }
                 }
             }
 

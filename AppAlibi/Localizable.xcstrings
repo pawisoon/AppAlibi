@@ -172,6 +172,22 @@
         }
       }
     },
+    "%@, via %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, via %2$@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, przez %2$@"
+          }
+        }
+      }
+    },
     "%lld" : {
       "shouldTranslate" : false
     },
@@ -577,6 +593,16 @@
         }
       }
     },
+    "App Activity" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktywność aplikacji"
+          }
+        }
+      }
+    },
     "App or path" : {
       "localizations" : {
         "pl" : {
@@ -878,6 +904,16 @@
         }
       }
     },
+    "Click a folder to open it in Finder. macOS logs which protected folder an app reached for, not which files." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kliknij folder, aby otworzyć go w Finderze. macOS zapisuje, do którego chronionego folderu sięgnęła aplikacja, ale nie do których plików."
+          }
+        }
+      }
+    },
     "Client" : {
       "localizations" : {
         "pl" : {
@@ -1038,6 +1074,16 @@
         }
       }
     },
+    "Denied" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odrzucone"
+          }
+        }
+      }
+    },
     "Denied: %lld" : {
       "localizations" : {
         "pl" : {
@@ -1184,6 +1230,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Za pierwszym razem"
+          }
+        }
+      }
+    },
+    "Folders" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foldery"
           }
         }
       }
@@ -1368,6 +1424,16 @@
         }
       }
     },
+    "Last: %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ostatnio: %@"
+          }
+        }
+      }
+    },
     "Leave it running" : {
       "localizations" : {
         "pl" : {
@@ -1504,6 +1570,16 @@
         }
       }
     },
+    "No Activity" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak aktywności"
+          }
+        }
+      }
+    },
     "No Admin Rights" : {
       "localizations" : {
         "pl" : {
@@ -1634,6 +1710,16 @@
         }
       }
     },
+    "Nothing recorded for this app in this range." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W tym okresie nie zarejestrowano nic dla tej aplikacji."
+          }
+        }
+      }
+    },
     "Nothing was granted administrator rights in this range. Try System or All." : {
       "localizations" : {
         "pl" : {
@@ -1725,6 +1811,16 @@
         }
       }
     },
+    "Open %@ in Finder" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz %@ w Finderze"
+          }
+        }
+      }
+    },
     "Open System Settings" : {
       "localizations" : {
         "pl" : {
@@ -1745,12 +1841,32 @@
         }
       }
     },
+    "Open in Finder" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz w Finderze"
+          }
+        }
+      }
+    },
     "Or skip this and stay quiet. Nothing is lost, the history keeps recording." : {
       "localizations" : {
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Możesz też to pominąć i obejść się bez powiadomień. Nic nie przepadnie, historia zapisuje się dalej."
+          }
+        }
+      }
+    },
+    "Overview" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przegląd"
           }
         }
       }
@@ -1781,6 +1897,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Uprawnienie"
+          }
+        }
+      }
+    },
+    "Permission checks" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprawdzenia uprawnień"
           }
         }
       }
@@ -2117,6 +2243,26 @@
         }
       }
     },
+    "Show Activity of %lld Apps" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokaż aktywność aplikacji (%lld)"
+          }
+        }
+      }
+    },
+    "Show App Activity" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokaż aktywność aplikacji"
+          }
+        }
+      }
+    },
     "Show AppAlibi in" : {
       "localizations" : {
         "pl" : {
@@ -2183,6 +2329,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pokazuj usługi systemowe"
+          }
+        }
+      }
+    },
+    "Shows everything this app did" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokazuje wszystko, co robiła ta aplikacja"
+          }
+        }
+      }
+    },
+    "Since %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Od %@"
           }
         }
       }
@@ -2715,6 +2881,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "przez %@"
+          }
+        }
+      }
+    },
+    "×%lld" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "×%lld"
           }
         }
       }
