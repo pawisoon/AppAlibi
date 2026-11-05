@@ -1,9 +1,10 @@
 # Changelog
 
-## Unreleased
+## 0.4.0 (2026-11-05)
 
 - Each app has its own activity window: camera, microphone and screen use, permission checks and admin rights on one timeline, grouped by day. Double-click a row in the Sensors, Permissions or Admin tab (or right-click and choose Show App Activity), or click an app in the Summary or the menu bar.
 - The window lists the protected folders the app reached for (Documents, Desktop, Downloads, iCloud Drive, volumes) with how often access was allowed or denied. Click one to open it in Finder. macOS logs the folder, not the files inside it.
+- New option in Settings > History: Keep the macOS log for two weeks. On a busy Mac, macOS can drop the log AppAlibi reads in under a day, so anything that happened while AppAlibi wasn't running was lost. With this option on, macOS keeps those lines for 14 days, and AppAlibi fills in the gap the next time it starts. It needs an administrator password and is off by default.
 
 ## 0.3.1 (2026-10-23)
 

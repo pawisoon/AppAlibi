@@ -28,6 +28,10 @@ The App Store sandbox doesn't allow running `/usr/bin/log`. Releases are signed 
 
 macOS keeps its log for days, not months. On first launch AppAlibi imports what's still there, and from then on it keeps its own copy.
 
+### Why are there gaps in my history?
+
+AppAlibi records only while it's running. When it starts again, it fills in from the macOS log, but on a busy Mac that log can roll over in less than a day. To close the gaps, turn on Open at login. You can also turn on Keep the macOS log for two weeks in Settings > History. That asks macOS to keep the lines AppAlibi reads for 14 days, and it needs an administrator password once. Turning it off removes the setting again.
+
 ### A macOS update broke something.
 
 The log messages AppAlibi reads aren't a public API, so Apple can change them. Please [open an issue](https://github.com/pawisoon/AppAlibi/issues) with your macOS version.
